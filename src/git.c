@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #define GIT_USER_MAXSTRING 1000
 
@@ -49,10 +50,10 @@ void git_set_user_global(git_user* user) {
     strcat(cmd, " && git config --global user.email ");
     strcat(cmd, user->email);
     if(user->signing_key) {
-        strcat(cmd, " && git config --global user.signingkey");
-        strcat(cmd, user->signingkey);
+        strcat(cmd, " && git config --global user.signingkey ");
+        strcat(cmd, user->signing_key);
     }
-
+    printf("%s\n", cmd);
     //TODO: Figure out how to handle non-zero exit codes
     minsystem(cmd);
 }
@@ -67,8 +68,8 @@ void git_set_user_local(git_user* user) {
     strcat(cmd, " && git config --local user.email ");
     strcat(cmd, user->email);
     if(user->signing_key) {
-        strcat(cmd, " && git config --local user.signingkey");
-        strcat(cmd, user->signingkey);
+        strcat(cmd, " && git config --local user.signingkey ");
+        strcat(cmd, user->signing_key);
     }
 
     //TODO: Figure out how to handle non-zero exit codes
@@ -96,4 +97,7 @@ int main() {
     printf("User obtained:\n name: %s | email: %s | signingKey: %s", user->name, user->email, user->signing_key);
 
     git_user_free(user);
+
+    git_user u2 = { "Meme", "meme@meme.io", "AE32" };
+    git_set_user_global(&u2);
 }
