@@ -91,8 +91,79 @@ void git_clone(git_clone_opts* opts) {
         strcat(cmd, opts->repo);
     }
     if(opts->verbose) {
-    
+        strcat(cmd, " -v");
     }
+    if(opts->quiet) {
+        strcat(cmd, " -q");
+    }
+    if(opts->progress) {
+        strcat(cmd, " --progress");
+    }
+    if(opts->no_checkout) {
+        strcat(cmd, " --no-checkout");
+    }
+    if(opts->bare) {
+        strcat(cmd, " --bare");
+    }
+    if(opts->mirror) {
+        strcat(cmd, " --mirror");
+    }
+    if(opts->local) {
+        strcat(cmd, " -l");
+    }
+    if(opts->no_hardlinks) {
+        strcat(cmd, " --no-hardlinks");
+    }
+    if(opts->shared) {
+        strcat(cmd, " -s");
+    }
+    if(opts->recursive) {
+        strcat(cmd, " --recursive");
+    }
+    if(opts->recurse_submodules) {
+        strcat(cmd, " --recurse-submodules");
+    }
+    if(opts->template) {
+        strcat(cmd, " --template ");
+        strcat(cmd, opts->template);
+    }
+    if(opts->reference) {
+        strcat(cmd, " --reference ");
+        strcat(cmd, opts->reference);
+    }
+    if(opts->dissociate) {
+        strcat(cmd, "--dissociate");
+    }
+    if(opts->origin) {
+        strcat(cmd, " -o ");
+        strcat(cmd, opts->origin);
+    }
+    if(opts->branch) {
+        strcat(cmd, " -b ");
+        strcat(cmd, opts->branch);
+    }
+    if(opts->upload_pack) {
+        strcat(cmd, " -u ");
+        strcat(cmd, opts->upload_pack);
+    }
+    if(opts->depth) {
+        strcat(cmd, " --depth ");
+        strcat(cmd, opts->depth);
+    }
+    if(opts->single_branch) {
+        strcat(cmd, " --single-branch");
+    }
+    if(opts->seperate_git_dir) {
+        strcat(cmd, " --seperate-git-dir ");
+        strcat(cmd, opts->seperate_git_dir);
+    }
+    if(opts->config) {
+        strcat(cmd, " -c ");
+        strcat(cmd, opts->config);
+    }
+
+    //Finally, execute constructed command
+    minsystem(cmd);
 }
 
 /**
