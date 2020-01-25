@@ -6,6 +6,8 @@
 #include <string.h>
 
 #define GIT_USER_MAXSTRING 1000
+#define GIT_CMD_MAXSTRING (GIT_USER_MAXSTRING * 3) + 100
+#define GIT_CLONE_CMD_MAXSTRING 10000
 
 /**
  * Allocates space for a new git_user struct.
@@ -47,11 +49,10 @@ void git_get_user_local(git_user* user) {
 }
 
 /**
- * 
+ * Sets the global user via git
  */
 void git_set_user_global(git_user* user) {
-    //TODO: Generalize this size into some #define
-    char cmd[10000] = "git config --global user.name ";
+    char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
     strcat(cmd, user->name);
     strcat(cmd, " && git config --global user.email ");
     strcat(cmd, user->email);
@@ -65,11 +66,10 @@ void git_set_user_global(git_user* user) {
 }
 
 /**
- *
+ * Sets the local user for a repository (therefore local)
  */
 void git_set_user_local(git_user* user) {
-    //TODO: Generalize this size into some #define
-    char cmd[10000] = "git config --local user.name ";
+    char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
     strcat(cmd, user->name);
     strcat(cmd, " && git config --local user.email ");
     strcat(cmd, user->email);
@@ -80,6 +80,19 @@ void git_set_user_local(git_user* user) {
 
     //TODO: Figure out how to handle non-zero exit codes
     minsystem(cmd);
+}
+
+void git_clone(git_clone_opts* opts) {
+    char cmd[GIT_CLONE_CMD_MAXSTRING] = "git clone";
+
+    //Check all of the possible options for git clone
+    if(opts->repo) {
+        strcat(cmd, " ");
+        strcat(cmd, opts->repo);
+    }
+    if(opts->verbose) {
+    
+    }
 }
 
 /**
