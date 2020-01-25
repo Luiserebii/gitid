@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "../include/util.h"
+
 /**
  * algorithm_copy(type, begin, end, dest)
  *
@@ -31,14 +33,14 @@ void escapesh(char* str) {
     strcpy(buffer, str);
 
     //Escape string to write
-    int escsz = 4;
-    char escapestr[escsz] = "'\\''";
+    int escsz = 5;
+    char escapestr[] = "'\\''";
 
     //Write escaped values to str
     for(char* it = buffer; *it; ++it) {
-        if(*it == ''') {
+        if(*it == '\'') {
             //Write '\''
-            algorithm_copy(char*, escapestr, escapestr + ecsz, str);
+            algorithm_copy(char*, escapestr, escapestr + escsz, str);
         } else {
             *str++ = *it;
         }
@@ -57,7 +59,19 @@ int minsystem(const char* str) {
     if((code = system(str)) != -1) {
         return code;
     } else {
-        fprintf("Internal error: Failure to execute \"%s\"\n", str);
+        fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", str);
         exit(1);
     }
+}
+
+int main() {
+    char a[1000] = "Hello world";
+    char b[1000] = "Hello 'world";
+    char c[1000] = "Hello wor'ld'";
+
+    escapesh(a);
+    escapesh(b);
+    escapesh(c);
+
+    printf("Escaped to: \n%s\n%s\n%s\n", a, b, c);
 }
