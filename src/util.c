@@ -3,6 +3,21 @@
 #include <string.h>
 
 /**
+ * algorithm_copy(type, begin, end, dest)
+ *
+ * Takes a pointer type as the first parameter, which is to be substituted as a generic for the values
+ * of begin and dest. Essentially, the range [begin, end) is copied into dest.
+ *
+ * Ex: algorithm_copy(int*, months, months + 12, words)
+ */
+#define algorithm_copy(type, begin, end, dest)                                                    \
+    {                                                                                             \
+        const type _alg_copy_it = begin;                                                          \
+        for(; _alg_copy_it != end; *dest++ = *_alg_copy_it++)                                     \
+            ;                                                                                     \
+    }
+
+/**
  * Escapes any ' by replacing with '\'', wrapping the entire
  * string in '' to treat as a literal.
  *
@@ -15,11 +30,17 @@ void escapesh(char* str) {
     char buffer[strlen(str) + 1];
     strcpy(buffer, str);
 
+    //Escape string to write
+    int escsz = 4;
+    char escapestr[escsz] = "'\\''";
+
     //Write escaped values to str
-    for(char* it = buffer; *it; ++it, ++str) {
+    for(char* it = buffer; *it; ++it) {
         if(*it == ''') {
             //Write '\''
-
+            algorithm_copy(char*, escapestr, escapestr + ecsz, str);
+        } else {
+            *str++ = *it;
         }
     }
 
