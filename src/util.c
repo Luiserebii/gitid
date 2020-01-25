@@ -60,3 +60,20 @@ void runcmd(const char* command, int maxline, char* out) {
         exit(1);
     }
 }
+
+
+/**
+ * A wrapped call of the stdlib int system() function. Prints any error
+ * to the standard error stream and exits.
+ *
+ * Returns the exit code of the command run if successful.
+ */
+int minsystem(const char* str) {
+    int code;
+    if((code = system(str)) != -1) {
+        return code;
+    } else {
+        fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", str);
+        exit(1);
+    }
+}

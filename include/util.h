@@ -3,5 +3,6 @@
 
 void escapesh(char* str);
 void runcmd(const char* command, int maxline, char* out);
+int minsystem(const char* str);
 
 #endif
