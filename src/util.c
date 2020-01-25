@@ -40,7 +40,7 @@ void escapesh(char* str) {
     for(char* it = buffer; *it; ++it) {
         if(*it == '\'') {
             //Write '\''
-            algorithm_copy(char*, escapestr, escapestr + escsz, str);
+            algorithm_copy(char*, escapestr, escapestr + escsz - 1, str);
         } else {
             *str++ = *it;
         }
