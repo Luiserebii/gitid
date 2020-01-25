@@ -2,6 +2,7 @@
 #include "../include/util.h"
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #define GIT_USER_MAXSTRING 1000
 
@@ -19,7 +20,7 @@ void git_user_init(git_user* user) {
 }
 
 /**
- * Obtains the global git_user condif and saves it into the 
+ * Obtains the global git_user config and saves it into the 
  * git_user struct passed.
  */
 void git_get_user_global(git_user* user) {
@@ -29,13 +30,42 @@ void git_get_user_global(git_user* user) {
 }
 
 /**
+ * Obtains the local git_user config and saves it into the 
+ * git_user struct passed.
+ */
+void git_get_user_local(git_user* user) {
+    runcmd("git config --local user.name", GIT_USER_MAXSTRING, user->name);
+    runcmd("git config --local user.email", GIT_USER_MAXSTRING, user->email);
+    runcmd("git config --local user.signing_key", GIT_USER_MAXSTRING, user->signing_key);
+}
+
+/**
+ * 
+ */
+void git_set_user_global(git_user* user) {
+    
+}
+
+/**
  * Frees git_user struct.
  */
 void git_user_free(git_user* user) {
     //Free members
-    free(git_user->name);
-    free(git_user->email);
-    free(git_user->signing_key);
+    free(user->name);
+    free(user->email);
+    free(user->signing_key);
+
     //Free struct
     free(user);
+}
+
+int main() {
+
+    git_user* user;
+    git_user_init(user);
+    git_get_user_global(user);
+
+    printf("User obtained:\n name: %s | email: %s | signingKey: %s", user->name, user->email, user->signing_key);
+
+    git_user_free(user);
 }
