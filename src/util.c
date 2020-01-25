@@ -5,8 +5,6 @@
 #include "../include/util.h"
 #include "../include/algorithm.h"
 
-#define MAXLINE 1000
-
 /**
  * Escapes any ' by replacing with '\'', wrapping the entire
  * string in '' to treat as a literal.
