@@ -19,8 +19,8 @@ void escapesh(char* str) {
     strcpy(buffer, str);
 
     //Escape string to write
-    int escsz = 5;
     char escapestr[] = "'\\''";
+    int escsz = sizeof(escapestr) / sizeof(char);
 
     //Write escaped values to str
     for(char* it = buffer; *it; ++it) {
@@ -75,5 +75,17 @@ int minsystem(const char* str) {
     } else {
         fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", str);
         exit(1);
+    }
+}
+
+/**
+ * Trims the string at the first newline character found.
+ */
+void trimNewline(char* str) {
+    for(; *str; ++str) {
+        if(*str == '\n') {
+            *str = '\0';
+            break;
+        }
     }
 }
