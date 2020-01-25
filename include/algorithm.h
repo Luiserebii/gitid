@@ -30,7 +30,7 @@
  */
 #define algorithm_copy(type, begin, end, dest)                                                    \
     {                                                                                             \
-        for(const type _alg_copy_it = begin;; _alg_copy_it != end; *dest++ = *_alg_copy_it++)     \
+        for(const type _alg_copy_it = begin; _alg_copy_it != end; *dest++ = *_alg_copy_it++)      \
             ;                                                                                     \
     }
 

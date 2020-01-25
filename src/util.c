@@ -5,6 +5,8 @@
 #include "../include/util.h"
 #include "../include/algorithm.h"
 
+#define MAXLINE 1000
+
 /**
  * Escapes any ' by replacing with '\'', wrapping the entire
  * string in '' to treat as a literal.
@@ -34,17 +36,29 @@ void escapesh(char* str) {
 }
 
 /**
- * A wrapped call of the stdlib int system() function. Prints any error
- * to the standard error stream and exits.
+ * A wrapped call of the popen() function. Prints any error to the standard 
+ * error stream and exits.
  *
- * Returns the exit code of the command run if successful.
+ * Writes the command's output to out if successful.
  */
-int minsystem(const char* str) {
-    int code;
-    if((code = system(str)) != -1) {
-        return code;
-    } else {
-        fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", str);
+void runcmd(const char* command, int maxline, char* out) {
+    FILE* proc;
+    //Process logic in case of failure
+    if((proc = popen(command, "r")) == NULL) {
+        fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", command);
+        exit(1);
+    }
+    //Copy all output to string out
+    int c;
+    for(int i = 0; (c = getc(proc)) != EOF && i < maxline - 1; ++i) {
+        *out++ = c;
+    }
+    //Close out
+    *out = '\0';
+
+    //Close process and return
+    if(pclose(proc) == -1) {
+        fprintf(stderr, "Internal error: Failure to close process from \"%s\"\n", command);
         exit(1);
     }
 }

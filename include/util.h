@@ -2,6 +2,6 @@
 #define UTIL_H
 
 void escapesh(char* str);
-int minsystem(const char* str);
+void runcmd(const char* command, int maxline, char* out);
 
 #endif
