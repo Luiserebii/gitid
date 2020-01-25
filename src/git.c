@@ -9,14 +9,14 @@
 /**
  * Allocates space for a new git_user struct.
  */
-void git_user_init(git_user* user) {
+git_user* git_user_init() {
     //Allocate for struct
-    user = malloc(sizeof(git_user));
+    git_user* user = (git_user*) malloc(sizeof(git_user));
 
     //Allocate each string
-    user->name = malloc(sizeof(char) * GIT_USER_MAXSTRING);
-    user->email = malloc(sizeof(char) * GIT_USER_MAXSTRING);
-    user->signing_key = malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    user->name = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    user->email = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    user->signing_key = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
 }
 
 /**
@@ -61,11 +61,10 @@ void git_user_free(git_user* user) {
 
 int main() {
 
-    git_user* user;
-    git_user_init(user);
+    git_user* user = git_user_init();
     git_get_user_global(user);
 
-    printf("User obtained:\n name: %s | email: %s | signingKey: %s", user->name, user->email, user->signing_key);
+    printf("User obtained:\n name: %s | email: %s | signingKey: %s\n", user->name, user->email, user->signing_key);
 
     git_user_free(user);
 }
