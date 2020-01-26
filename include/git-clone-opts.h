@@ -94,5 +94,4 @@ declare_struct_set_string(git_clone_opts, config, opts, conf);
  */
 void git_clone_opts_free(git_clone_opts* opts);
 
-
 #endif

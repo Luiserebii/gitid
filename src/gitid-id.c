@@ -1,6 +1,6 @@
+#include "../include/gitid-id.h"
 #include "../include/struct.h"
 #include "../include/util.h"
-#include "../include/gitid-id.h"
 
 #include <string.h>
 
@@ -32,4 +32,3 @@ void gitid_id_free(gitid_id* id) {
     //Free struct
     free(id);
 }
-

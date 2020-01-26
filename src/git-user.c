@@ -1,6 +1,6 @@
 #include "../include/git-user.h"
-#include "../include/util.h"
 #include "../include/struct.h"
+#include "../include/util.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -12,7 +12,7 @@ git_user* git_user_init() {
     //Allocate each string
     user->name = safemalloc(GIT_USER_MAXSTRING);
     user->email = safemalloc(GIT_USER_MAXSTRING);
-    
+
     //Optional, so set to NULL by default
     user->signing_key = NULL;
 }

@@ -1,10 +1,10 @@
 #include "../include/git.h"
-#include "../include/git-user.h"
 #include "../include/git-clone-opts.h"
+#include "../include/git-user.h"
 #include "../include/util.h"
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void git_get_user_global(git_user* user) {
@@ -27,7 +27,7 @@ void git_get_user_global(git_user* user) {
 void git_get_user_local(git_user* user) {
     runcmd("git config --local user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --local user.email", GIT_USER_MAXSTRING, user->email);
-    
+
     //Create buffer to determine how to handle data which may yield nothing
     char buffer[GIT_USER_MAXSTRING];
     runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, buffer);
@@ -36,7 +36,7 @@ void git_get_user_local(git_user* user) {
         git_user_set_signing_key(user, buffer);
         trimNewline(user->signing_key);
     }
-    
+
     //Trim all inputs
     trimNewline(user->name), trimNewline(user->email);
 }
@@ -161,5 +161,4 @@ int main() {
     printf("User obtained:\n name: %s | email: %s | signingKey: %s\n", user->name, user->email, user->signing_key);
 
     git_user_free(user);
-
 }
