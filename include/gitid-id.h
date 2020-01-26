@@ -3,7 +3,7 @@
 
 #include "../include/struct.h"
 
-#define GITID_ID_MAXSTRING 1000
+#define GITID_ID_BUFFER_MAX 1000
 
 typedef struct {
     char* name;
@@ -15,8 +15,8 @@ typedef struct {
 /**
  * Allocates space for a new git_user struct.
  */
-
 gitid_id* gitid_id_init();
+gitid_id* gitid_id_safe_init(const char* n, const char* usrn, const char* e);
 
 /**
  * void gitid_id_set_name(gitid_id* opts, const char* n);

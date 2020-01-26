@@ -2,6 +2,7 @@
 #include "../include/struct.h"
 #include "../include/util.h"
 
+#include <stdio.h>
 #include <string.h>
 
 gitid_id* gitid_id_init() {
@@ -10,6 +11,24 @@ gitid_id* gitid_id_init() {
 
     //Initialize fields
     id->name = id->username = id->email = id->signing_key = NULL;
+
+    return id;
+}
+
+gitid_id* gitid_id_safe_init(const char* n, const char* usrn, const char* e) {
+    if(!n || !usrn || !e) {
+        fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
+        exit(1);
+    }
+    //Allocate gitid_id
+    gitid_id* id = safemalloc(sizeof(gitid_id));
+
+    gitid_id_set_name(id, n);
+    gitid_id_set_username(id, usrn);
+    gitid_id_set_email(id, e);
+
+    //Initialize fields
+    id->signing_key = NULL;
 
     return id;
 }

@@ -69,6 +69,11 @@ typedef struct {
 git_clone_opts* git_clone_opts_init();
 
 /**
+ *
+ */
+git_clone_opts* git_clone_opts_safe_init(const char* rp);
+
+/**
  * MACRO use: Declares the following functions:
  *
  * void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl);

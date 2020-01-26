@@ -25,7 +25,7 @@ git_clone_opts* git_clone_opts_safe_init(const char* rp) {
         fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
         exit(1);
     }
-    
+
     //Allocate git_clone_opts
     git_clone_opts* opts = safemalloc(sizeof(git_clone_opts));
 
