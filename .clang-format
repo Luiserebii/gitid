@@ -1,0 +1,93 @@
+---
+Language:        Cpp
+# BasedOnStyle:  Google
+# Any comments will probably be directed towards settings that I'm not 100% certain on
+# If no comments exist, it means I've approved it 100%
+AccessModifierOffset: -2 # Was -1, doubling this to mimick Google's offset logic
+AlignAfterOpenBracket: Align # Sure, this is probably fine, but I think I tend to use DontAlign
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlinesLeft: true # Sure
+AlignOperands:   true # Sure
+AlignTrailingComments: false # This was true, but I don't think I want a linter to force this
+AllowAllParametersOfDeclarationOnNextLine: true # Sure
+AllowShortBlocksOnASingleLine: false # Uncertain on this; but sure
+AllowShortCaseLabelsOnASingleLine: false 
+AllowShortFunctionsOnASingleLine: Inline # Was All, I think that only really inline should have this
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakAfterDefinitionReturnType: None # A note that this is deprecated
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true # Sure
+AlwaysBreakTemplateDeclarations: true
+BinPackArguments: true 
+BinPackParameters: true
+BraceWrapping:   
+  AfterClass:      false # Sure, I think
+  AfterControlStatement: false
+  AfterEnum:       false
+  AfterFunction:   false
+  AfterNamespace:  false
+  AfterObjCDeclaration: false
+  AfterStruct:     false
+  AfterUnion:      false
+  BeforeCatch:     false
+  BeforeElse:      false
+  IndentBraces:    false
+BreakBeforeBinaryOperators: None # Was None; I like the breaking before operators when things get too long
+BreakBeforeBraces: Attach # Sure
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializersBeforeComma: false # Sure
+ColumnLimit:     120
+CommentPragmas:  '^[^ ]' # Don't mess with comments that start with chars other than space, e.g. no space after comment delimiter
+# # Used to be: CommentPragmas:  '^ IWYU pragma:' # OwO
+ConstructorInitializerAllOnOneLineOrOnePerLine: true # Sure
+ConstructorInitializerIndentWidth: 4 # Sure
+ContinuationIndentWidth: 4 # Sure
+Cpp11BracedListStyle: true
+DerivePointerAlignment: true # Sure
+DisableFormat:   false 
+ForEachMacros:   [ foreach, Q_FOREACH, BOOST_FOREACH ] # OwO
+IncludeCategories: 
+  - Regex:           '^<.*\.h>'
+    Priority:        1
+  - Regex:           '^<.*'
+    Priority:        2
+  - Regex:           '.*'
+    Priority:        3
+IndentCaseLabels: true
+IndentWidth:     4
+IndentWrappedFunctionNames: false
+KeepEmptyLinesAtTheStartOfBlocks: true # Was false; I'd rather keep this loose
+MacroBlockBegin: '' # OwO
+MacroBlockEnd:   '' # OwO
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: None # I'm tempted to select Inner here, but I've never quite done this
+ObjCBlockIndentWidth: 4 # OwO
+ObjCSpaceAfterProperty: false 
+ObjCSpaceBeforeProtocolList: false
+PenaltyBreakBeforeFirstCallParameter: 1 # Penalty OwO - Penalty game??? Yugioh! Zero????
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyExcessCharacter: 1000000
+PenaltyReturnTypeOnItsOwnLine: 200
+PointerAlignment: Left
+ReflowComments:  true # Sure
+SortIncludes:    true 
+SpaceAfterCStyleCast: true # Was false; this is something we want, I think
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: Never # Ahhh, yes, this is the option for controlling that... hm. ControlStatements option is very likely the convention, but, I will actually set this to Never due to personal preference
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1 # Was 2; I can see how 2 might be nice, but 1 is fine
+SpacesInAngles:  false
+SpacesInContainerLiterals: false # Was true
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+Standard:        Cpp03 # Was Auto
+TabWidth:        8
+UseTab:          Never
+...
+
+
