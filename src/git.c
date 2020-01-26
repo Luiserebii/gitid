@@ -1,4 +1,5 @@
 #include "../include/git.h"
+#include "../include/git-clone.h"
 #include "../include/util.h"
 
 #include <stdlib.h>
@@ -14,22 +15,26 @@
  */
 git_user* git_user_init() {
     //Allocate for struct
-    git_user* user = (git_user*) malloc(sizeof(git_user));
+    git_user* user = safemalloc(sizeof(git_user));
 
     //Allocate each string
-    user->name = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
-    user->email = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    user->name = safemalloc(GIT_USER_MAXSTRING);
+    user->email = safemalloc(GIT_USER_MAXSTRING);
     
     //Optional, so set to NULL by default
     user->signing_key = NULL;
 }
 
 /**
- * Allocate the signing_key field, and takes an optional char* to set the 
+ * If new, allocate the signing_key field, and takes an optional char* to set the 
  * newly allocated field to. If NULL is passed, only allocation occurs.
  */
-void git_user_init_signing_key(const char* sk) {
-    user->signing_key = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+void git_user_set_signing_key(git_user* user, const char* sk) {
+    //Free if not NULL, before allocating
+    if(user->signing_key) {
+        free(user->signing_key);
+    }
+    user->signing_key = safemalloc(GIT_USER_MAXSTRING);
     if(sk) {
         strcpy(user->signing_key, sk);
     }

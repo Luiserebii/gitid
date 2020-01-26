@@ -56,7 +56,7 @@ void runcmd(const char* command, int maxline, char* out) {
 
     //Close process and return
     if(pclose(proc) == -1) {
-        fprintf(stderr, "Internal error: Failure to close process from \"%s\"\n", command);
+        fprintf(stderr, "error: failure to close process from \"%s\"\n", command);
         exit(1);
     }
 }
@@ -73,7 +73,7 @@ int minsystem(const char* str) {
     if((code = system(str)) != -1) {
         return code;
     } else {
-        fprintf(stderr, "Internal error: Failure to execute \"%s\"\n", str);
+        fprintf(stderr, "error: failure to execute \"%s\"\n", str);
         exit(1);
     }
 }
@@ -88,4 +88,16 @@ void trimNewline(char* str) {
             break;
         }
     }
+}
+
+/**
+ * Wrapper function to handle all malloc() cases of failure.
+ */
+void* safemalloc(size_t size) {
+    void* ptr = malloc(size);
+    if(ptr == NULL) {
+        fprintf(stderr, "error: memory allocation failed, system may be out of memory\n");
+        exit(1);
+    }
+    return ptr;
 }
