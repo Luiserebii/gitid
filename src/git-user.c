@@ -39,6 +39,14 @@ define_struct_set_string(git_user, name, user, n);
 define_struct_set_string(git_user, email, user, e);
 define_struct_set_string(git_user, signing_key, user, sk);
 
+void git_user_write(git_user* user, FILE* stream) {
+    fprintf(stream, "Name: %s\nEmail: %s\n", user->name, user->email);
+    if(user->signing_key) {
+        fprintf(stream, "Signing Key: %s\n", user->signing_key);
+    }
+}
+
+
 void git_user_free(git_user* user) {
     //Free members
     free(user->name);
