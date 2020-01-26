@@ -1,4 +1,5 @@
 #include "../include/git.h"
+#include "../include/git-user.h"
 #include "../include/git-clone.h"
 #include "../include/util.h"
 
@@ -6,39 +7,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#define GIT_USER_MAXSTRING 1000
 #define GIT_CMD_MAXSTRING (GIT_USER_MAXSTRING * 3) + 100
 #define GIT_CLONE_CMD_MAXSTRING 10000
-
-/**
- * Allocates space for a new git_user struct.
- */
-git_user* git_user_init() {
-    //Allocate for struct
-    git_user* user = safemalloc(sizeof(git_user));
-
-    //Allocate each string
-    user->name = safemalloc(GIT_USER_MAXSTRING);
-    user->email = safemalloc(GIT_USER_MAXSTRING);
-    
-    //Optional, so set to NULL by default
-    user->signing_key = NULL;
-}
-
-/**
- * If new, allocate the signing_key field, and takes an optional char* to set the 
- * newly allocated field to. If NULL is passed, only allocation occurs.
- */
-void git_user_set_signing_key(git_user* user, const char* sk) {
-    //Free if not NULL, before allocating
-    if(user->signing_key) {
-        free(user->signing_key);
-    }
-    user->signing_key = safemalloc(GIT_USER_MAXSTRING);
-    if(sk) {
-        strcpy(user->signing_key, sk);
-    }
-}
 
 /**
  * Obtains the global git_user config and saves it into the 
@@ -66,7 +36,14 @@ void git_get_user_global(git_user* user) {
 void git_get_user_local(git_user* user) {
     runcmd("git config --local user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --local user.email", GIT_USER_MAXSTRING, user->email);
-    runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, user->signing_key);
+    
+    //Create buffer to determine how to handle data which may yield nothing
+    char buffer[GIT_USER_MAXSTRING];
+    runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, buffer);
+    //Check if we got something with size
+//    if(*buffer) {
+        git_user_set_signing_key(user, buffer);
+//    }
     
     //Trim all inputs
     trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
@@ -188,21 +165,6 @@ void git_clone(git_clone_opts* opts) {
 
     //Finally, execute constructed command
     minsystem(cmd);
-}
-
-/**
- * Frees git_user struct.
- */
-void git_user_free(git_user* user) {
-    //Free members
-    free(user->name);
-    free(user->email);
-    if(user->signing_key) {
-        free(user->signing_key);
-    }
-
-    //Free struct
-    free(user);
 }
 
 int main() {
