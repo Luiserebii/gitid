@@ -47,7 +47,13 @@ void git_user_set_signing_key(git_user* user, const char* sk) {
 void git_get_user_global(git_user* user) {
     runcmd("git config --global user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --global user.email", GIT_USER_MAXSTRING, user->email);
-    runcmd("git config --global user.signingkey", GIT_USER_MAXSTRING, user->signing_key);
+    //Create buffer to determine how to handle data which may yield nothing
+    char buffer[GIT_USER_MAXSTRING];
+    runcmd("git config --global user.signingkey", GIT_USER_MAXSTRING, buffer);
+    //Check if we got something with size
+    if(*buffer) {
+        git_user_set_signing_key(user, buffer);
+    }
 
     //Trim all inputs
     trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
