@@ -41,6 +41,13 @@ define_struct_set_string(gitid_id, username, opts, usrn);
 define_struct_set_string(gitid_id, email, opts, e);
 define_struct_set_string(gitid_id, signing_key, opts, sk);
 
+void gitid_id_write(gitid_id* id, FILE* stream) {
+    fprintf(stream, "Name: %s\nUsername: %s\nEmail: %s\n", id->name, id->username, id->email);
+    if(id->signing_key) {
+        fprintf(stream, "Signing Key: %s\n", id->signing_key);
+    }
+}
+
 void gitid_id_free(gitid_id* id) {
     //Free members
     free(id->name);

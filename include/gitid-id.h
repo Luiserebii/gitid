@@ -3,6 +3,8 @@
 
 #include "../include/struct.h"
 
+#include <stdio.h>
+
 #define GITID_ID_BUFFER_MAX 1000
 
 typedef struct {
@@ -16,6 +18,10 @@ typedef struct {
  * Allocates space for a new git_user struct.
  */
 gitid_id* gitid_id_init();
+
+/**
+ * Invariant protected: name, username, and email set
+ */
 gitid_id* gitid_id_safe_init(const char* n, const char* usrn, const char* e);
 
 /**
@@ -28,6 +34,11 @@ declare_struct_set_string(gitid_id, name, opts, n);
 declare_struct_set_string(gitid_id, username, opts, usrn);
 declare_struct_set_string(gitid_id, email, opts, e);
 declare_struct_set_string(gitid_id, signing_key, opts, sk);
+
+/**
+ * Writes git_id struct to a FILE* stream.
+ */
+void gitid_id_write(gitid_id* id, FILE* stream);
 
 /**
  * Frees gitid_id struct.
