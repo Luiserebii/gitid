@@ -8,12 +8,15 @@
 #include <string.h>
 
 void git_get_user_global(git_user* user) {
-    runcmd("git config --global user.name", GIT_USER_MAXSTRING, user->name);
-    runcmd("git config --global user.email", GIT_USER_MAXSTRING, user->email);
+    //String buffer to hold char results from commands temporarily, so they can be
+    //dynamically allocated and fit to size afterwards
+    char buffer[GIT_USER_BUFFER_MAX];
 
-    //Create buffer to determine how to handle data which may yield nothing
-    char buffer[GIT_USER_MAXSTRING];
-    runcmd("git config --global user.signingkey", GIT_USER_MAXSTRING, buffer);
+    runcmd("git config --global user.name", GIT_USER_BUFFER_MAX, buffer);
+    git_user_set_name(user, buffer);
+    runcmd("git config --global user.email", GIT_USER_BUFFER_MAX, buffer);
+    git_user_set_email(user, buffer);
+    runcmd("git config --global user.signingkey", GIT_USER_BUFFER_MAX, buffer);
     //Check if we obtained something
     if(*buffer) {
         git_user_set_signing_key(user, buffer);
@@ -25,12 +28,12 @@ void git_get_user_global(git_user* user) {
 }
 
 void git_get_user_local(git_user* user) {
-    runcmd("git config --local user.name", GIT_USER_MAXSTRING, user->name);
-    runcmd("git config --local user.email", GIT_USER_MAXSTRING, user->email);
+    runcmd("git config --local user.name", GIT_USER_BUFFER_MAX, user->name);
+    runcmd("git config --local user.email", GIT_USER_BUFFER_MAX, user->email);
 
     //Create buffer to determine how to handle data which may yield nothing
-    char buffer[GIT_USER_MAXSTRING];
-    runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, buffer);
+    char buffer[GIT_USER_BUFFER_MAX];
+    runcmd("git config --local user.signingkey", GIT_USER_BUFFER_MAX, buffer);
     //Check if we obtained something
     if(*buffer) {
         git_user_set_signing_key(user, buffer);

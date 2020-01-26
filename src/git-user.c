@@ -2,6 +2,7 @@
 #include "../include/struct.h"
 #include "../include/util.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -9,17 +10,33 @@ git_user* git_user_init() {
     //Allocate for struct
     git_user* user = safemalloc(sizeof(git_user));
 
-    //Allocate each string
-    user->name = safemalloc(GIT_USER_MAXSTRING);
-    user->email = safemalloc(GIT_USER_MAXSTRING);
+    //Initialize all values
+    user->name = user->email = user->signing_key = NULL;
+}
 
-    //Optional, so set to NULL by default
+git_user* git_user_safe_init(const char* n, const char* e) {
+    //Throw in the event either param is null
+    if(!n || !e) {
+        fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
+        exit(1);
+    }
+
+    //Allocate for struct
+    git_user* user = safemalloc(sizeof(git_user));
+
+    //Set name and email in parameter
+    git_user_set_name(user, n);
+    git_user_set_email(user, e);
+
+    //Initialize other values
     user->signing_key = NULL;
 }
 
 /**
  * void git_user_set_signing_key(git_user* user, const char* sk)
  */
+define_struct_set_string(git_user, name, user, n);
+define_struct_set_string(git_user, email, user, e);
 define_struct_set_string(git_user, signing_key, user, sk);
 
 void git_user_free(git_user* user) {
