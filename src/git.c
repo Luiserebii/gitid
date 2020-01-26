@@ -10,16 +10,18 @@
 void git_get_user_global(git_user* user) {
     runcmd("git config --global user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --global user.email", GIT_USER_MAXSTRING, user->email);
+
     //Create buffer to determine how to handle data which may yield nothing
     char buffer[GIT_USER_MAXSTRING];
     runcmd("git config --global user.signingkey", GIT_USER_MAXSTRING, buffer);
-    //Check if we got something with size
+    //Check if we obtained something
     if(*buffer) {
         git_user_set_signing_key(user, buffer);
+        trimNewline(user->signing_key);
     }
 
     //Trim all inputs
-    trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
+    trimNewline(user->name), trimNewline(user->email);
 }
 
 void git_get_user_local(git_user* user) {
@@ -29,13 +31,14 @@ void git_get_user_local(git_user* user) {
     //Create buffer to determine how to handle data which may yield nothing
     char buffer[GIT_USER_MAXSTRING];
     runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, buffer);
-    //Check if we got something with size
+    //Check if we obtained something
     if(*buffer) {
         git_user_set_signing_key(user, buffer);
+        trimNewline(user->signing_key);
     }
     
     //Trim all inputs
-    trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
+    trimNewline(user->name), trimNewline(user->email);
 }
 
 void git_set_user_global(git_user* user) {

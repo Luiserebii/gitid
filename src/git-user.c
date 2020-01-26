@@ -17,11 +17,10 @@ git_user* git_user_init() {
 }
 
 void git_user_set_signing_key(git_user* user, const char* sk) {
-    //Free if not NULL, before allocating
-    if(user->signing_key) {
-        free(user->signing_key);
-    }
-    user->signing_key = safemalloc(GIT_USER_MAXSTRING);
+    //Free in the case that we are not NULL (free does nothing
+    //if we pass NULL, so we're good executing this)
+    free(user->signing_key);
+    user->signing_key = safemalloc(strlen(sk) + 1);
     if(sk) {
         strcpy(user->signing_key, sk);
     }
@@ -31,9 +30,7 @@ void git_user_free(git_user* user) {
     //Free members
     free(user->name);
     free(user->email);
-    if(user->signing_key) {
-        free(user->signing_key);
-    }
+    free(user->signing_key);
 
     //Free struct
     free(user);
