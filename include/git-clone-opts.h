@@ -1,7 +1,7 @@
 #ifndef GIT_CLONE_OPTS_H
 #define GIT_CLONE_OPTS_H
 
-#define GIT_CLONE_OPTS_MAXSTRING 1000
+#define GIT_CLONE_OPTS_BUFFER_MAX 1000
 
 #include "../include/struct.h"
 
@@ -80,6 +80,7 @@ git_clone_opts* git_clone_opts_init();
  * void git_clone_opts_set_seperate_git_dir(git_clone_opts* opts, const char* sep_gd);
  * void git_clone_opts_set_config(git_clone_opts* opts, const char* conf);
  */
+declare_struct_set_string(git_clone_opts, repo, opts, rp);
 declare_struct_set_string(git_clone_opts, template, opts, tmpl);
 declare_struct_set_string(git_clone_opts, reference, opts, ref);
 declare_struct_set_string(git_clone_opts, origin, opts, orig);
