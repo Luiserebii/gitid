@@ -1,6 +1,6 @@
 #include "../include/git.h"
 #include "../include/git-user.h"
-#include "../include/git-clone.h"
+#include "../include/git-clone-opts.h"
 #include "../include/util.h"
 
 #include <stdlib.h>

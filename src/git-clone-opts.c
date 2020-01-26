@@ -1,4 +1,4 @@
-#include "../include/git-clone.h"
+#include "../include/git-clone-opts.h"
 #include "../include/util.h"
 #include "../include/struct.h"
 
@@ -24,7 +24,7 @@ git_clone_opts* git_clone_opts_init() {
 }
 
 /**
- * Define struct functions for each char* member
+ * MACRO use: Define struct functions for each char* member
  */
 define_struct_set_string(git_clone_opts, template, opts, tmpl)
 define_struct_set_string(git_clone_opts, reference, opts, ref)

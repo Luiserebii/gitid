@@ -2,7 +2,7 @@
 #define GIT_H
 
 #include "../include/git-user.h"
-#include "../include/git-clone.h"
+#include "../include/git-clone-opts.h"
 
 #define GIT_CMD_MAXSTRING (GIT_USER_MAXSTRING * 3) + 100
 #define GIT_CLONE_CMD_MAXSTRING 10000
