@@ -10,21 +10,21 @@ gitid_id* gitid_id_init() {
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
     //Initialize fields
-    id->name = id->username = id->email = id->signing_key = NULL;
+    id->id_name = id->name = id->email = id->signing_key = NULL;
 
     return id;
 }
 
-gitid_id* gitid_id_safe_init(const char* n, const char* usrn, const char* e) {
-    if(!n || !usrn || !e) {
+gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
+    if(!id_n || !n || !e) {
         fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
         exit(1);
     }
     //Allocate gitid_id
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
+    gitid_id_set_id_name(id, id_n);
     gitid_id_set_name(id, n);
-    gitid_id_set_username(id, usrn);
     gitid_id_set_email(id, e);
 
     //Initialize fields
@@ -36,13 +36,13 @@ gitid_id* gitid_id_safe_init(const char* n, const char* usrn, const char* e) {
 /**
  * MACRO use: Define struct functions for each char* member
  */
+define_struct_set_string(gitid_id, id_name, opts, id_n);
 define_struct_set_string(gitid_id, name, opts, n);
-define_struct_set_string(gitid_id, username, opts, usrn);
 define_struct_set_string(gitid_id, email, opts, e);
 define_struct_set_string(gitid_id, signing_key, opts, sk);
 
 void gitid_id_write(gitid_id* id, FILE* stream) {
-    fprintf(stream, "Name: %s\nUsername: %s\nEmail: %s\n", id->name, id->username, id->email);
+    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", id->id_name, id->name, id->email);
     if(id->signing_key) {
         fprintf(stream, "Signing Key: %s\n", id->signing_key);
     }
@@ -50,8 +50,8 @@ void gitid_id_write(gitid_id* id, FILE* stream) {
 
 void gitid_id_free(gitid_id* id) {
     //Free members
+    free(id->id_name);
     free(id->name);
-    free(id->username);
     free(id->email);
     free(id->signing_key);
 
