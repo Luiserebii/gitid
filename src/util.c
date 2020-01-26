@@ -5,14 +5,6 @@
 #include "../include/util.h"
 #include "../include/algorithm.h"
 
-/**
- * Escapes any ' by replacing with '\'', wrapping the entire
- * string in '' to treat as a literal.
- *
- * Assumes the string has enough space to handle 2 additional characters
- * plus 3 characters for each ' the string contains. Otherwise, undefined
- * behavior can arise.
- */
 void escapesh(char* str) {
     //Declare and load buffer with copy of str
     char buffer[strlen(str) + 1];
@@ -33,12 +25,6 @@ void escapesh(char* str) {
     }
 }
 
-/**
- * A wrapped call of the popen() function. Prints any error to the standard 
- * error stream and exits.
- *
- * Writes the command's output to out if successful.
- */
 void runcmd(const char* command, int maxline, char* out) {
     FILE* proc;
     //Process logic in case of failure
@@ -61,13 +47,6 @@ void runcmd(const char* command, int maxline, char* out) {
     }
 }
 
-
-/**
- * A wrapped call of the stdlib int system() function. Prints any error
- * to the standard error stream and exits.
- *
- * Returns the exit code of the command run if successful.
- */
 int minsystem(const char* str) {
     int code;
     if((code = system(str)) != -1) {
@@ -78,9 +57,6 @@ int minsystem(const char* str) {
     }
 }
 
-/**
- * Trims the string at the first newline character found.
- */
 void trimNewline(char* str) {
     for(; *str; ++str) {
         if(*str == '\n') {
@@ -90,9 +66,6 @@ void trimNewline(char* str) {
     }
 }
 
-/**
- * Wrapper function to handle all malloc() cases of failure.
- */
 void* safemalloc(size_t size) {
     void* ptr = malloc(size);
     if(ptr == NULL) {

@@ -7,13 +7,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define GIT_CMD_MAXSTRING (GIT_USER_MAXSTRING * 3) + 100
-#define GIT_CLONE_CMD_MAXSTRING 10000
-
-/**
- * Obtains the global git_user config and saves it into the 
- * git_user struct passed.
- */
 void git_get_user_global(git_user* user) {
     runcmd("git config --global user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --global user.email", GIT_USER_MAXSTRING, user->email);
@@ -29,10 +22,6 @@ void git_get_user_global(git_user* user) {
     trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
 }
 
-/**
- * Obtains the local git_user config and saves it into the 
- * git_user struct passed.
- */
 void git_get_user_local(git_user* user) {
     runcmd("git config --local user.name", GIT_USER_MAXSTRING, user->name);
     runcmd("git config --local user.email", GIT_USER_MAXSTRING, user->email);
@@ -41,17 +30,14 @@ void git_get_user_local(git_user* user) {
     char buffer[GIT_USER_MAXSTRING];
     runcmd("git config --local user.signingkey", GIT_USER_MAXSTRING, buffer);
     //Check if we got something with size
-//    if(*buffer) {
+    if(*buffer) {
         git_user_set_signing_key(user, buffer);
-//    }
+    }
     
     //Trim all inputs
     trimNewline(user->name), trimNewline(user->email), trimNewline(user->signing_key);
 }
 
-/**
- * Sets the global user via git
- */
 void git_set_user_global(git_user* user) {
     char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
     strcat(cmd, user->name);
@@ -66,9 +52,6 @@ void git_set_user_global(git_user* user) {
     minsystem(cmd);
 }
 
-/**
- * Sets the local user for a repository (therefore local)
- */
 void git_set_user_local(git_user* user) {
     char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
     strcat(cmd, user->name);
