@@ -19,7 +19,20 @@ git_user* git_user_init() {
     //Allocate each string
     user->name = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
     user->email = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    
+    //Optional, so set to NULL by default
+    user->signing_key = NULL;
+}
+
+/**
+ * Allocate the signing_key field, and takes an optional char* to set the 
+ * newly allocated field to. If NULL is passed, only allocation occurs.
+ */
+void git_user_init_signing_key(const char* sk) {
     user->signing_key = (char*) malloc(sizeof(char) * GIT_USER_MAXSTRING);
+    if(sk) {
+        strcpy(user->signing_key, sk);
+    }
 }
 
 /**
@@ -173,7 +186,9 @@ void git_user_free(git_user* user) {
     //Free members
     free(user->name);
     free(user->email);
-    free(user->signing_key);
+    if(user->signing_key) {
+        free(user->signing_key);
+    }
 
     //Free struct
     free(user);
