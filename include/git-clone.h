@@ -3,6 +3,8 @@
 
 #define GIT_CLONE_OPTS_MAXSTRING 1000
 
+#include "../include/struct.h"
+
 typedef struct {
     char* repo;
     int verbose;
@@ -34,10 +36,9 @@ typedef struct {
 git_clone_opts* git_clone_opts_init();
 
 /**
- * If new, allocate the signing_key field, and takes an optional char* to set the 
- * newly allocated field to. If NULL is passed, only allocation occurs.
+ * void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl);
  */
-void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl);
+declare_struct_set_string(git_clone_opts, template, opts, tmpl)
 
 /**
  * Frees git_clone_opts struct.

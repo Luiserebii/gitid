@@ -1,5 +1,6 @@
 #include "../include/git-clone.h"
 #include "../include/util.h"
+#include "../include/struct.h"
 
 #include <string.h>
 
@@ -21,14 +22,16 @@ git_clone_opts* git_clone_opts_init() {
 
     return opts;
 }
-
+/*
 void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl) {
     free(opts->template);
     opts->template = safemalloc(strlen(tmpl) + 1);
     if(tmpl) {
         strcpy(opts->template, tmpl);
     }
-}
+}*/
+
+define_struct_set_string(git_clone_opts, template, opts, tmpl)
 
 void git_clone_opts_free(git_clone_opts* opts) {
     //Free members
