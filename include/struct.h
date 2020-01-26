@@ -17,7 +17,7 @@
  * with the name of the struct parameter (e.g. anim), and char_param with the name
  * of the char* parameter (e.g. n).
  */
-#define define_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* tmpl) { \
+#define define_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* char_param) { \
     free(struct_param->member); \
     struct_param->member = safemalloc(strlen(char_param) + 1); \
     if(char_param) { \
@@ -30,6 +30,6 @@
  *
  * Simple macro which declares the function defined with define_struct_set_string.
  */
-#define declare_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* tmpl);
+#define declare_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* char_param);
 
 #endif

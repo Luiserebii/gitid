@@ -1,5 +1,6 @@
 #include "../include/git-user.h"
 #include "../include/util.h"
+#include "../include/struct.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -16,15 +17,10 @@ git_user* git_user_init() {
     user->signing_key = NULL;
 }
 
-void git_user_set_signing_key(git_user* user, const char* sk) {
-    //Free in the case that we are not NULL (free does nothing
-    //if we pass NULL, so we're good executing this)
-    free(user->signing_key);
-    user->signing_key = safemalloc(strlen(sk) + 1);
-    if(sk) {
-        strcpy(user->signing_key, sk);
-    }
-}
+/**
+ * void git_user_set_signing_key(git_user* user, const char* sk)
+ */
+define_struct_set_string(git_user, signing_key, user, sk)
 
 void git_user_free(git_user* user) {
     //Free members

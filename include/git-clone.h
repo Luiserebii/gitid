@@ -39,6 +39,13 @@ git_clone_opts* git_clone_opts_init();
  * void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl);
  */
 declare_struct_set_string(git_clone_opts, template, opts, tmpl)
+declare_struct_set_string(git_clone_opts, reference, opts, ref)
+declare_struct_set_string(git_clone_opts, origin, opts, orig)
+declare_struct_set_string(git_clone_opts, branch, opts, brnch)
+declare_struct_set_string(git_clone_opts, upload_pack, opts, up_pck)
+declare_struct_set_string(git_clone_opts, depth, opts, dpth)
+declare_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd)
+declare_struct_set_string(git_clone_opts, config, opts, conf)
 
 /**
  * Frees git_clone_opts struct.

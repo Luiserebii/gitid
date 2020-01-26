@@ -22,16 +22,18 @@ git_clone_opts* git_clone_opts_init() {
 
     return opts;
 }
-/*
-void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl) {
-    free(opts->template);
-    opts->template = safemalloc(strlen(tmpl) + 1);
-    if(tmpl) {
-        strcpy(opts->template, tmpl);
-    }
-}*/
 
+/**
+ * Define struct functions for each char* member
+ */
 define_struct_set_string(git_clone_opts, template, opts, tmpl)
+define_struct_set_string(git_clone_opts, reference, opts, ref)
+define_struct_set_string(git_clone_opts, origin, opts, orig)
+define_struct_set_string(git_clone_opts, branch, opts, brnch)
+define_struct_set_string(git_clone_opts, upload_pack, opts, up_pck)
+define_struct_set_string(git_clone_opts, depth, opts, dpth)
+define_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd)
+define_struct_set_string(git_clone_opts, config, opts, conf)
 
 void git_clone_opts_free(git_clone_opts* opts) {
     //Free members
