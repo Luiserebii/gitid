@@ -20,7 +20,7 @@ git_user* git_user_init() {
 /**
  * void git_user_set_signing_key(git_user* user, const char* sk)
  */
-define_struct_set_string(git_user, signing_key, user, sk)
+define_struct_set_string(git_user, signing_key, user, sk);
 
 void git_user_free(git_user* user) {
     //Free members

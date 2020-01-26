@@ -24,10 +24,10 @@ gitid_id* gitid_id_init();
  * void gitid_id_set_email(gitid_id* opts, const char* e);
  * void gitid_id_set_signing_key(gitid_id* opts, const char* sk);
  */
-declare_struct_set_string(gitid_id, name, opts, n)
-declare_struct_set_string(gitid_id, username, opts, usrn)
-declare_struct_set_string(gitid_id, email, opts, e)
-declare_struct_set_string(gitid_id, signing_key, opts, sk)
+declare_struct_set_string(gitid_id, name, opts, n);
+declare_struct_set_string(gitid_id, username, opts, usrn);
+declare_struct_set_string(gitid_id, email, opts, e);
+declare_struct_set_string(gitid_id, signing_key, opts, sk);
 
 /**
  * Frees gitid_id struct.

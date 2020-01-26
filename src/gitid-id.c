@@ -17,10 +17,10 @@ gitid_id* gitid_id_init() {
 /**
  * MACRO use: Define struct functions for each char* member
  */
-define_struct_set_string(gitid_id, name, opts, n)
-define_struct_set_string(gitid_id, username, opts, usrn)
-define_struct_set_string(gitid_id, email, opts, e)
-define_struct_set_string(gitid_id, signing_key, opts, sk)
+define_struct_set_string(gitid_id, name, opts, n);
+define_struct_set_string(gitid_id, username, opts, usrn);
+define_struct_set_string(gitid_id, email, opts, e);
+define_struct_set_string(gitid_id, signing_key, opts, sk);
 
 void gitid_id_free(gitid_id* id) {
     //Free members

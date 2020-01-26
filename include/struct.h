@@ -30,6 +30,6 @@
  *
  * Simple macro which declares the function defined with define_struct_set_string.
  */
-#define declare_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* char_param);
+#define declare_struct_set_string(struct, member, struct_param, char_param) void struct##_set_##member(struct* struct_param, const char* char_param)
 
 #endif
