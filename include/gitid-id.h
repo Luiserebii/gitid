@@ -41,6 +41,11 @@ declare_struct_set_string(gitid_id, signing_key, id, sk);
 void gitid_id_write(gitid_id* id, FILE* stream);
 
 /**
+ * Writes git_id struct to a FILE* stream, in a minimal format.
+ */
+void gitid_id_min_write(gitid_id* id, FILE* stream);
+
+/**
  * Frees gitid_id struct.
  */
 void gitid_id_free(gitid_id* id);

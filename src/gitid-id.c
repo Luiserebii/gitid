@@ -48,6 +48,29 @@ void gitid_id_write(gitid_id* id, FILE* stream) {
     }
 }
 
+void gitid_id_min_write(gitid_id* id, FILE* stream) {
+    fprintf(stream, "| %s\n| %s\n| %s\n", id->id_name, id->name, id->email);
+    if(id->signing_key) {
+        fprintf(stream, "| %s\n", id->signing_key);
+    }
+    //Close with ending ___
+    fprintf(stream, "____________\n");
+}
+
+void gitid_id_min_read(gitid_id* id, FILE* stream) {
+    char buffer1[GITID_ID_BUFFER_MAX];
+    char buffer2[GITID_ID_BUFFER_MAX];
+    char buffer3[GITID_ID_BUFFER_MAX];
+    
+    //Load into buffers
+    fscanf(stream, "| %s\n| %s\n| %s\n", buffer1, buffer2, buffer3);
+
+    //Set into struct
+    gitid_id_set_id_name(id, buffer1);
+    gitid_id_set_name(id, buffer1);
+    gitid_id_set_email(id, buffer1);
+}
+
 void gitid_id_free(gitid_id* id) {
     //Free members
     free(id->id_name);
