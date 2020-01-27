@@ -58,7 +58,11 @@ void test_git_set_user_global() {
     git_user_set_email(user, e);
     git_user_set_signing_key(user, sigkey);
 
+    //runcmd("touch $TMPDIR/.gitconfig", 1000, buffer);
+    //runcmd("ls -lha $TMPDIR", 1000, buffer);
+    //printf("%s", buffer);
     git_set_user_global(user);
+    //runcmd("git config --global user.name 'End of Evangello' && git config --global user.email 'endofeva@meme.io' && git config --global user.signingkey '3V@01'", 1000, buffer)
 
     //Finally, try confirming the set
     runcmd("git config --global user.name", 1000, buffer);
