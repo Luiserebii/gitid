@@ -1,12 +1,15 @@
 #include "../lib/unity.h"
 #include "../../include/git.h"
-#include "../../include/git-user.h"
 #include "../../include/gitid-id.h"
+#include "../../include/git-user.h"
 #include "../../include/util.h"
 
 #include <stdio.h>
 #include <string.h>
 
+void test_gitid_id_write();
+void test_gitid_id_min_write();
+void test_gitid_id_read();
 void test_git_user_init();
 void test_git_user_set_functions();
 void test_git_user_write();
@@ -30,20 +33,64 @@ int main() {
     return UNITY_END();
 }
 
-void test_git_user_write() {
-    git_user* id = git_user_init();
+void test_gitid_id_write() {
+    gitid_id* id = gitid_id_init();
     
-    git_user_set_name(id, "Luiserebii");
-    git_user_set_email(id, "luis@serebii.io");
-    git_user_set_signing_key(id, "3B7E2D68E27CBBCF");
+    gitid_id_set_id_name(id, "Luiserebii");
+    gitid_id_set_name(id, "Luiserebii");
+    gitid_id_set_email(id, "luis@serebii.io");
+    gitid_id_set_signing_key(id, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
     //program, note this
-    FILE* tmp = fopen("./tmp/temp_test_git_user_write", "w");
-    git_user_write(id, tmp);
-    int res = fclose(tmp);
-    TEST_ASSERT(res != EOF)
+    FILE* tmp = fopen("./tmp/tmp_test_gitid_id_write", "w");
+    TEST_ASSERT(tmp != NULL);
+    gitid_id_write(id, tmp);
+
+    fclose(tmp);
+    gitid_id_free(id);
+}
+
+void test_gitid_id_min_write() {
+    gitid_id* id = gitid_id_init();
+    
+    gitid_id_set_id_name(id, "Luiserebii");
+    gitid_id_set_name(id, "Luiserebii");
+    gitid_id_set_email(id, "luis@serebii.io");
+    gitid_id_set_signing_key(id, "3B7E2D68E27CBBCF");
+
+    //Temporary file to write to
+    //NOTE: fopen() relative paths are relative to the execution of the 
+    //program, note this
+    FILE* tmp = fopen("./tmp/tmp_test_gitid_id_min_write", "w");
+    TEST_ASSERT(tmp != NULL);
+    gitid_id_min_write(id, tmp);
+
+    fclose(tmp);
+    gitid_id_free(id);
+}
+
+void test_gitid_id_read() {
+
+}
+
+void test_git_user_write() {
+    git_user* user = git_user_init();
+    
+    git_user_set_name(user, "Luiserebii");
+    git_user_set_email(user, "luis@serebii.io");
+    git_user_set_signing_key(user, "3B7E2D68E27CBBCF");
+
+    //Temporary file to write to
+    //NOTE: fopen() relative paths are relative to the execution of the 
+    //program, note this
+    FILE* tmp = fopen("./tmp/tmp_test_git_user_write", "w");
+    TEST_ASSERT(tmp != NULL);
+    git_user_write(user, tmp);
+
+    fclose(tmp);
+    git_user_free(user);
 }
 
 void test_git_user_set_functions() {
