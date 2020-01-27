@@ -82,9 +82,26 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
         exit(1);
     }
     //Check if ending delimiter
-    int cmp = strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER));
+    if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER)) == 0) {
+        return;
+    }
+    //Otherwise, continue to parse the signing key
+    if(sscanf(buffer1, "| %s\n", buffer1) != 1) {
+        fprintf(stderr, "error reading file stream: expected signing key not found\n");
+        fprintf(stderr, "Dumping buffer contents:\n1: %s\n", buffer1);
+        exit(1);
+    }
 
+    //Finally, set signing key into struct
+    gitid_id_set_signing_key(id, buffer1);
 
+    //Read ending delimiter so as to complete read of one entity
+    while((res = getc(stream)) != '\n' && res != EOF)
+        ;
+
+    //NOTE: For the time being, I suppose EOF is "ok", we don't need to enforce an ending delim/newline to read,
+    //but it could perhaps be a source of trouble for the function calling this one...? Consider throwing on EOF,
+    //or returning EOF from this function if it happens
 }
 
 void gitid_id_free(gitid_id* id) {
