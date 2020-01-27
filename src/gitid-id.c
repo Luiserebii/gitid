@@ -66,7 +66,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     int res;
     if((res = fscanf(stream, "| %s\n| %s\n| %s\n", buffer1, buffer2, buffer3)) != 3) {
         fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
-        fprintf("Dumping buffer contents:\n1: %s\n2: %s\n3: %s\n", buffer1, buffer2, buffer3);
+        fprintf(stderr, "Dumping buffer contents:\n1: %s\n2: %s\n3: %s\n", buffer1, buffer2, buffer3);
         exit(1);
     }
     
@@ -76,13 +76,13 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     gitid_id_set_email(id, buffer1);
     
     //Test to see if next is ending, or not
-    if((res = fgets(buffer1, GITID_ID_BUFFER_MAX, stream)) != 1) {
-        fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
-        fprintf("Dumping buffer contents:\n1: %s\n", buffer1);
+    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) != NULL) {
+        fprintf(stderr, "error reading file stream: potential unexpected EOF or other erroe\n");
+        fprintf(stderr, "Dumping buffer contents:\n1: %s\n", buffer1);
         exit(1);
     }
     //Check if ending delimiter
-    int cmp = strncmp(buffer1, GIT_ID_ENDING_DELIMITER, sizeof(GIT_ID_ENDING_DELIMITER));
+    int cmp = strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER));
 
 
 }
