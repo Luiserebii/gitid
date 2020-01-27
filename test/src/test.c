@@ -5,8 +5,10 @@
 #include "../../include/util.h"
 
 #include <stdio.h>
+#include <string.h>
 
 void test_git_user();
+void test_escapesh();
 void test_runcmd();
 void test_trimNewline();
 
@@ -17,6 +19,7 @@ int main() {
 
     UNITY_BEGIN();
     RUN_TEST(test_git_user);
+    RUN_TEST(test_escapesh);
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
     return UNITY_END();
@@ -45,9 +48,27 @@ void test_git_user() {
     TEST_ASSERT(1);
 }
 
+void test_escapesh() {
+    char s1[100] = "ls -lha";
+    char s2[100] = "Fun Giraffe' 'ls -lha'";
+    char s3[100] = "'Meme Team'";
+
+    char exp1[] = "ls -lha";
+    char exp2[] = "Fun Giraffe'\\'' '\\''ls -lha'\\''";
+    char exp3[] = "'\\''Meme Team'\\''";
+
+    escapesh(s1);
+    escapesh(s2);
+    escapesh(s3);
+
+    TEST_ASSERT(strcmp(s1, exp1) == 0);
+    TEST_ASSERT(strcmp(s2, exp2) == 0);
+    TEST_ASSERT(strcmp(s3, exp3) == 0);
+}
+
 void test_runcmd() {
     char cmd[] = "echo hello";
-    char exp[] = "hello";
+    char exp[] = "hello\n";
 
     int maxsz = 100;
     char res[maxsz];
