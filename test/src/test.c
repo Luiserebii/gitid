@@ -47,7 +47,6 @@ void test_git_set_user_global() {
     //as a way to safely rm -rf it
     char tmpdir[] = "/tmp/tmp.XXXXXX";
     mkdtemp(tmpdir);
-    setenv("TMPDIR", tmpdir, 1);
     
     //Set HOME to temporary directory
     setenv("HOME", tmpdir, 1);
@@ -75,13 +74,16 @@ void test_git_set_user_global() {
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
-    strcpy(buffer, tmpdir);
-    strcat(tmpdir, "/.gitconfig");
-    unlink(buffer);
-    rmdir(tmpdir);
-    runcmd("rm -rf $TMPDIR", 1000, buffer);
-    runcmd("rm -rf $TMPDIR", 1000, buffer);
-    printf("BUFfER: %s", buffer);
+    //Attempt to remove .gitconfig
+    strcpy(buffer, tmpdir), strcat(buffer, "/.gitconfig");
+    int res = unlink(buffer);
+    TEST_ASSERT_EQUAL_INT(0, res);
+    //Attempt to remove the TMPDIR 
+    res = rmdir(tmpdir);
+    TEST_ASSERT_EQUAL_INT(0, res);
+    
+    //Finally, free git_user
+    git_user_free(user);
 }
 
 void test_gitid_id_write() {

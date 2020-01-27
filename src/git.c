@@ -58,10 +58,9 @@ void git_set_user_global(git_user* user) {
         strcat(cmd, " && git config --global user.signingkey ");
         strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     }
-    printf("%s\n", cmd);
+    
     //TODO: Figure out how to handle non-zero exit codes
     minsystem(cmd);
-    //runcmd(cmd, GIT_CMD_MAXSTRING, escapebuffer);
 }
 
 void git_set_user_local(git_user* user) {
