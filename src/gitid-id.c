@@ -63,41 +63,28 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     char buffer3[GITID_ID_BUFFER_MAX];
 
     //Load into buffers
-    int res;
-    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) == NULL || 
-            fgets(buffer2, GITID_ID_BUFFER_MAX, stream) == NULL ||
-            fgets(buffer3, GITID_ID_BUFFER_MAX, stream) == NULL) {
-        fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
-        fprintf(stderr, "Dumping buffer contents:\n1: %s\n2: %s\n3: %s\n", buffer1, buffer2, buffer3);
-        exit(1);
-    }
+    minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
+    minfgets(buffer2, GITID_ID_BUFFER_MAX, stream);
+    minfgets(buffer3, GITID_ID_BUFFER_MAX, stream);
     
     //Set into struct
     gitid_id_set_id_name(id, buffer1);
-    gitid_id_set_name(id, buffer1);
-    gitid_id_set_email(id, buffer1);
+    gitid_id_set_name(id, buffer2);
+    gitid_id_set_email(id, buffer3);
     
     //Test to see if next is ending, or not
-    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) == NULL) {
-        fprintf(stderr, "error reading file stream: potential unexpected EOF or other error\n");
-        fprintf(stderr, "Dumping buffer contents:\n1: %s\n", buffer1);
-        exit(1);
-    }
+    minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
+    
     //Check if ending delimiter
     if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER) - 1) == 0) {
         return;
     }
-    //Otherwise, continue to parse the signing key
-    if(sscanf(buffer1, "| %s\n", buffer1) != 1) {
-        fprintf(stderr, "error reading file stream: expected signing key not found\n");
-        fprintf(stderr, "Dumping buffer contents:\n1: %s\n", buffer1);
-        exit(1);
-    }
 
-    //Finally, set signing key into struct
+    //Otherwise, set signing key into struct
     gitid_id_set_signing_key(id, buffer1);
 
     //Read ending delimiter so as to complete read of one entity
+    int res;
     while((res = getc(stream)) != '\n' && res != EOF)
         ;
 
