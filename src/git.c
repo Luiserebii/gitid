@@ -48,13 +48,15 @@ void git_get_user_local(git_user* user) {
 }
 
 void git_set_user_global(git_user* user) {
+    char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
-    strcat(cmd, user->name);
+    //Copy to buffer, escape, and finally, concatenate the result
+    strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     strcat(cmd, " && git config --global user.email ");
-    strcat(cmd, user->email);
+    strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     if(user->signing_key) {
         strcat(cmd, " && git config --global user.signingkey ");
-        strcat(cmd, user->signing_key);
+        strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     }
     printf("%s\n", cmd);
     //TODO: Figure out how to handle non-zero exit codes
@@ -62,13 +64,14 @@ void git_set_user_global(git_user* user) {
 }
 
 void git_set_user_local(git_user* user) {
+    char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
-    strcat(cmd, user->name);
+    strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     strcat(cmd, " && git config --local user.email ");
-    strcat(cmd, user->email);
+    strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     if(user->signing_key) {
         strcat(cmd, " && git config --local user.signingkey ");
-        strcat(cmd, user->signing_key);
+        strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     }
 
     //TODO: Figure out how to handle non-zero exit codes
