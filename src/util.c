@@ -57,6 +57,16 @@ int minsystem(const char* str) {
     }
 }
 
+char* minfgets(char* s, int n, FILE* stream) {
+    char* sret;
+    if((sret = fgets(s, n, stream)) == NULL) {
+        fprintf(stderr, "error reading file stream: potential unexpected EOF or other error");
+        fprintf(stderr, "Dumping buffer contents:\n%s\n", s);
+        exit(1);
+    }
+    return sret;
+}
+
 void trimNewline(char* str) {
     for(; *str; ++str) {
         if(*str == '\n') {

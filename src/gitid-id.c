@@ -49,9 +49,9 @@ void gitid_id_write(gitid_id* id, FILE* stream) {
 }
 
 void gitid_id_min_write(gitid_id* id, FILE* stream) {
-    fprintf(stream, "| %s\n| %s\n| %s\n", id->id_name, id->name, id->email);
+    fprintf(stream, "%s\n%s\n%s\n", id->id_name, id->name, id->email);
     if(id->signing_key) {
-        fprintf(stream, "| %s\n", id->signing_key);
+        fprintf(stream, "%s\n", id->signing_key);
     }
     //Close with ending ___
     fprintf(stream, GITID_ID_ENDING_DELIMITER "\n");
@@ -64,7 +64,9 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 
     //Load into buffers
     int res;
-    if((res = fscanf(stream, "| %s\n| %s\n| %s\n", buffer1, buffer2, buffer3)) != 3) {
+    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) == NULL || 
+            fgets(buffer2, GITID_ID_BUFFER_MAX, stream) == NULL ||
+            fgets(buffer3, GITID_ID_BUFFER_MAX, stream) == NULL) {
         fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
         fprintf(stderr, "Dumping buffer contents:\n1: %s\n2: %s\n3: %s\n", buffer1, buffer2, buffer3);
         exit(1);

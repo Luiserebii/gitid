@@ -23,7 +23,10 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
-    RUN_TEST(test_git_user_init);
+    RUN_TEST(test_gitid_id_write);
+    RUN_TEST(test_gitid_id_min_write);
+
+    RUN_TEST(test_git_user_init);    
     RUN_TEST(test_git_user_set_functions);
     RUN_TEST(test_git_user_write);
     

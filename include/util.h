@@ -30,6 +30,14 @@ void runcmd(const char* command, int maxline, char* out);
 int minsystem(const char* str);
 
 /**
+ * A wrapped call of the fgets() function. Prints any error to the standard
+ * error stream and exits.
+ *
+ * Returns the char* returned by fgets otherwise.
+ */
+char* minfgets(char* s, int n, FILE* stream);
+
+/**
  * Trims the string at the first newline character found.
  */
 void trimNewline(char* str);
