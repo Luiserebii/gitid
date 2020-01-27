@@ -9,6 +9,7 @@
 #include <string.h>
 #include <unistd.h>
 
+void test_git_get_user_global();
 void test_git_set_user_global();
 void test_gitid_id_write();
 void test_gitid_id_min_write();
@@ -26,6 +27,7 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
+    RUN_TEST(test_git_get_user_global);
     RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_gitid_id_write);
     RUN_TEST(test_gitid_id_min_write);
@@ -39,6 +41,56 @@ int main() {
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
     return UNITY_END();
+}
+
+void test_git_get_user_global() { 
+    char buffer[1000];
+    //Create a temporary directory, and set it to TMPDIR
+    //as a way to safely rm -rf it
+    char tmpdir[] = "/tmp/tmp.XXXXXX";
+    mkdtemp(tmpdir);
+    
+    //Set HOME to temporary directory
+    setenv("HOME", tmpdir, 1);
+  
+    //Set temporary git user details to TMPDIR
+    char n[] = "End of Evangello";
+    char e[] = "endofeva@meme.io";
+    char sigkey[] = "3V@01";
+    //Create the command, and run
+    char cmd[1000];
+    sprintf(cmd, "git config --global user.name '%s' && git config --global user.email '%s'"
+            "&& git config --global user.signingkey '%s'", n, e, sigkey);
+    runcmd(cmd, 1000, buffer);
+
+    git_user* user = git_user_init();
+    git_get_user_global(user);
+
+    //Finally, try confirming the get
+    runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
+    TEST_ASSERT_EQUAL_STRING(user->name, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->name, n);
+
+    runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
+    TEST_ASSERT_EQUAL_STRING(user->email, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->email, e);
+
+    runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
+    TEST_ASSERT_EQUAL_STRING(user->signing_key, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->signing_key, sigkey);
+
+    //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
+    //so let's attempt it on the TMPDIR
+    //Attempt to remove .gitconfig
+    strcpy(buffer, tmpdir), strcat(buffer, "/.gitconfig");
+    int res = unlink(buffer);
+    TEST_ASSERT_EQUAL_INT(0, res);
+    //Attempt to remove the TMPDIR 
+    res = rmdir(tmpdir);
+    TEST_ASSERT_EQUAL_INT(0, res);
+    
+    //Finally, free git_user
+    git_user_free(user);
 }
 
 void test_git_set_user_global() { 
