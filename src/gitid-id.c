@@ -76,13 +76,13 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     gitid_id_set_email(id, buffer1);
     
     //Test to see if next is ending, or not
-    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) != NULL) {
-        fprintf(stderr, "error reading file stream: potential unexpected EOF or other erroe\n");
+    if(fgets(buffer1, GITID_ID_BUFFER_MAX, stream) == NULL) {
+        fprintf(stderr, "error reading file stream: potential unexpected EOF or other error\n");
         fprintf(stderr, "Dumping buffer contents:\n1: %s\n", buffer1);
         exit(1);
     }
     //Check if ending delimiter
-    if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER)) == 0) {
+    if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER) - 1) == 0) {
         return;
     }
     //Otherwise, continue to parse the signing key

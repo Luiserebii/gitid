@@ -1,2 +1,2 @@
 all:
-	cc ./src/* ../src/*.c
+	cc -g ./src/* ../src/*.c
