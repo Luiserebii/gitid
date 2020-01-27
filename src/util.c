@@ -26,8 +26,8 @@ void escapesh(char* str) {
             *str++ = *it;
         }
     }
-    //Close with '
-    *str = '\'';
+    //Close with ', and finally, '\0'
+    *str++ = '\'', *str = '\0';
 }
 
 void runcmd(const char* command, int maxline, char* out) {

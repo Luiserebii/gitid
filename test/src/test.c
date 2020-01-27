@@ -46,8 +46,12 @@ void test_git_set_user_global() {
     //as a way to safely rm -rf it
     runcmd("mktemp -d", 1000, buffer);
     setenv("TMPDIR", buffer, 1);
+    char tmpdir[] = "/tmp/tmp.XXXXXX";
+    mkdtemp(tmpdir);
+    printf("OwO: %s", tmpdir);
     //Set HOME to temporary directory
-    setenv("HOME", buffer, 1);
+    //setenv("HOME", buffer, 1);
+    setenv("HOME", tmpdir, 1);
   
     //Create git_user as test, and try setting
     git_user* user = git_user_init();

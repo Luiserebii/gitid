@@ -61,6 +61,7 @@ void git_set_user_global(git_user* user) {
     printf("%s\n", cmd);
     //TODO: Figure out how to handle non-zero exit codes
     minsystem(cmd);
+    //runcmd(cmd, GIT_CMD_MAXSTRING, escapebuffer);
 }
 
 void git_set_user_local(git_user* user) {
