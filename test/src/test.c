@@ -166,9 +166,9 @@ void test_git_user_set_functions() {
     git_user_set_email(user, e);
     git_user_set_signing_key(user, sigkey);
 
-    TEST_ASSERT_EQUAL_PTR(n, user->name);
-    TEST_ASSERT_EQUAL_PTR(e, user->email);
-    TEST_ASSERT_EQUAL_PTR(sigkey, user->signing_key);
+    TEST_ASSERT_EQUAL_STRING(n, user->name);
+    TEST_ASSERT_EQUAL_STRING(e, user->email);
+    TEST_ASSERT_EQUAL_STRING(sigkey, user->signing_key);
 
     git_user_free(user);
 }
@@ -188,9 +188,9 @@ void test_escapesh() {
     char s2[100] = "Fun Giraffe' 'ls -lha'";
     char s3[100] = "'Meme Team'";
 
-    char exp1[] = "ls -lha";
-    char exp2[] = "Fun Giraffe'\\'' '\\''ls -lha'\\''";
-    char exp3[] = "'\\''Meme Team'\\''";
+    char exp1[] = "'ls -lha'";
+    char exp2[] = "'Fun Giraffe'\\'' '\\''ls -lha'\\'''";
+    char exp3[] = "''\\''Meme Team'\\'''";
 
     escapesh(s1);
     escapesh(s2);

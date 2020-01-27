@@ -14,6 +14,9 @@ void escapesh(char* str) {
     char escapestr[] = "'\\''";
     int escsz = sizeof(escapestr) / sizeof(char);
 
+    //Write initial '
+    *str++ = '\'';
+
     //Write escaped values to str
     for(char* it = buffer; *it; ++it) {
         if(*it == '\'') {
@@ -23,6 +26,8 @@ void escapesh(char* str) {
             *str++ = *it;
         }
     }
+    //Close with '
+    *str = '\'';
 }
 
 void runcmd(const char* command, int maxline, char* out) {
