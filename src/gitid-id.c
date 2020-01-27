@@ -54,21 +54,37 @@ void gitid_id_min_write(gitid_id* id, FILE* stream) {
         fprintf(stream, "| %s\n", id->signing_key);
     }
     //Close with ending ___
-    fprintf(stream, "____________\n");
+    fprintf(stream, GITID_ID_ENDING_DELIMITER "\n");
 }
 
 void gitid_id_min_read(gitid_id* id, FILE* stream) {
     char buffer1[GITID_ID_BUFFER_MAX];
     char buffer2[GITID_ID_BUFFER_MAX];
     char buffer3[GITID_ID_BUFFER_MAX];
-    
-    //Load into buffers
-    fscanf(stream, "| %s\n| %s\n| %s\n", buffer1, buffer2, buffer3);
 
+    //Load into buffers
+    int res;
+    if((res = fscanf(stream, "| %s\n| %s\n| %s\n", buffer1, buffer2, buffer3)) != 3) {
+        fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
+        fprintf("Dumping buffer contents:\n1: %s\n2: %s\n3: %s\n", buffer1, buffer2, buffer3);
+        exit(1);
+    }
+    
     //Set into struct
     gitid_id_set_id_name(id, buffer1);
     gitid_id_set_name(id, buffer1);
     gitid_id_set_email(id, buffer1);
+    
+    //Test to see if next is ending, or not
+    if((res = fgets(buffer1, GITID_ID_BUFFER_MAX, stream)) != 1) {
+        fprintf(stderr, "error reading file stream: only %d arguments found\n", res);
+        fprintf("Dumping buffer contents:\n1: %s\n", buffer1);
+        exit(1);
+    }
+    //Check if ending delimiter
+    int cmp = strncmp(buffer1, GIT_ID_ENDING_DELIMITER, sizeof(GIT_ID_ENDING_DELIMITER));
+
+
 }
 
 void gitid_id_free(gitid_id* id) {

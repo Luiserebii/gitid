@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #define GITID_ID_BUFFER_MAX 1000
+#define GITID_ID_ENDING_DELIMITER "____________"
 
 typedef struct {
     char* id_name;
