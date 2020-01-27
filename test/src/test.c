@@ -5,8 +5,10 @@
 #include "../../include/util.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
+void test_git_set_user_global();
 void test_gitid_id_write();
 void test_gitid_id_min_write();
 void test_gitid_id_read();
@@ -23,6 +25,7 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
+    RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_gitid_id_write);
     RUN_TEST(test_gitid_id_min_write);
     RUN_TEST(test_gitid_id_read);
@@ -35,6 +38,22 @@ int main() {
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
     return UNITY_END();
+}
+
+void test_git_set_user_global() { 
+    char buffer[1000];
+    //Create a temporary directory, and set it to TMPDIR
+    //as a way to safely rm -rf it
+    runcmd("mktemp -d", 1000, buffer);
+    setenv("TMPDIR", buffer, 1);
+    //Set HOME to temporary directory
+    setenv("HOME", buffer, 1);
+   
+    runcmd("echo $TMPDIR", 1000, buffer);
+    printf("AAAA\n%s\n", buffer);
+    //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
+    //so let's attempt it on the TMPDIR
+    runcmd("rm -rf $TMPDIR", 1000, buffer);
 }
 
 void test_gitid_id_write() {
@@ -87,10 +106,9 @@ void test_gitid_id_read() {
     //Write input to temporary file
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_read_1", "w");
     gitid_id_min_write(id, tmp);
-    gitid_id_free(id);
     
     //Testing second file
-    id = gitid_id_init();
+    gitid_id_clear(id);
     f = fopen(fname2, "r");
     gitid_id_min_read(id, f);
 
