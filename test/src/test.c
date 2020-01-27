@@ -48,9 +48,28 @@ void test_git_set_user_global() {
     setenv("TMPDIR", buffer, 1);
     //Set HOME to temporary directory
     setenv("HOME", buffer, 1);
-   
-    runcmd("echo $TMPDIR", 1000, buffer);
-    printf("AAAA\n%s\n", buffer);
+  
+    //Create git_user as test, and try setting
+    git_user* user = git_user_init();
+    char n[] = "End of Evangello";
+    char e[] = "endofeva@meme.io";
+    char sigkey[] = "3V@01";
+    git_user_set_name(user, n);
+    git_user_set_email(user, e);
+    git_user_set_signing_key(user, sigkey);
+
+    git_set_user_global(user);
+
+    //Finally, try confirming the set
+    runcmd("git config --global user.name", 1000, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->name, buffer);
+
+    runcmd("git config --global user.email", 1000, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->email, buffer);
+
+    runcmd("git config --global user.signingkey", 1000, buffer);
+    TEST_ASSERT_EQUAL_STRING(user->signing_key, buffer);
+
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
     runcmd("rm -rf $TMPDIR", 1000, buffer);
@@ -147,9 +166,9 @@ void test_git_user_set_functions() {
     git_user_set_email(user, e);
     git_user_set_signing_key(user, sigkey);
 
-    TEST_ASSERT(strcmp(n, user->name) == 0);
-    TEST_ASSERT(strcmp(e, user->email) == 0);
-    TEST_ASSERT(strcmp(sigkey, user->signing_key) == 0);
+    TEST_ASSERT_EQUAL_PTR(n, user->name);
+    TEST_ASSERT_EQUAL_PTR(e, user->email);
+    TEST_ASSERT_EQUAL_PTR(sigkey, user->signing_key);
 
     git_user_free(user);
 }
@@ -177,9 +196,9 @@ void test_escapesh() {
     escapesh(s2);
     escapesh(s3);
 
-    TEST_ASSERT(strcmp(s1, exp1) == 0);
-    TEST_ASSERT(strcmp(s2, exp2) == 0);
-    TEST_ASSERT(strcmp(s3, exp3) == 0);
+    TEST_ASSERT_EQUAL_STRING(s1, exp1);
+    TEST_ASSERT_EQUAL_STRING(s2, exp2);
+    TEST_ASSERT_EQUAL_STRING(s3, exp3);
 }
 
 void test_runcmd() {
@@ -190,12 +209,12 @@ void test_runcmd() {
     char res[maxsz];
     
     runcmd(cmd, maxsz, res);
-    TEST_ASSERT_EQUAL_CHAR_ARRAY(res, exp, sizeof(exp));
+    TEST_ASSERT_EQUAL_STRING(exp, res);
 }
 
 void test_trimNewline() {
     char s[] = "Hello\n";
     char exp[] = "Hello";
     trimNewline(s);
-    TEST_ASSERT_EQUAL_CHAR_ARRAY(s, exp, sizeof(exp));
+    TEST_ASSERT_EQUAL_STRING(exp, s);
 }

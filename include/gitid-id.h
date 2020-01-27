@@ -60,6 +60,11 @@ void gitid_id_min_write(gitid_id* id, FILE* stream);
 void gitid_id_min_read(gitid_id* id, FILE* stream);
 
 /**
+ * Clears all members, resetting them to NULL, but does not deallocate the struct.
+ */
+void gitid_id_clear(gitid_id* id);
+
+/**
  * Frees gitid_id struct.
  */
 void gitid_id_free(gitid_id* id);

@@ -97,6 +97,17 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     //or returning EOF from this function if it happens
 }
 
+void gitid_id_clear(gitid_id* id) {
+    //Free members
+    free(id->id_name);
+    free(id->name);
+    free(id->email);
+    free(id->signing_key);
+
+    //Reset to NULL
+    id->id_name = id->name = id->email = id->signing_key = NULL;
+}
+
 void gitid_id_free(gitid_id* id) {
     //Free members
     free(id->id_name);
