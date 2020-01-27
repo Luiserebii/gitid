@@ -136,7 +136,8 @@ void test_gitid_id_read() {
     //Write input to temporary file
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_read_1", "w");
     gitid_id_min_write(id, tmp);
-    
+    fclose(f), fclose(tmp);
+
     //Testing second file
     gitid_id_clear(id);
     f = fopen(fname2, "r");
@@ -145,7 +146,8 @@ void test_gitid_id_read() {
     //Write input to temporary file
     tmp = fopen("./tmp/tmp_test_gitid_id_read_2", "w");
     gitid_id_min_write(id, tmp);
-
+   
+    fclose(f), fclose(tmp); 
     gitid_id_free(id);
 }
 
