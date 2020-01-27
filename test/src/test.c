@@ -25,6 +25,7 @@ int main() {
     UNITY_BEGIN();
     RUN_TEST(test_gitid_id_write);
     RUN_TEST(test_gitid_id_min_write);
+    RUN_TEST(test_gitid_id_read);
 
     RUN_TEST(test_git_user_init);    
     RUN_TEST(test_git_user_set_functions);
@@ -67,7 +68,6 @@ void test_gitid_id_min_write() {
     //NOTE: fopen() relative paths are relative to the execution of the 
     //program, note this
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_min_write", "w");
-    TEST_ASSERT(tmp != NULL);
     gitid_id_min_write(id, tmp);
 
     fclose(tmp);
@@ -75,7 +75,19 @@ void test_gitid_id_min_write() {
 }
 
 void test_gitid_id_read() {
+    char fname1[] = "./data/single_gitid_id_1";
+    char fname2[] = "./data/single_gitid_id_2";
 
+    gitid_id* id = gitid_id_init();
+
+    FILE* f = fopen(fname1, "r");
+    gitid_id_min_read(id, f);
+
+    //Write input to temporary file
+    FILE* tmp = fopen("./tmp/tmp_test_gitid_id_read_1", "w");
+    gitid_id_min_write(id, tmp);
+    
+    gitid_id_free(id);
 }
 
 void test_git_user_write() {

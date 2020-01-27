@@ -66,7 +66,10 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
     minfgets(buffer2, GITID_ID_BUFFER_MAX, stream);
     minfgets(buffer3, GITID_ID_BUFFER_MAX, stream);
-    
+   
+    //Trim newlines off
+    trimNewline(buffer1), trimNewline(buffer2), trimNewline(buffer3);
+
     //Set into struct
     gitid_id_set_id_name(id, buffer1);
     gitid_id_set_name(id, buffer2);
@@ -81,6 +84,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     }
 
     //Otherwise, set signing key into struct
+    trimNewline(buffer1);
     gitid_id_set_signing_key(id, buffer1);
 
     //Read ending delimiter so as to complete read of one entity
