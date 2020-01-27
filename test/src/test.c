@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 void test_git_set_user_global();
 void test_gitid_id_write();
@@ -44,13 +45,11 @@ void test_git_set_user_global() {
     char buffer[1000];
     //Create a temporary directory, and set it to TMPDIR
     //as a way to safely rm -rf it
-    runcmd("mktemp -d", 1000, buffer);
-    setenv("TMPDIR", buffer, 1);
     char tmpdir[] = "/tmp/tmp.XXXXXX";
     mkdtemp(tmpdir);
-    printf("OwO: %s", tmpdir);
+    setenv("TMPDIR", tmpdir, 1);
+    
     //Set HOME to temporary directory
-    //setenv("HOME", buffer, 1);
     setenv("HOME", tmpdir, 1);
   
     //Create git_user as test, and try setting
@@ -62,25 +61,27 @@ void test_git_set_user_global() {
     git_user_set_email(user, e);
     git_user_set_signing_key(user, sigkey);
 
-    //runcmd("touch $TMPDIR/.gitconfig", 1000, buffer);
-    //runcmd("ls -lha $TMPDIR", 1000, buffer);
-    //printf("%s", buffer);
     git_set_user_global(user);
-    //runcmd("git config --global user.name 'End of Evangello' && git config --global user.email 'endofeva@meme.io' && git config --global user.signingkey '3V@01'", 1000, buffer)
 
     //Finally, try confirming the set
-    runcmd("git config --global user.name", 1000, buffer);
+    runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
     TEST_ASSERT_EQUAL_STRING(user->name, buffer);
 
-    runcmd("git config --global user.email", 1000, buffer);
+    runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
     TEST_ASSERT_EQUAL_STRING(user->email, buffer);
 
-    runcmd("git config --global user.signingkey", 1000, buffer);
+    runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
     TEST_ASSERT_EQUAL_STRING(user->signing_key, buffer);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
+    strcpy(buffer, tmpdir);
+    strcat(tmpdir, "/.gitconfig");
+    unlink(buffer);
+    rmdir(tmpdir);
     runcmd("rm -rf $TMPDIR", 1000, buffer);
+    runcmd("rm -rf $TMPDIR", 1000, buffer);
+    printf("BUFfER: %s", buffer);
 }
 
 void test_gitid_id_write() {
