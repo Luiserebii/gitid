@@ -47,6 +47,19 @@ void gitid_id_write(gitid_id* id, FILE* stream);
 void gitid_id_min_write(gitid_id* id, FILE* stream);
 
 /**
+ * Reads git_id struct from a FILE* stream, expecting the minimal format.
+ * Will throw errors and exit if any errors occur. 
+ *
+ * This function will read under the assumption that the next characters 
+ * in the stream represent a complete gitid_id; it is recommended to check for EOF
+ * beforehand, if grabbing multiple of these.
+ *
+ * The last characters read from this function are guaranteed to include the ending
+ * delimiter and following newline under a valid ending delimiter input.
+ */
+void gitid_id_min_read(gitid_id* id, FILE* stream);
+
+/**
  * Frees gitid_id struct.
  */
 void gitid_id_free(gitid_id* id);
