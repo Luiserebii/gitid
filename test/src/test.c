@@ -38,7 +38,9 @@ void test_git_user_write() {
     git_user_set_signing_key(id, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
-    FILE* tmp = fopen("../tmp/temp_test_git_user_write", "w");
+    //NOTE: fopen() relative paths are relative to the execution of the 
+    //program, note this
+    FILE* tmp = fopen("./tmp/temp_test_git_user_write", "w");
     git_user_write(id, tmp);
     int res = fclose(tmp);
     TEST_ASSERT(res != EOF)
