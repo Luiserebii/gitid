@@ -80,13 +80,24 @@ void test_gitid_id_read() {
 
     gitid_id* id = gitid_id_init();
 
+    //Attempt to open first file for reading
     FILE* f = fopen(fname1, "r");
     gitid_id_min_read(id, f);
 
     //Write input to temporary file
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_read_1", "w");
     gitid_id_min_write(id, tmp);
+    gitid_id_free(id);
     
+    //Testing second file
+    id = gitid_id_init();
+    f = fopen(fname2, "r");
+    gitid_id_min_read(id, f);
+
+    //Write input to temporary file
+    tmp = fopen("./tmp/tmp_test_gitid_id_read_2", "w");
+    gitid_id_min_write(id, tmp);
+
     gitid_id_free(id);
 }
 
