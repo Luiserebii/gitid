@@ -8,6 +8,8 @@
 #include <string.h>
 
 void test_git_user();
+void test_git_user_init();
+void test_git_user_set_functions();
 void test_escapesh();
 void test_runcmd();
 void test_trimNewline();
@@ -19,6 +21,9 @@ int main() {
 
     UNITY_BEGIN();
     RUN_TEST(test_git_user);
+    RUN_TEST(test_git_user_init);
+    RUN_TEST(test_git_user_set_functions);
+    
     RUN_TEST(test_escapesh);
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
@@ -42,10 +47,37 @@ void test_git_user() {
     gitid_id_write(id, stdout);
     gitid_id_min_write(id, stdout);
     //Attempt read
-    gitid_id_min_read(id, stdin);
+    //gitid_id_min_read(id, stdin);
     //Print read
-    gitid_id_min_write(id, stdout);
+    //gitid_id_min_write(id, stdout);
     TEST_ASSERT(1);
+}
+
+void test_git_user_set_functions() {
+    char n[] = "Luiserebii";
+    char e[] = "luis@serebii.io";
+    char sigkey[] = "3B7E2D68E27CBBCF";
+    git_user* user = git_user_init();
+
+    git_user_set_name(user, n);
+    git_user_set_email(user, e);
+    git_user_set_signing_key(user, sigkey);
+
+    TEST_ASSERT(strcmp(n, user->name) == 0);
+    TEST_ASSERT(strcmp(e, user->email) == 0);
+    TEST_ASSERT(strcmp(sigkey, user->signing_key) == 0);
+
+    git_user_free(user);
+}
+
+void test_git_user_init() {
+    git_user* user = git_user_init();
+
+    TEST_ASSERT_EQUAL_PTR(user->name, NULL);
+    TEST_ASSERT_EQUAL_PTR(user->email, NULL);
+    TEST_ASSERT_EQUAL_PTR(user->signing_key, NULL);
+
+    git_user_free(user);
 }
 
 void test_escapesh() {
