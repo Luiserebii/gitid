@@ -2,10 +2,13 @@
 #include "../../include/git.h"
 #include "../../include/git-user.h"
 #include "../../include/gitid-id.h"
+#include "../../include/util.h"
 
 #include <stdio.h>
 
 void test_git_user();
+void test_runcmd();
+void test_trimNewline();
 
 void setUp() {}
 void tearDown() {}
@@ -14,6 +17,8 @@ int main() {
 
     UNITY_BEGIN();
     RUN_TEST(test_git_user);
+    RUN_TEST(test_runcmd);
+    RUN_TEST(test_trimNewline);
     return UNITY_END();
 }
 
@@ -38,4 +43,22 @@ void test_git_user() {
     //Print read
     gitid_id_min_write(id, stdout);
     TEST_ASSERT(1);
+}
+
+void test_runcmd() {
+    char cmd[] = "echo hello";
+    char exp[] = "hello";
+
+    int maxsz = 100;
+    char res[maxsz];
+    
+    runcmd(cmd, maxsz, res);
+    TEST_ASSERT_EQUAL_CHAR_ARRAY(res, exp, sizeof(exp));
+}
+
+void test_trimNewline() {
+    char s[] = "Hello\n";
+    char exp[] = "Hello";
+    trimNewline(s);
+    TEST_ASSERT_EQUAL_CHAR_ARRAY(s, exp, sizeof(exp));
 }
