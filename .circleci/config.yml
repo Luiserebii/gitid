@@ -31,10 +31,10 @@ jobs:
       - checkout
       - run:
           name: Setup directory permissions
-          command: ls -lha && chown -R $USER:$USER ./test/ && mkdir ./test/tmp
+          command: chown -R $USER:$USER ./test/ && mkdir ./test/tmp
       - run:
-          name: Test
-          command: cd test && make && ./a.out
+          name: Run tests and display output
+          command: cd test && make && ./a.out && make out
       - run:
           name: valgrind
           command: cd test && make && valgrind ./a.out
