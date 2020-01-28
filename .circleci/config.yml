@@ -30,6 +30,9 @@ jobs:
           command: apt-get update && apt-get install -y git
       - checkout
       - run:
+          name: Setup directory permissions
+          command: ls -lha && chown -R $USER:$USER ./test/ && mkdir ./test/tmp
+      - run:
           name: Test
           command: cd test && make && ./a.out
       - run:
