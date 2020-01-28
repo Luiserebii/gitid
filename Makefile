@@ -1,2 +1,2 @@
 all:
-	cc -g ./src/*.c -o gitid
+	cc -g3 -Wall ./src/*.c -o gitid

@@ -12,6 +12,8 @@ git_user* git_user_init() {
 
     //Initialize all values
     user->name = user->email = user->signing_key = NULL;
+
+    return user;
 }
 
 git_user* git_user_safe_init(const char* n, const char* e) {
@@ -30,6 +32,8 @@ git_user* git_user_safe_init(const char* n, const char* e) {
 
     //Initialize other values
     user->signing_key = NULL;
+
+    return user;
 }
 
 /**
