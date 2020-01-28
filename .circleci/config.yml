@@ -1,0 +1,43 @@
+version: 2
+
+aliases:
+  # Alias for any default options
+  - &defaults
+    docker:
+      - image: debian:stretch
+
+jobs:
+  lint:
+    <<: *defaults
+    steps:
+      - run:
+          name: Install clang-format
+          command: apt-get update && apt-get install -y git clang-format
+      - checkout
+      - run:
+          name: Linter
+          command: ./scripts/lint.sh && if [[ `git status --porcelain` ]]; then exit 1; else exit 0; fi
+
+  # Building and running examples
+  test:
+    <<: *defaults
+    steps:
+      - run:
+          name: Install gcc, make, and valgrind
+          command: apt-get update && apt-get install -y gcc make valgrind
+      - checkout
+      - run:
+          name: Test
+          command: cd test && make && ./a.out
+      - run:
+          name: valgrind
+          command: cd test && make && valgrind ./a.out
+
+
+workflows:
+  version: 2
+  everything:
+    jobs: # For reference, all jobs run in parallel
+      - lint
+      - test
+

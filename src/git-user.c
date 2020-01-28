@@ -46,7 +46,6 @@ void git_user_write(git_user* user, FILE* stream) {
     }
 }
 
-
 void git_user_free(git_user* user) {
     //Free members
     free(user->name);

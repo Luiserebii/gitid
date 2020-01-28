@@ -66,7 +66,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
     minfgets(buffer2, GITID_ID_BUFFER_MAX, stream);
     minfgets(buffer3, GITID_ID_BUFFER_MAX, stream);
-   
+
     //Trim newlines off
     trimNewline(buffer1), trimNewline(buffer2), trimNewline(buffer3);
 
@@ -74,10 +74,10 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     gitid_id_set_id_name(id, buffer1);
     gitid_id_set_name(id, buffer2);
     gitid_id_set_email(id, buffer3);
-    
+
     //Test to see if next is ending, or not
     minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
-    
+
     //Check if ending delimiter
     if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER) - 1) == 0) {
         return;
