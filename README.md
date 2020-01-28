@@ -1,4 +1,6 @@
 # gitid
+![GitHub](https://img.shields.io/github/license/Luiserebii/gitid?color=222222)
+[![CircleCI](https://circleci.com/gh/Luiserebii/gitid.svg?style=svg)](https://circleci.com/gh/Luiserebii/gitid)
 
 A command line tool allowing for easy shifting between git identities (username, email, and GPG). A lighter, more portable rewrite of [git-identity](https://github.com/Luiserebii/git-identity) in C.
 
