@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../include/algorithm.h"
+#include "../lib/c-stl/include/algorithm.h"
 #include "../include/util.h"
 
 void escapesh(char* str) {
@@ -21,7 +21,7 @@ void escapesh(char* str) {
     for(char* it = buffer; *it; ++it) {
         if(*it == '\'') {
             //Write '\''
-            algorithm_copy(char*, escapestr, escapestr + escsz - 1, str);
+            algorithm_copy(char*, escapestr, escapestr + escsz - 1, str, str);
         } else {
             *str++ = *it;
         }
