@@ -160,6 +160,13 @@ void test_vector_gitid_id() {
     TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 2)->id_name);
     TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
 
+    //Attempt erase of second element
+    vector_erase_free_gitid_id(ids, ids->head + 1);
+
+    //Make assertions of first and third (now second) elements
+    TEST_ASSERT_EQUAL_STRING(id_data1[1], vector_at_gitid_id(ids, 0)->user->name);
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 1)->id_name);
+
     //Finally, attempt to free the entire vector (this should result in positives from valgrind)
     vector_free_gitid_id(ids);
 }
