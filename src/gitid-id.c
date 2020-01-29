@@ -25,9 +25,8 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
     //Allocate gitid_id
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
-    gitid_id_set_id_name(id, id_n);
-    gitid_id_set_name(id, n);
-    gitid_id_set_email(id, e);
+    //Initialize git-user
+    id->user = git_user_safe_init(n, e);
 
     //Initialize fields
     id->signing_key = NULL;
@@ -69,10 +68,10 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     //Trim newlines off
     trimNewline(buffer1), trimNewline(buffer2), trimNewline(buffer3);
 
-    //Set into struct
+    //Set into gitid_id
     gitid_id_set_id_name(id, buffer1);
-    gitid_id_set_name(id, buffer2);
-    gitid_id_set_email(id, buffer3);
+    git_user_set_name(id->user, buffer2);
+    git_user_set_email(id->user, buffer3);
 
     //Test to see if next is ending, or not
     minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
@@ -84,7 +83,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 
     //Otherwise, set signing key into struct
     trimNewline(buffer1);
-    gitid_id_set_signing_key(id, buffer1);
+    git_user_set_signing_key(id->user, buffer1);
 
     //Read ending delimiter so as to complete read of one entity
     int res;
@@ -99,20 +98,16 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 void gitid_id_clear(gitid_id* id) {
     //Free members
     free(id->id_name);
-    free(id->name);
-    free(id->email);
-    free(id->signing_key);
+    git_user_free(id->user);
 
     //Reset to NULL
-    id->id_name = id->name = id->email = id->signing_key = NULL;
+    id->id_name = id->user = NULL;
 }
 
 void gitid_id_free(gitid_id* id) {
     //Free members
     free(id->id_name);
-    free(id->name);
-    free(id->email);
-    free(id->signing_key);
+    git_user_free(id->user);
 
     //Free struct
     free(id);
