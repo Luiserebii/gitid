@@ -142,9 +142,9 @@ void test_gitid_id_write() {
     gitid_id* id = gitid_id_init();
     
     gitid_id_set_id_name(id, "Luiserebii");
-    gitid_id_set_name(id, "Luiserebii");
-    gitid_id_set_email(id, "luis@serebii.io");
-    gitid_id_set_signing_key(id, "3B7E2D68E27CBBCF");
+    git_user_set_name(id->user, "Luiserebii");
+    git_user_set_email(id->user, "luis@serebii.io");
+    git_user_set_signing_key(id->user, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -161,9 +161,9 @@ void test_gitid_id_min_write() {
     gitid_id* id = gitid_id_init();
     
     gitid_id_set_id_name(id, "Luiserebii");
-    gitid_id_set_name(id, "Luiserebii");
-    gitid_id_set_email(id, "luis@serebii.io");
-    gitid_id_set_signing_key(id, "3B7E2D68E27CBBCF");
+    git_user_set_name(id->user, "Luiserebii");
+    git_user_set_email(id->user, "luis@serebii.io");
+    git_user_set_signing_key(id->user, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 

@@ -11,7 +11,7 @@ gitid_id* gitid_id_init() {
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
     //Initialize fields
-    id->id_name  = NULL;
+    id->id_name = NULL;
     id->user = git_user_init();
 
     return id;
@@ -27,9 +27,6 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
 
     //Initialize git-user
     id->user = git_user_safe_init(n, e);
-
-    //Initialize fields
-    id->signing_key = NULL;
 
     return id;
 }
@@ -101,7 +98,8 @@ void gitid_id_clear(gitid_id* id) {
     git_user_free(id->user);
 
     //Reset to NULL
-    id->id_name = id->user = NULL;
+    id->id_name = NULL;
+    id->user = NULL;
 }
 
 void gitid_id_free(gitid_id* id) {
