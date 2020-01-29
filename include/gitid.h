@@ -1,6 +1,8 @@
 #ifndef GITID_H
 #define GITID_H
 
+#include "git-user.h"
+
 #define GITID_SYSTEM_DATA_FILE "./data/gitids"
 
 //Lowest level functions
@@ -41,10 +43,10 @@ void gitid_delete_system_gitid_id(char* id_name);
 //Functions dealing with the setting of identities to git b
 /**
  * Sets either the local/global git users on the git application.
- * Since these are so minor to implement, these are really better as macros
+ * Since these are so trivial to implement, these are really better as macros,
+ * if they should be used at all
  */
-void gitid_shift_gitid_id_global(gitid_id* id);
-
-void gitid_shift_gitid_id_local(gitid_id* id);
+#define gitid_shift_gitid_id_global(id) git_set_user_global(id->user)
+#define gitid_shift_gitid_id_local(id) git_set_user_local(id->user)
 
 #endif
