@@ -2,6 +2,7 @@
 #define GITID_ID_H
 
 #include "../include/struct.h"
+#include "../include/git-user.h"
 
 #include <stdio.h>
 
@@ -10,9 +11,7 @@
 
 typedef struct {
     char* id_name;
-    char* name;
-    char* email;
-    char* signing_key;
+    git_user* user;
 } gitid_id;
 
 /**
@@ -27,14 +26,8 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e);
 
 /**
  * void gitid_id_set_name(gitid_id* opts, const char* n);
- * void gitid_id_set_username(gitid_id* opts, const char* usrn);
- * void gitid_id_set_email(gitid_id* opts, const char* e);
- * void gitid_id_set_signing_key(gitid_id* opts, const char* sk);
  */
 declare_struct_set_string(gitid_id, id_name, id, id_n);
-declare_struct_set_string(gitid_id, name, id, n);
-declare_struct_set_string(gitid_id, email, id, e);
-declare_struct_set_string(gitid_id, signing_key, id, sk);
 
 /**
  * Writes git_id struct to a FILE* stream.

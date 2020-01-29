@@ -1,4 +1,5 @@
 #include "../include/gitid-id.h"
+#include "../include/git-user.h"
 #include "../include/struct.h"
 #include "../include/util.h"
 
@@ -10,7 +11,8 @@ gitid_id* gitid_id_init() {
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
     //Initialize fields
-    id->id_name = id->name = id->email = id->signing_key = NULL;
+    id->id_name  = NULL;
+    id->user = git_user_init();
 
     return id;
 }
@@ -37,21 +39,18 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
  * MACRO use: Define struct functions for each char* member
  */
 define_struct_set_string(gitid_id, id_name, opts, id_n);
-define_struct_set_string(gitid_id, name, opts, n);
-define_struct_set_string(gitid_id, email, opts, e);
-define_struct_set_string(gitid_id, signing_key, opts, sk);
 
 void gitid_id_write(gitid_id* id, FILE* stream) {
-    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", id->id_name, id->name, id->email);
-    if(id->signing_key) {
-        fprintf(stream, "Signing Key: %s\n", id->signing_key);
+    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", id->id_name, id->user->name, id->user->email);
+    if(id->user->signing_key) {
+        fprintf(stream, "Signing Key: %s\n", id->user->signing_key);
     }
 }
 
 void gitid_id_min_write(gitid_id* id, FILE* stream) {
-    fprintf(stream, "%s\n%s\n%s\n", id->id_name, id->name, id->email);
-    if(id->signing_key) {
-        fprintf(stream, "%s\n", id->signing_key);
+    fprintf(stream, "%s\n%s\n%s\n", id->id_name, id->user->name, id->user->email);
+    if(id->user->signing_key) {
+        fprintf(stream, "%s\n", id->user->signing_key);
     }
     //Close with ending ___
     fprintf(stream, GITID_ID_ENDING_DELIMITER "\n");
