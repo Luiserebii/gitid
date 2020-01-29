@@ -1,6 +1,7 @@
 #include "../lib/unity.h"
 #include "../../include/git.h"
 #include "../../include/gitid-id.h"
+#include "../../include/vector-gitid-id.h"
 #include "../../include/git-user.h"
 #include "../../include/util.h"
 
@@ -11,6 +12,7 @@
 
 void test_git_get_user_global();
 void test_git_set_user_global();
+void test_vector_gitid_id();
 void test_gitid_id_write();
 void test_gitid_id_min_write();
 void test_gitid_id_read();
@@ -136,6 +138,26 @@ void test_git_set_user_global() {
     
     //Finally, free git_user
     git_user_free(user);
+}
+
+void test_vector_gitid_id() {
+    //Initialize gitid_id vector
+    vector_gitid_id* ids = vector_init_gitid_id();
+    //Sample data
+    char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
+    char* id_data2[] = {"notcheem", "uncheem prime", "uncheemz@meme.io", "A2FJ39SA"};
+    char* id_data3[] = {"secret cheem", "???", "???@???.cheem"};
+    
+    //Push all of sample data as gitid_ids onto the vector
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
+    git_user_set_signing_key(vector_at_gitid_id(ids, 1)->user, id_data2[3]);
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
+
+    //Assert current state
+    TEST_ASSERT_EQUAL_STRING(id_data2[3], vector_at_gitid_id(ids, 1)->user->signing_key);
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 2)->id_name);
+    TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
 }
 
 void test_gitid_id_write() {

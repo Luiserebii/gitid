@@ -1,6 +1,10 @@
 #include "../include/vector-gitid-id.h"
 #include "../include/gitid-id.h"
 
+#include <stdlib.h>
+
+static void vector_grow_gitid_id(vector_gitid_id* v);
+
 vector_gitid_id* vector_init_gitid_id() {
     vector_gitid_id* v = (vector_gitid_id*) malloc(sizeof(vector_gitid_id));
     v->head = v->avail = v->tail = NULL;
