@@ -31,6 +31,7 @@ int main() {
     UNITY_BEGIN();
     RUN_TEST(test_git_get_user_global);
     RUN_TEST(test_git_set_user_global);
+    RUN_TEST(test_vector_gitid_id);
     RUN_TEST(test_gitid_id_write);
     RUN_TEST(test_gitid_id_min_write);
     RUN_TEST(test_gitid_id_read);
@@ -158,6 +159,9 @@ void test_vector_gitid_id() {
     TEST_ASSERT_EQUAL_STRING(id_data2[3], vector_at_gitid_id(ids, 1)->user->signing_key);
     TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 2)->id_name);
     TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
+
+    //Finally, attempt to free the entire vector (this should result in positives from valgrind)
+    //vector_free_gitid_id(ids);
 }
 
 void test_gitid_id_write() {

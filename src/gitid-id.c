@@ -24,6 +24,9 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
     }
     //Allocate gitid_id
     gitid_id* id = safemalloc(sizeof(gitid_id));
+    //Initialize to NULL so we don't get errors by set_id_name TODO: make this... a little less hacky
+    id->id_name = NULL;
+    gitid_id_set_id_name(id, id_n);
 
     //Initialize git-user
     id->user = git_user_safe_init(n, e);

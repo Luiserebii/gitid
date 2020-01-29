@@ -25,6 +25,13 @@ git_user* git_user_safe_init(const char* n, const char* e) {
 
     //Allocate for struct
     git_user* user = safemalloc(sizeof(git_user));
+    //Initialize to NULL so we don't get errors by set_id_name TODO: make this... a little less hacky
+    //Explanation; we will get a terrible error if we don't, as user->name currently contains garbage
+    //values; free() works if the struct is in a valid state, e.g. either is a valid address currently
+    //pointing to memory, or is NULL and therefore fine to use. However, if not, then we have an issue
+    //of attempting to free an invalid address!!! So, as a hacky solution... simply set to NULL before
+    //setting
+    user->name = user->email = NULL;
 
     //Set name and email in parameter
     git_user_set_name(user, n);
