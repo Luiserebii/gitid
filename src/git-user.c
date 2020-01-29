@@ -50,6 +50,16 @@ void git_user_write(git_user* user, FILE* stream) {
     }
 }
 
+void git_user_clear(git_user* user) {
+    //Free members
+    free(user->name);
+    free(user->email);
+    free(user->signing_key);
+
+    //Reset to NULL
+    user->name = user->email = user->signing_key = NULL;
+}
+
 void git_user_free(git_user* user) {
     //Free members
     free(user->name);

@@ -43,6 +43,11 @@ declare_struct_set_string(git_user, signing_key, user, sk);
 void git_user_write(git_user* user, FILE* stream);
 
 /**
+ * Clears all members, resetting them to NULL, but does not deallocate the struct.
+ */
+void git_user_clear(git_user* user);
+
+/**
  * Frees git_user struct.
  */
 void git_user_free(git_user* user);

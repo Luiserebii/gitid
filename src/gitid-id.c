@@ -95,11 +95,10 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 void gitid_id_clear(gitid_id* id) {
     //Free members
     free(id->id_name);
-    git_user_free(id->user);
+    git_user_clear(id->user);
 
     //Reset to NULL
     id->id_name = NULL;
-    id->user = NULL;
 }
 
 void gitid_id_free(gitid_id* id) {

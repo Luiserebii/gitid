@@ -54,6 +54,8 @@ void gitid_id_min_read(gitid_id* id, FILE* stream);
 
 /**
  * Clears all members, resetting them to NULL, but does not deallocate the struct.
+ * Note that this function will also "recursively" clear all members, which leaves
+ * the struct in a valid state (a deallocated struct member would be invalid).
  */
 void gitid_id_clear(gitid_id* id);
 
