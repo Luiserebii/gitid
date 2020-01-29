@@ -1,8 +1,8 @@
 #ifndef GITID_ID_H
 #define GITID_ID_H
 
-#include "../include/struct.h"
 #include "../include/git-user.h"
+#include "../include/struct.h"
 
 #include <stdio.h>
 
