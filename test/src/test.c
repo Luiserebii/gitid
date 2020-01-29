@@ -161,7 +161,7 @@ void test_vector_gitid_id() {
     TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
 
     //Finally, attempt to free the entire vector (this should result in positives from valgrind)
-    //vector_free_gitid_id(ids);
+    vector_free_gitid_id(ids);
 }
 
 void test_gitid_id_write() {

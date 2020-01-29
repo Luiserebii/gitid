@@ -119,4 +119,3 @@ void vector_free_gitid_id(vector_gitid_id* v) {
     free(v->head);
     free(v);
 }
-
