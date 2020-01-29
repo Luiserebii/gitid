@@ -2,6 +2,7 @@
 #include "../include/gitid-id.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 static void vector_grow_gitid_id(vector_gitid_id* v);
 
@@ -104,6 +105,16 @@ size_t vector_capacity_gitid_id(vector_gitid_id* v) {
 
 gitid_id* vector_at_gitid_id(vector_gitid_id* v, size_t n) {
     return *(v->head + n);
+}
+
+gitid_id* vector_get_id_gitid_id(vector_gitid_id* v, char* id_name) {
+    for(gitid_id** it = v->head; it != v->avail; ++it) {
+        if(strcmp(id_name, (*it)->id_name) == 0) {
+            return *it;
+        }
+    }
+    //If we hit here, nothing was found
+    return NULL;
 }
 
 void vector_clear_gitid_id(vector_gitid_id* v) {

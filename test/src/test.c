@@ -167,6 +167,14 @@ void test_vector_gitid_id() {
     TEST_ASSERT_EQUAL_STRING(id_data1[1], vector_at_gitid_id(ids, 0)->user->name);
     TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 1)->id_name);
 
+    //Test vector_get_id_gitid_id by searching for one
+    gitid_id* id = vector_get_id_gitid_id(ids, id_data3[0]);
+
+    //Assert that we found our one
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], id->id_name);
+    TEST_ASSERT_EQUAL_STRING(id_data3[1], id->user->name);
+    TEST_ASSERT_EQUAL_STRING(id_data3[2], id->user->email);
+
     //Finally, attempt to free the entire vector (this should result in positives from valgrind)
     vector_free_gitid_id(ids);
 }

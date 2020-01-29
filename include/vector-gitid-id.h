@@ -88,6 +88,12 @@ size_t vector_capacity_gitid_id(vector_gitid_id* v);
 gitid_id* vector_at_gitid_id(vector_gitid_id* v, size_t n);
 
 /**
+ * Returns a pointer to a gitid_id by searching for the first with the name passed.
+ * If nothing was found, NULL is returned.
+ */
+gitid_id* vector_get_id_gitid_id(vector_gitid_id* v, char* id_name);
+
+/**
  * 
  * Clears all elements allocated to the vector, but does not deallocate
  * the vector itself.
