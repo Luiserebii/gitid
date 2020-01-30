@@ -1,5 +1,6 @@
 #include "../lib/unity.h"
 #include "../../include/git.h"
+#include "../../include/gitid.h"
 #include "../../include/gitid-id.h"
 #include "../../include/vector-gitid-id.h"
 #include "../../include/git-user.h"
@@ -10,6 +11,9 @@
 #include <string.h>
 #include <unistd.h>
 
+
+void test_gitid_get_system_gitid_ids();
+void test_gitid_set_system_gitid_ids();
 void test_git_get_user_global();
 void test_git_set_user_global();
 void test_vector_gitid_id();
@@ -29,6 +33,7 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
+    RUN_TEST(test_gitid_get_system_gitid_ids);
     RUN_TEST(test_git_get_user_global);
     RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_vector_gitid_id);
@@ -44,6 +49,23 @@ int main() {
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
     return UNITY_END();
+}
+
+void test_gitid_get_system_gitid_ids() {
+
+    //Attempt to get system ids from one with two
+    vector_gitid_id* v1 = vector_init_gitid_id();
+    gitid_get_system_gitid_ids_file(v1, "data/double_gitid_id_1");
+    
+    //Assert each data piece
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v1->head))->id_name);
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v1->head))->user->name);
+    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", (*(v1->head))->user->email);
+    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", (*(v1->head))->user->signing_key);
+}
+
+void test_gitid_set_system_gitid_ids() {
+
 }
 
 void test_git_get_user_global() { 
