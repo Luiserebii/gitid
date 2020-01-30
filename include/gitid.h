@@ -1,9 +1,9 @@
 #ifndef GITID_H
 #define GITID_H
 
-#include "git-user.h"
-#include "gitid-id.h"
 #include "vector-gitid-id.h"
+#include "gitid-id.h"
+#include "git-user.h"
 
 #define GITID_SYSTEM_DATA_FILE "./data/gitids"
 
@@ -47,7 +47,7 @@ void gitid_new_system_gitid_id(gitid_id* git_id);
  * found in the gitid_id pointer passed. Should break if the gitid is not found
  * on the system by printing an error and exiting.
  */
-void gitid_update_system_gitid_id(gitid_id* id, char* id_name);
+void gitid_update_system_gitid_id(gitid_id* id, const char* id_name);
 
 /**
  * Deletes a system gitid of the ID id_name. Should break if the gitid is not found
@@ -55,7 +55,7 @@ void gitid_update_system_gitid_id(gitid_id* id, char* id_name);
  */
 void gitid_delete_system_gitid_id(char* id_name);
 
-//Functions dealing with the setting of identities to git b
+//Functions dealing with the setting of identities to git itself
 /**
  * Sets either the local/global git users on the git application.
  * Since these are so trivial to implement, these are really better as macros,

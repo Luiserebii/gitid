@@ -134,6 +134,10 @@ int main(int argc, char** argv) {
     }
 
     if(shift->count != 0) {
+        //TODO: I just spotted an early bug here, we have a case where a gitid
+        //that has no signing key that is set, will not actually clear the signing 
+        //key used, it'll just overwrite user.name and user.email.
+
         //Assert not both --global and --local
         if(global->count && local->count) {
             fputs("Error: --global and --local both specified\n", stderr);
@@ -189,7 +193,31 @@ int main(int argc, char** argv) {
         
         //Free
         gitid_id_free(new_id);
+    }
 
+    if(update->count != 0) {
+        //NOTE: This function will not change the ID, due to the way the flags are
+        //currently set up.
+
+        //Assert all flags needed
+        if(!user->count && !email->count) {
+            fputs("Error: minimum --user and --email must be specified.\n", stderr);
+        }
+        
+        //Construct gitid_id
+        gitid_id* upd_id = gitid_id_init();
+        gitid_id_set_id_name(upd_id, *(update->sval));
+        git_user_set_name(upd_id->user, *(user->sval));
+        git_user_set_email(upd_id->user, *(email->sval));
+        if(sigkey->count) {
+            git_user_set_signing_key(upd_id->user, *(sigkey->sval));
+        }
+       
+        //Finally, attempt to update
+        gitid_update_system_gitid_id(upd_id, *(update->sval)); 
+    
+        //Free
+        gitid_id_free(upd_id);
     }
 
     //Exit
