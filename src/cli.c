@@ -4,6 +4,8 @@
 #include "../lib/argtable3/argtable3.h"
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -113,12 +115,44 @@ int main(int argc, char** argv) {
     if(current->count != 0) {
         //Init git_user and obtain latest
         git_user* user = git_user_init();
-        git_get_user_global(user);
-        //Print
+        
+        //If local not specified, global is default anyways, so print global
+        if(!local->count) {
+            git_get_user_global(user);
+        } else {
+            git_get_user_local(user);
+        }
+        //Print, and free
         git_user_write(user, stdout);
-        //Free
-        git_user_free(user);
+        git_user_free(user); 
     }
+
+    if(shift->count != 0) {
+        //Try to obtain all vectors
+        vector_gitid_id* v = vector_init_gitid_id();
+        gitid_get_system_gitid_ids(v);
+
+        gitid_id* id;
+        //Look for matching
+        for(gitid_id** it = v->head; it != v->avail; ++it) {
+            if(strcmp((*it)->id_name, *(shift->sval)) == 0) {
+                id = *it;
+                break;
+            }
+        }
+        //If nothing found, print error and break
+        if(id == NULL) {
+            fprintf(stderr, "Error: No git id found under the name \"%s\"\n", *(shift->sval));
+       	    exit(1);
+    	}
+        
+        //Finally, set
+        gitid_shift_gitid_id_global(id);
+
+        //And, finally, free vector (no need to free id)
+        vector_free_gitid_id(v);
+    }
+
 
     //Exit
     clean(argtable, 0);
