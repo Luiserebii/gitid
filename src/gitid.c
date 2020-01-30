@@ -101,7 +101,7 @@ void gitid_update_system_gitid_id(gitid_id* id, const char* id_name) {
     vector_free_gitid_id(v);
 }
 
-void gitid_delete_system_gitid_id(char* id_name) {
+void gitid_delete_system_gitid_id(const char* id_name) {
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);

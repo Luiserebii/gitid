@@ -53,7 +53,7 @@ void gitid_update_system_gitid_id(gitid_id* id, const char* id_name);
  * Deletes a system gitid of the ID id_name. Should break if the gitid is not found
  * on the system by printing an error and exiting.
  */
-void gitid_delete_system_gitid_id(char* id_name);
+void gitid_delete_system_gitid_id(const char* id_name);
 
 //Functions dealing with the setting of identities to git itself
 /**

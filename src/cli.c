@@ -219,6 +219,11 @@ int main(int argc, char** argv) {
         //Free
         gitid_id_free(upd_id);
     }
+    
+    if(delete->count != 0) {
+        //Attempt a delete
+        gitid_delete_system_gitid_id(*(delete->sval));
+    }
 
     //Exit
     clean(argtable, 0);
