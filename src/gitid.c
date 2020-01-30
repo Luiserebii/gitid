@@ -44,7 +44,6 @@ void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
 }
 
 void gitid_new_system_gitid_id(gitid_id* id) {
-
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
