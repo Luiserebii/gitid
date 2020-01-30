@@ -33,6 +33,8 @@ void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
 void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
 
 //Slightly higher level, these call the above two get/set functions; get to obtain system ids to process, and set to save to the system once more
+//A minor note about these functions: they similarly will segfault if a file is not found,
+//please create one ahead of time.
 /**
  * Adds a new gitid represented by the pointer passed onto the system.
  * This can be seen as an "append" operation. Should break if an already existing

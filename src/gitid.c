@@ -39,3 +39,30 @@ void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Close stream
     fclose(sys_gitids);
 }
+
+void gitid_new_system_gitid_id(gitid_id* id) {
+    
+    //Initialize new vector and attempt a load
+    vector_gitid_id* v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids(v);
+
+    //Add the new identity to be added
+    vector_push_back_gitid_id(v, id);
+
+    //Set
+    gitid_set_system_gitid_ids(v);
+
+    //Finally, remove the last element (so we don't kill the pointer
+    //when we free) and free
+    vector_erase_gitid_id(v, v->head + vector_size_gitid_id(v) - 1);
+    vector_free_gitid_id(v);
+}
+
+void gitid_update_system_gitid_id(gitid_id* id, char* id_name) {
+
+}
+
+void gitid_delete_system_gitid_id(char* id_name) {
+
+}
+
