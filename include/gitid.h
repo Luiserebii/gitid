@@ -1,9 +1,9 @@
 #ifndef GITID_H
 #define GITID_H
 
-#include "vector-gitid-id.h"
-#include "gitid-id.h"
 #include "git-user.h"
+#include "gitid-id.h"
+#include "vector-gitid-id.h"
 
 #define GITID_SYSTEM_DATA_FILE "./data/gitids"
 

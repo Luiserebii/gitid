@@ -45,7 +45,7 @@ declare_struct_set_string(git_user, signing_key, user, sk);
  * The only pointers which may change may be values such as strings, 
  * which are freed and re-allocated using the set_string macro.
  */
-void git_user_set(gitid_id* dest, gitid_id* src);
+void git_user_set(git_user* dest, git_user* src);
 
 /**
  * Writes git_user to FILE* stream.

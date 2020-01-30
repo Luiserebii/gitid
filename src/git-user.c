@@ -50,7 +50,7 @@ define_struct_set_string(git_user, name, user, n);
 define_struct_set_string(git_user, email, user, e);
 define_struct_set_string(git_user, signing_key, user, sk);
 
-void git_user_set(gitid_id* dest, gitid_id* src) {
+void git_user_set(git_user* dest, git_user* src) {
     git_user_set_name(dest, src->name);
     git_user_set_email(dest, src->email);
     git_user_set_signing_key(dest, src->signing_key);

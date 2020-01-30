@@ -2,6 +2,9 @@
 #include "../include/gitid-id.h"
 #include "../include/vector-gitid-id.h"
 
+#include <stdlib.h>
+#include <string.h>
+
 void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Declare gitid_id for use
     gitid_id* id;
@@ -41,7 +44,7 @@ void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
 }
 
 void gitid_new_system_gitid_id(gitid_id* id) {
-    
+
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
@@ -49,7 +52,7 @@ void gitid_new_system_gitid_id(gitid_id* id) {
     //Look for the id_name to determine uniqueness
     int unique = 1;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp(it->id_name, id->id_name) == 0) {
+        if(strcmp((*it)->id_name, id->id_name) == 0) {
             unique = 0;
             break;
         }
@@ -81,7 +84,7 @@ void gitid_update_system_gitid_id(gitid_id* id, char* id_name) {
     //Look for the id_name, and set
     gitid_id* upd_id = NULL;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp(it->id_name, id_name) == 0) {
+        if(strcmp((*it)->id_name, id_name) == 0) {
             upd_id = *it;
             break;
         }
@@ -96,18 +99,18 @@ void gitid_update_system_gitid_id(gitid_id* id, char* id_name) {
     //Update, write, and free vector
     gitid_id_set(id, upd_id);
     gitid_set_system_gitid_ids(v);
-    vector_gitid_id_free(v);
+    vector_free_gitid_id(v);
 }
 
 void gitid_delete_system_gitid_id(char* id_name) {
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
-    
+
     //Look for the id to delete
     gitid_id** upd_id = NULL;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp(it->id_name, id_name) == 0) {
+        if(strcmp((*it)->id_name, id_name) == 0) {
             upd_id = it;
             break;
         }
@@ -118,10 +121,9 @@ void gitid_delete_system_gitid_id(char* id_name) {
         fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
         exit(1);
     }
-    
+
     //Erase and free element, write, and free vector
     vector_erase_free_gitid_id(v, upd_id);
     gitid_set_system_gitid_ids(v);
-    vector_gitid_id_free(v);
+    vector_free_gitid_id(v);
 }
-

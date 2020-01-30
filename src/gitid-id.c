@@ -43,7 +43,7 @@ void gitid_id_set(gitid_id* dest, gitid_id* src) {
     //Set id_name, and...
     gitid_id_set_id_name(dest, src->id_name);
     //Set the user
-    git_user_set(dest->user, src->dest);
+    git_user_set(dest->user, src->user);
 }
 
 void gitid_id_write(gitid_id* id, FILE* stream) {
