@@ -1,6 +1,7 @@
 #include "../include/gitid.h"
 #include "../include/vector-gitid-id.h"
 #include "../include/git.h"
+#include "../include/git-user.h"
 #include "../lib/argtable3/argtable3.h"
 
 #include <stdio.h>
@@ -113,24 +114,32 @@ int main(int argc, char** argv) {
     }
 
     if(current->count != 0) {
+        //Assert not both --global and --local
+        if(global->count && local->count) {
+            fputs("Error: --global and --local both specified\n", stderr);
+            exit(1);
+        }
         //Init git_user and obtain latest
         git_user* user = git_user_init();
         
         //If local not specified, global is default anyways, so print global
         if(!local->count) {
             git_get_user_global(user);
-        } else if(local->count && !global->count) {
-            git_get_user_local(user);
         } else {
-            fputs("Error: --global and --local both specified\n", stderr);
-            exit(1);
-        }
+            git_get_user_local(user);
+        } 
         //Print, and free
         git_user_write(user, stdout);
         git_user_free(user); 
     }
 
     if(shift->count != 0) {
+        //Assert not both --global and --local
+        if(global->count && local->count) {
+            fputs("Error: --global and --local both specified\n", stderr);
+            exit(1);
+        }
+        
         //Try to obtain all vectors
         vector_gitid_id* v = vector_init_gitid_id();
         gitid_get_system_gitid_ids(v);
@@ -152,17 +161,36 @@ int main(int argc, char** argv) {
         //Finally, set
         if(!local->count) {
             gitid_shift_gitid_id_global(id);
-        } else if(local->count && !global->count) {
-            gitid_shift_gitid_id_local(id);
         } else {
-            fputs("Error: --global and --local both specified\n", stderr);
-            exit(1);
+            gitid_shift_gitid_id_local(id);
         }
 
         //And, finally, free vector (no need to free id)
         vector_free_gitid_id(v);
     }
+    
+    if(new->count != 0) {
+        //Assert all flags needed
+        if(!user->count && !email->count) {
+            fputs("Error: minimum --user and --email must be specified.\n", stderr);
+        }
 
+        //Construct gitid_id
+        gitid_id* new_id = gitid_id_init();
+        gitid_id_set_id_name(new_id, *(new->sval));
+        git_user_set_name(new_id->user, *(user->sval));
+        git_user_set_email(new_id->user, *(email->sval));
+        if(sigkey->count) {
+            git_user_set_signing_key(new_id->user, *(sigkey->sval));
+        }
+
+        //Finally, attempt to add
+        gitid_new_system_gitid_id(new_id);
+        
+        //Free
+        gitid_id_free(new_id);
+
+    }
 
     //Exit
     clean(argtable, 0);
