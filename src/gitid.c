@@ -96,7 +96,7 @@ void gitid_update_system_gitid_id(gitid_id* id, const char* id_name) {
     }
 
     //Update, write, and free vector
-    gitid_id_set(id, upd_id);
+    gitid_id_set(upd_id, id);
     gitid_set_system_gitid_ids(v);
     vector_free_gitid_id(v);
 }
