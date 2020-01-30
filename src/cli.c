@@ -119,8 +119,11 @@ int main(int argc, char** argv) {
         //If local not specified, global is default anyways, so print global
         if(!local->count) {
             git_get_user_global(user);
-        } else {
+        } else if(local->count && !global->count) {
             git_get_user_local(user);
+        } else {
+            fputs("Error: --global and --local both specified\n", stderr);
+            exit(1);
         }
         //Print, and free
         git_user_write(user, stdout);
@@ -147,7 +150,14 @@ int main(int argc, char** argv) {
     	}
         
         //Finally, set
-        gitid_shift_gitid_id_global(id);
+        if(!local->count) {
+            gitid_shift_gitid_id_global(id);
+        } else if(local->count && !global->count) {
+            gitid_shift_gitid_id_local(id);
+        } else {
+            fputs("Error: --global and --local both specified\n", stderr);
+            exit(1);
+        }
 
         //And, finally, free vector (no need to free id)
         vector_free_gitid_id(v);
