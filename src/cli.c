@@ -1,5 +1,6 @@
 #include "../include/gitid.h"
 #include "../include/vector-gitid-id.h"
+#include "../include/git.h"
 #include "../lib/argtable3/argtable3.h"
 
 #include <stdio.h>
@@ -12,6 +13,8 @@
 #define clean(argtable, exitcode)                                    \
     arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0])); \
     return exitcode;
+
+void write_glossary(FILE* stream, void** argtable);
 
 int main(int argc, char** argv) {
 
@@ -38,11 +41,11 @@ int main(int argc, char** argv) {
     void* argtable[] = {version = arg_litn("v", "version", 0, 1, "output the version number"),
                         about = arg_litn("a", "about", 0, 1, "about this tool"),
                         list = arg_litn("l", "list", 0, 1, "list all registered identities"),
+                        current = arg_litn("c", "current", 0, 1, "current global git identity"),
+                        shift = arg_strn("s", "shift", "<id-name>", 0, 1, "shift git identity to registered identity (global by default)"),
                         new = arg_strn("n", "new", "<id-name>", 0, 1, "add new identity"),
                         update = arg_strn("u", "update", "<id-name>", 0, 1, "update registered identity"),
                         delete = arg_strn("d", "delete", "<id-name>", 0, 1, "delete registered identity"),
-                        shift = arg_strn("s", "shift", "<id-name>", 0, 1, "shift git identity to registered identity (global by default)"),
-                        current = arg_litn("c", "current", 0, 1, "current global git identity"),
                         global = arg_litn(NULL, "global", 0, 1, /*"global (option for -s and -c)"*/ NULL),
                         local = arg_litn(NULL, "local", 0, 1, /*"local (option for -s and -c)"*/ NULL),
                         user = arg_strn(NULL, "user", "<username>", 0, 1, /*specify username*/ NULL),
@@ -56,13 +59,7 @@ int main(int argc, char** argv) {
 
     //Check for --help as a special case, before checking for errors
     if(help->count) {
-        printf("Usage: %s", PRG_NAME);
-        //Print one-line syntax for main argtable
-        arg_print_syntax(stdout, argtable, "\n");
-        printf(
-            "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-            "key).\n\n");
-        arg_print_glossary(stdout, argtable, "  %-25s %s\n");
+        write_glossary(stdout, argtable);
         //Exit
         clean(argtable, 0);
     }
@@ -113,8 +110,33 @@ int main(int argc, char** argv) {
         vector_free_gitid_id(v);
     }
 
-    //if()
+    if(current->count != 0) {
+        //Init git_user and obtain latest
+        git_user* user = git_user_init();
+        git_get_user_global(user);
+        //Print
+        git_user_write(user, stdout);
+        //Free
+        git_user_free(user);
+    }
 
     //Exit
     clean(argtable, 0);
+}
+
+void write_glossary(FILE* stream, void** argtable) {
+    fprintf(stream, "Usage: %s", PRG_NAME);
+    //Print one-line syntax for main argtable
+    arg_print_syntax(stream, argtable, "\n");
+    fprintf(stream, 
+        "A command line tool allowing for easy shifting between git identities (username, email, and signing "
+        "key).\n\n");
+    arg_print_glossary(stream, argtable, "  %-25s %s\n");
+    fputs("\nAdditional flags:\n\n-c, --current, --s, --shift:\n", stream);
+    fprintf(stream, "  %-25s %s\n", "--global", "global (option for -s and -c)");
+    fprintf(stream, "  %-25s %s\n", "--local", "local (option for -s and -c)");
+    fputs("\n-n, --new, -u, --update:\n", stream);
+    fprintf(stream, "  %-25s %s\n", "--user=<username>", "specify username");
+    fprintf(stream, "  %-25s %s\n", "--email=<email>", "specify email");
+    fprintf(stream, "  %-25s %s\n", "--sigkey=<sigket>", "specify signing key (key-id format: LONG)");
 }
