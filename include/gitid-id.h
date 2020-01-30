@@ -30,6 +30,15 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e);
 declare_struct_set_string(gitid_id, id_name, id, id_n);
 
 /**
+ * Set the values of dest to the values of src. Note that the function
+ * does not disrupt any pointers; the gitid_id struct pointer and the
+ * git_user struct is guaranteed to stay. The only pointers which may
+ * change may be values such as strings, which are freed and re-allocated 
+ * using the set_string macro.
+ */
+void gitid_id_set(gitid_id* dest, gitid_id* src);
+
+/**
  * Writes git_id struct to a FILE* stream.
  */
 void gitid_id_write(gitid_id* id, FILE* stream);

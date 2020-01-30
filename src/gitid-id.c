@@ -39,6 +39,13 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
  */
 define_struct_set_string(gitid_id, id_name, opts, id_n);
 
+void gitid_id_set(gitid_id* dest, gitid_id* src) {
+    //Set id_name, and...
+    gitid_id_set_id_name(dest, src->id_name);
+    //Set the user
+    git_user_set(dest->user, src->dest);
+}
+
 void gitid_id_write(gitid_id* id, FILE* stream) {
     fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", id->id_name, id->user->name, id->user->email);
     if(id->user->signing_key) {
