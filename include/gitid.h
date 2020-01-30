@@ -18,6 +18,9 @@
  * into one that takes a filename, which allows us to swap something in for
  * the macro. The only small risk is perhaps making the interface look
  * slightly more complex, but I don't think it's so bad.
+ *
+ * As a final note, note that this function will segfault if a file is not found,
+ * please ensure that you check for the existence of the file beforehand.
  */
 #define gitid_get_system_gitid_ids(v_gitid_id) gitid_get_system_gitid_ids_file(v_gitid_id, GITID_SYSTEM_DATA_FILE)
 void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn);

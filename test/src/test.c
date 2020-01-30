@@ -34,6 +34,7 @@ int main() {
 
     UNITY_BEGIN();
     RUN_TEST(test_gitid_get_system_gitid_ids);
+    RUN_TEST(test_gitid_set_system_gitid_ids);
     RUN_TEST(test_git_get_user_global);
     RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_vector_gitid_id);
@@ -54,18 +55,57 @@ int main() {
 void test_gitid_get_system_gitid_ids() {
 
     //Attempt to get system ids from one with two
-    vector_gitid_id* v1 = vector_init_gitid_id();
-    gitid_get_system_gitid_ids_file(v1, "data/double_gitid_id_1");
+    vector_gitid_id* v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids_file(v, "data/double_gitid_id_1");
     
-    //Assert each data piece
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v1->head))->id_name);
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v1->head))->user->name);
-    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", (*(v1->head))->user->email);
-    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", (*(v1->head))->user->signing_key);
+    //Assert each data piece, and size
+    TEST_ASSERT_EQUAL_INT(2, vector_size_gitid_id(v));
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v->head))->id_name);
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v->head))->user->name);
+    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", (*(v->head))->user->email);
+    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", (*(v->head))->user->signing_key);
+    
+    TEST_ASSERT_EQUAL_STRING("cheem", (*(v->head + 1))->id_name);
+    TEST_ASSERT_EQUAL_STRING("I am cheem", (*(v->head + 1))->user->name);
+    TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", (*(v->head + 1))->user->email);
+    TEST_ASSERT_EQUAL_PTR(NULL, (*(v->head + 1))->user->signing_key);
+    
+    //Free vector
+    vector_free_gitid_id(v);
+
+    //Test attempting to grab ids from empty file
+    v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids_file(v, "data/empty_gitid_id_1");
+
+    //Assert state
+    TEST_ASSERT_EQUAL_INT(0, vector_size_gitid_id(v));
+    TEST_ASSERT_EQUAL_PTR(NULL, v->head);
+
+    //Free vector
+    vector_free_gitid_id(v);
 }
 
 void test_gitid_set_system_gitid_ids() {
+    
+    //Initialize gitid_id vector
+    vector_gitid_id* ids = vector_init_gitid_id();
 
+    //Sample data
+    char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
+    char* id_data2[] = {"notcheem", "uncheem prime", "uncheemz@meme.io", "A2FJ39SA"};
+    char* id_data3[] = {"secret cheem", "???", "???@???.cheem"};
+    
+    //Push all of sample data as gitid_ids onto the vector
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
+    git_user_set_signing_key(vector_at_gitid_id(ids, 1)->user, id_data2[3]);
+    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
+
+    //Finally, write to file
+    gitid_set_system_gitid_ids_file(ids, "./tmp/tmp_test_gitid_set_system_gitid_ids");
+
+    //Free vector
+    vector_free_gitid_id(ids);
 }
 
 void test_git_get_user_global() { 
