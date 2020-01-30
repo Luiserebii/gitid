@@ -3,6 +3,8 @@
 #include "../include/vector-gitid-id.h"
 
 #include <stdio.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #define PRG_NAME "gitid"
 #define PRG_VERSION "0.1.0"
@@ -57,6 +59,14 @@ int main(int argc, char** argv) {
     /**
      * Setup (check if no file, if none, make a blank one)
      */
+    //Attempt the creation of the data dir; if it already exists, this'll
+    //fail anyways (lazy solution, perhaps has issues)
+    mkdir("./data/", 0775);
+    int status = access(GITID_SYSTEM_DATA_FILE, F_OK);
+    if(status == -1) {
+        FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
+        fclose(sys_gitids);
+    }
 
     /**
      * Process flags
@@ -75,7 +85,7 @@ int main(int argc, char** argv) {
     if(list->count != 0) {
         //Intialize a vector, and grab all system gitids
         vector_gitid_id* v = vector_init_gitid_id();
-        gitid_get_system_gitids(v);
+        gitid_get_system_gitid_ids(v);
         //Write to stdout
         for(gitid_id** it = v->head; it != v->avail; ++it) {
             gitid_id_write(*it, stdout);
