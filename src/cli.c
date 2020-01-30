@@ -1,12 +1,12 @@
+#include "../include/git-user.h"
+#include "../include/git.h"
 #include "../include/gitid.h"
 #include "../include/vector-gitid-id.h"
-#include "../include/git.h"
-#include "../include/git-user.h"
 #include "../lib/argtable3/argtable3.h"
 
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
     struct arg_str* user;
     struct arg_str* email;
     struct arg_str* sigkey;
-    
+
     struct arg_lit* help;
     struct arg_end* end;
 
@@ -45,7 +45,8 @@ int main(int argc, char** argv) {
                         about = arg_litn("a", "about", 0, 1, "about this tool"),
                         list = arg_litn("l", "list", 0, 1, "list all registered identities"),
                         current = arg_litn("c", "current", 0, 1, "current global git identity"),
-                        shift = arg_strn("s", "shift", "<id-name>", 0, 1, "shift git identity to registered identity (global by default)"),
+                        shift = arg_strn("s", "shift", "<id-name>", 0, 1,
+                                         "shift git identity to registered identity (global by default)"),
                         new = arg_strn("n", "new", "<id-name>", 0, 1, "add new identity"),
                         update = arg_strn("u", "update", "<id-name>", 0, 1, "update registered identity"),
                         delete = arg_strn("d", "delete", "<id-name>", 0, 1, "delete registered identity"),
@@ -54,8 +55,7 @@ int main(int argc, char** argv) {
                         user = arg_strn(NULL, "user", "<username>", 0, 1, /*specify username*/ NULL),
                         email = arg_strn(NULL, "email", "<email>", 0, 1, /*specify email*/ NULL),
                         sigkey = arg_strn(NULL, "sigkey", "<sigkey>", 0, 1, /*specify signing key*/ NULL),
-                        help = arg_litn("h", "help", 0, 1, "display this help and exit"),
-                        end = arg_end(20)};
+                        help = arg_litn("h", "help", 0, 1, "display this help and exit"), end = arg_end(20)};
 
     //Parse, and capture errors from parsing
     int nerrors = arg_parse(argc, argv, argtable);
@@ -90,6 +90,7 @@ int main(int argc, char** argv) {
      */
     if(version->count != 0) {
         printf(PRG_VERSION "\n");
+        clean(argtable, 1);
     }
 
     if(about->count != 0) {
@@ -99,6 +100,7 @@ int main(int argc, char** argv) {
             "key).\n");
         printf("Version: %s\n", PRG_VERSION);
         printf("Author: Luiserebii\nCheck me out on GitHub at: https://github.com/Luiserebii!\n");
+        clean(argtable, 1);
     }
 
     if(list->count != 0) {
@@ -111,6 +113,7 @@ int main(int argc, char** argv) {
         }
         //Free
         vector_free_gitid_id(v);
+        clean(argtable, 1);
     }
 
     if(current->count != 0) {
@@ -121,21 +124,22 @@ int main(int argc, char** argv) {
         }
         //Init git_user and obtain latest
         git_user* user = git_user_init();
-        
+
         //If local not specified, global is default anyways, so print global
         if(!local->count) {
             git_get_user_global(user);
         } else {
             git_get_user_local(user);
-        } 
+        }
         //Print, and free
         git_user_write(user, stdout);
-        git_user_free(user); 
+        git_user_free(user);
+        clean(argtable, 1);
     }
 
     if(shift->count != 0) {
         //TODO: I just spotted an early bug here, we have a case where a gitid
-        //that has no signing key that is set, will not actually clear the signing 
+        //that has no signing key that is set, will not actually clear the signing
         //key used, it'll just overwrite user.name and user.email.
 
         //Assert not both --global and --local
@@ -143,7 +147,7 @@ int main(int argc, char** argv) {
             fputs("Error: --global and --local both specified\n", stderr);
             exit(1);
         }
-        
+
         //Try to obtain all vectors
         vector_gitid_id* v = vector_init_gitid_id();
         gitid_get_system_gitid_ids(v);
@@ -159,9 +163,9 @@ int main(int argc, char** argv) {
         //If nothing found, print error and break
         if(id == NULL) {
             fprintf(stderr, "Error: No git id found under the name \"%s\"\n", *(shift->sval));
-       	    exit(1);
-    	}
-        
+            exit(1);
+        }
+
         //Finally, set
         if(!local->count) {
             gitid_shift_gitid_id_global(id);
@@ -171,8 +175,9 @@ int main(int argc, char** argv) {
 
         //And, finally, free vector (no need to free id)
         vector_free_gitid_id(v);
+        clean(argtable, 1);
     }
-    
+
     if(new->count != 0) {
         //Assert all flags needed
         if(!user->count && !email->count) {
@@ -190,9 +195,10 @@ int main(int argc, char** argv) {
 
         //Finally, attempt to add
         gitid_new_system_gitid_id(new_id);
-        
+
         //Free
         gitid_id_free(new_id);
+        clean(argtable, 1);
     }
 
     if(update->count != 0) {
@@ -203,7 +209,7 @@ int main(int argc, char** argv) {
         if(!user->count && !email->count) {
             fputs("Error: minimum --user and --email must be specified.\n", stderr);
         }
-        
+
         //Construct gitid_id
         gitid_id* upd_id = gitid_id_init();
         gitid_id_set_id_name(upd_id, *(update->sval));
@@ -212,19 +218,23 @@ int main(int argc, char** argv) {
         if(sigkey->count) {
             git_user_set_signing_key(upd_id->user, *(sigkey->sval));
         }
-       
+
         //Finally, attempt to update
-        gitid_update_system_gitid_id(upd_id, *(update->sval)); 
-    
+        gitid_update_system_gitid_id(upd_id, *(update->sval));
+
         //Free
         gitid_id_free(upd_id);
+        clean(argtable, 1);
     }
-    
+
     if(delete->count != 0) {
         //Attempt a delete
         gitid_delete_system_gitid_id(*(delete->sval));
+        clean(argtable, 1);
     }
 
+    //If we reached here, nothing was passed, so show glossary
+    write_glossary(stdout, argtable);
     //Exit
     clean(argtable, 0);
 }
@@ -233,9 +243,9 @@ void write_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "Usage: %s", PRG_NAME);
     //Print one-line syntax for main argtable
     arg_print_syntax(stream, argtable, "\n");
-    fprintf(stream, 
-        "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-        "key).\n\n");
+    fprintf(stream,
+            "A command line tool allowing for easy shifting between git identities (username, email, and signing "
+            "key).\n\n");
     arg_print_glossary(stream, argtable, "  %-25s %s\n");
     fputs("\nAdditional flags:\n\n-c, --current, --s, --shift:\n", stream);
     fprintf(stream, "  %-25s %s\n", "--global", "global (option for -s and -c)");

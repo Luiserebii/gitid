@@ -18,7 +18,19 @@ jobs:
           name: Linter
           command: ./scripts/lint.sh && if [[ `git status --porcelain` ]]; then exit 1; else exit 0; fi
 
-  # Building and running examples
+  # Test build of the actual application
+  build:
+    - run:
+        name: Install gcc, make, and git
+        command: apt-get update && apt-get install -y gcc make git
+    - checkout
+    - run:
+        name: Build via make
+        command: make
+    - run:
+        name: Run built application
+        command: ./gitid
+
   test:
     <<: *defaults
     steps:
