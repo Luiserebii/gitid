@@ -1,9 +1,9 @@
 #ifndef GITID_H
 #define GITID_H
 
-#include "git-user.h"
-#include "gitid-id.h"
 #include "vector-gitid-id.h"
+#include "gitid-id.h"
+#include "git-user.h"
 
 #define GITID_SYSTEM_DATA_FILE "./data/gitids"
 
@@ -12,14 +12,22 @@
  * Takes a pointer to an intialized vector_gitid_id and pushes all gitids 
  * found on the system onto it. The system's gitids are represented by a file,
  * which is held as a macro in this header file.
+ *
+ * In order to allow for a "testable interface", the innermost logic of the
+ * below two functions operating on the system data file have been refactored
+ * into one that takes a filename, which allows us to swap something in for
+ * the macro. The only small risk is perhaps making the interface look
+ * slightly more complex, but I don't think it's so bad.
  */
-void gitid_get_system_gitid_ids(vector_gitid_id* v);
+#define gitid_get_system_gitid_ids(v_gitid_id) gitid_get_system_gitid_ids_file(v_gitid_id, GITID_SYSTEM_DATA_FILE)
+void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
 
 /**
  * Takes a pointer to an intialized vector_gitid_id and writes all gitids 
  * from the vector onto the system's. This will cause an overwrite, not append.
  */
-void gitid_set_system_gitid_ids(vector_gitid_id* v);
+#define gitid_set_system_gitid_ids(v_gitid_id) gitid_set_system_gitid_ids_file(v_gitid_id, GITID_SYSTEM_DATA_FILE)
+void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
 
 //Slightly higher level, these call the above two get/set functions; get to obtain system ids to process, and set to save to the system once more
 /**

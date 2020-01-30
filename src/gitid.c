@@ -2,12 +2,12 @@
 #include "../include/gitid-id.h"
 #include "../include/vector-gitid-id.h"
 
-void gitid_get_system_gitid_ids(vector_gitid_id* v) {
+void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Declare gitid_id for use
     gitid_id* id;
 
     //Open file stream to system file
-    FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "r");
+    FILE* sys_gitids = fopen(fn, "r");
 
     int c;
     while((c = fgetc(sys_gitids)) != EOF) {
@@ -27,9 +27,9 @@ void gitid_get_system_gitid_ids(vector_gitid_id* v) {
     fclose(sys_gitids);
 }
 
-void gitid_set_system_gitid_ids(vector_gitid_id* v) {
+void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Open file stream to system file in write mode
-    FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
+    FILE* sys_gitids = fopen(fn, "w");
 
     //Iterate through vector and write each one
     for(gitid_id** it = v->head; it != v->avail; ++it) {
