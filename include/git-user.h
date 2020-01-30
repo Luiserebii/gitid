@@ -38,6 +38,16 @@ declare_struct_set_string(git_user, email, user, e);
 declare_struct_set_string(git_user, signing_key, user, sk);
 
 /**
+ * Set the values of dest to the values of src. Note that the function
+ * does not disrupt any pointers; the git_user struct pointer 
+ * is guaranteed to stay. 
+ *
+ * The only pointers which may change may be values such as strings, 
+ * which are freed and re-allocated using the set_string macro.
+ */
+void git_user_set(gitid_id* dest, gitid_id* src);
+
+/**
  * Writes git_user to FILE* stream.
  */
 void git_user_write(git_user* user, FILE* stream);

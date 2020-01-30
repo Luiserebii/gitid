@@ -46,6 +46,21 @@ void gitid_new_system_gitid_id(gitid_id* id) {
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
 
+    //Look for the id_name to determine uniqueness
+    int unique = 1;
+    for(gitid_id** it = v->head; it != v->avail; ++it) {
+        if(strcmp(it->id_name, id->id_name) == 0) {
+            unique = 0;
+            break;
+        }
+    }
+
+    //Throw error and break if not unique
+    if(!unique) {
+        fprintf(stderr, "Error: git id already exists under the name \"%s\"\n", id->id_name);
+        exit(1);
+    }
+
     //Add the new identity to be added
     vector_push_back_gitid_id(v, id);
 
@@ -59,10 +74,54 @@ void gitid_new_system_gitid_id(gitid_id* id) {
 }
 
 void gitid_update_system_gitid_id(gitid_id* id, char* id_name) {
+    //Initialize new vector and attempt a load
+    vector_gitid_id* v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids(v);
 
+    //Look for the id_name, and set
+    gitid_id* upd_id = NULL;
+    for(gitid_id** it = v->head; it != v->avail; ++it) {
+        if(strcmp(it->id_name, id_name) == 0) {
+            upd_id = *it;
+            break;
+        }
+    }
+
+    //If nothing found, print error and break
+    if(upd_id == NULL) {
+        fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
+        exit(1);
+    }
+
+    //Update, write, and free vector
+    gitid_id_set(id, upd_id);
+    gitid_set_system_gitid_ids(v);
+    vector_gitid_id_free(v);
 }
 
 void gitid_delete_system_gitid_id(char* id_name) {
+    //Initialize new vector and attempt a load
+    vector_gitid_id* v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids(v);
+    
+    //Look for the id to delete
+    gitid_id** upd_id = NULL;
+    for(gitid_id** it = v->head; it != v->avail; ++it) {
+        if(strcmp(it->id_name, id_name) == 0) {
+            upd_id = it;
+            break;
+        }
+    }
 
+    //If nothing found, print error and break
+    if(upd_id == NULL) {
+        fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
+        exit(1);
+    }
+    
+    //Erase and free element, write, and free vector
+    vector_erase_free_gitid_id(v, upd_id);
+    gitid_set_system_gitid_ids(v);
+    vector_gitid_id_free(v);
 }
 

@@ -50,6 +50,12 @@ define_struct_set_string(git_user, name, user, n);
 define_struct_set_string(git_user, email, user, e);
 define_struct_set_string(git_user, signing_key, user, sk);
 
+void git_user_set(gitid_id* dest, gitid_id* src) {
+    git_user_set_name(dest, src->name);
+    git_user_set_email(dest, src->email);
+    git_user_set_signing_key(dest, src->signing_key);
+}
+
 void git_user_write(git_user* user, FILE* stream) {
     fprintf(stream, "Name: %s\nEmail: %s\n", user->name, user->email);
     if(user->signing_key) {
