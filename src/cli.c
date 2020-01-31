@@ -110,6 +110,7 @@ int main(int argc, char** argv) {
         //Write to stdout
         for(gitid_id** it = v->head; it != v->avail; ++it) {
             gitid_id_write(*it, stdout);
+            putc('\n', stdout);
         }
         //Free
         vector_free_gitid_id(v);
@@ -180,8 +181,9 @@ int main(int argc, char** argv) {
 
     if(new->count != 0) {
         //Assert all flags needed
-        if(!user->count && !email->count) {
+        if(!user->count || !email->count) {
             fputs("Error: minimum --user and --email must be specified.\n", stderr);
+            exit(1);
         }
 
         //Construct gitid_id
@@ -208,6 +210,7 @@ int main(int argc, char** argv) {
         //Assert all flags needed
         if(!user->count && !email->count) {
             fputs("Error: minimum --user and --email must be specified.\n", stderr);
+            exit(1);
         }
 
         //Construct gitid_id
