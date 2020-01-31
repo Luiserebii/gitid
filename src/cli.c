@@ -13,11 +13,13 @@
 #define PRG_NAME "gitid"
 #define PRG_VERSION "0.1.0-alpha"
 
-#define clean(argtable, exitcode)                                    \
-    arg_freetable(argtable, sizeof(argtable) / sizeof(argtable[0])); \
+#define clean(m_argtable, c_argtable, exitcode)                                    \
+    arg_freetable(m_argtable, sizeof(m_argtable) / sizeof(m_argtable[0])); \
+    arg_freetable(c_argtable, sizeof(c_argtable) / sizeof(c_argtable[0])); \
     return exitcode;
 
 void write_glossary(FILE* stream, void** argtable);
+int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list, struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift, struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user, struct arg_str* email, struct arg_str* sigkey, struct arg_lit* help, struct arg_end* end);
 
 int main(int argc, char** argv) {
 
@@ -41,7 +43,7 @@ int main(int argc, char** argv) {
     struct arg_lit* help;
     struct arg_end* end;
 
-    void* argtable[] = {version = arg_litn("v", "version", 0, 1, "output the version number"),
+    void* main_argtable[] = {version = arg_litn("v", "version", 0, 1, "output the version number"),
                         about = arg_litn("a", "about", 0, 1, "about this tool"),
                         list = arg_litn("l", "list", 0, 1, "list all registered identities"),
                         current = arg_litn("c", "current", 0, 1, "current global git identity"),
@@ -56,20 +58,43 @@ int main(int argc, char** argv) {
                         email = arg_strn(NULL, "email", "<email>", 0, 1, /*specify email*/ NULL),
                         sigkey = arg_strn(NULL, "sigkey", "<sigkey>", 0, 1, /*specify signing key*/ NULL),
                         help = arg_litn("h", "help", 0, 1, "display this help and exit"), end = arg_end(20)};
+    
+    struct arg_rex* clone_cmd;
+    struct arg_str* repo;
+    struct arg_lit* clone_help;
+
+    void* clone_argtable[] = {
+        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, REG_ICASE, NULL),
+        repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL)
+        help = arg_litn("h", "help", 0, 1, "display this help and exit"), 
+        end = arg_end(20)
+    };
+
+    if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
+        fprintf(stderr, "%s: insufficient memory\n", PRG_NAME);
+        exit(1);
+    }
 
     //Parse, and capture errors from parsing
-    int nerrors = arg_parse(argc, argv, argtable);
+    int nerrors_main = arg_parse(argc, argv, main_argtable);
+    int nerrors_clone = arg_parse(argc, argv, clone_argtable);
 
     //Check for --help as a special case, before checking for errors
-    if(help->count) {
-        write_glossary(stdout, argtable);
+    if(help->count && !nerrors_main) {
+        write_glossary(stdout, main_argtable);
         //Exit
-        clean(argtable, 0);
+        clean(main_argtable, 0);
+    } else if(clone_help->count && !nerrors_clone) {
+        write_glossary(stdout, clone_argtable);
+        clean(clone_argtable, 0);
     }
 
     //If there are errors, print them!
     if(nerrors) {
         arg_print_errors(stderr, end, PRG_NAME);
+        clean(argtable, 1);
+    } else {
+        arg_print_syntax(stdout, clone_argtable, "\n");
         clean(argtable, 1);
     }
 
@@ -84,6 +109,11 @@ int main(int argc, char** argv) {
         FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
         fclose(sys_gitids);
     }
+    
+    return process_main(argtable, version, about, list, new, update, delete, shift, current, global, local, user, email, sigkey, help, end);
+}
+
+int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list, struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift, struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user, struct arg_str* email, struct arg_str* sigkey, struct arg_lit* help, struct arg_end* end) {
 
     /**
      * Process flags
@@ -104,13 +134,14 @@ int main(int argc, char** argv) {
     }
 
     if(list->count != 0) {
+        fputs("All registered identities:\n", stdout);
         //Intialize a vector, and grab all system gitids
         vector_gitid_id* v = vector_init_gitid_id();
         gitid_get_system_gitid_ids(v);
         //Write to stdout
         for(gitid_id** it = v->head; it != v->avail; ++it) {
-            gitid_id_write(*it, stdout);
             putc('\n', stdout);
+            gitid_id_write(*it, stdout);
         }
         //Free
         vector_free_gitid_id(v);
@@ -241,6 +272,7 @@ int main(int argc, char** argv) {
     //Exit
     clean(argtable, 0);
 }
+
 
 void write_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "Usage: %s", PRG_NAME);
