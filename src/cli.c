@@ -62,12 +62,13 @@ int main(int argc, char** argv) {
     struct arg_rex* clone_cmd;
     struct arg_str* repo;
     struct arg_lit* clone_help;
+    struct arg_end* clone_end;
 
     void* clone_argtable[] = {
-        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, REG_ICASE, NULL),
-        repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL)
-        help = arg_litn("h", "help", 0, 1, "display this help and exit"), 
-        end = arg_end(20)
+        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL),
+        repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
+        clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), 
+        clone_end = arg_end(20)
     };
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
@@ -82,20 +83,21 @@ int main(int argc, char** argv) {
     //Check for --help as a special case, before checking for errors
     if(help->count && !nerrors_main) {
         write_glossary(stdout, main_argtable);
-        //Exit
-        clean(main_argtable, 0);
-    } else if(clone_help->count && !nerrors_clone) {
-        write_glossary(stdout, clone_argtable);
-        clean(clone_argtable, 0);
+        clean(main_argtable, clone_argtable, 0);
+    } else if(clone_help->count) {
+        arg_print_glossary(stdout, clone_argtable, "  %-25s %s\n");
+        clean(main_argtable, clone_argtable, 0);
     }
 
     //If there are errors, print them!
-    if(nerrors) {
-        arg_print_errors(stderr, end, PRG_NAME);
-        clean(argtable, 1);
-    } else {
-        arg_print_syntax(stdout, clone_argtable, "\n");
-        clean(argtable, 1);
+    if(nerrors_main && nerrors_clone) {
+        if(clone_cmd->count) {
+            arg_print_errors(stderr, clone_end, PRG_NAME);
+            clean(main_argtable, clone_argtable, 1);
+        } else {
+            arg_print_errors(stderr, end, PRG_NAME);
+            clean(main_argtable, clone_argtable, 1);
+        }
     }
 
     /**
@@ -110,7 +112,8 @@ int main(int argc, char** argv) {
         fclose(sys_gitids);
     }
     
-    return process_main(argtable, version, about, list, new, update, delete, shift, current, global, local, user, email, sigkey, help, end);
+    int ret_code = process_main(main_argtable, version, about, list, new, update, delete, shift, current, global, local, user, email, sigkey, help, end);
+    clean(main_argtable, clone_argtable, ret_code);
 }
 
 int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list, struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift, struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user, struct arg_str* email, struct arg_str* sigkey, struct arg_lit* help, struct arg_end* end) {
@@ -120,7 +123,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
      */
     if(version->count != 0) {
         printf(PRG_VERSION "\n");
-        clean(argtable, 1);
+        return 0;
     }
 
     if(about->count != 0) {
@@ -130,7 +133,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
             "key).\n");
         printf("Version: %s\n", PRG_VERSION);
         printf("Author: Luiserebii\nCheck me out on GitHub at: https://github.com/Luiserebii!\n");
-        clean(argtable, 1);
+        return 0;
     }
 
     if(list->count != 0) {
@@ -145,7 +148,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
         }
         //Free
         vector_free_gitid_id(v);
-        clean(argtable, 1);
+        return 0;
     }
 
     if(current->count != 0) {
@@ -166,7 +169,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
         //Print, and free
         git_user_write(user, stdout);
         git_user_free(user);
-        clean(argtable, 1);
+        return 0;
     }
 
     if(shift->count != 0) {
@@ -207,7 +210,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
 
         //And, finally, free vector (no need to free id)
         vector_free_gitid_id(v);
-        clean(argtable, 1);
+        return 0;
     }
 
     if(new->count != 0) {
@@ -231,7 +234,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
 
         //Free
         gitid_id_free(new_id);
-        clean(argtable, 1);
+        return 0;
     }
 
     if(update->count != 0) {
@@ -258,19 +261,19 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
 
         //Free
         gitid_id_free(upd_id);
-        clean(argtable, 1);
+        return 0;
     }
 
     if(delete->count != 0) {
         //Attempt a delete
         gitid_delete_system_gitid_id(*(delete->sval));
-        clean(argtable, 1);
+        return 0;
     }
 
     //If we reached here, nothing was passed, so show glossary
     write_glossary(stdout, argtable);
     //Exit
-    clean(argtable, 0);
+    return 0;
 }
 
 
