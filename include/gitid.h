@@ -36,6 +36,13 @@ void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
 //A minor note about these functions: they similarly will segfault if a file is not found,
 //please create one ahead of time.
 /**
+ * Gets a system gitid of the ID id_name and sets the details into an initialized
+ * gitid_id* id. Should break if the gitid is not found on the system by printing
+ * an error and exiting.
+ */
+void gitid_get_system_gitid_id(const char* id_name, gitid_id* id);
+
+/**
  * Adds a new gitid represented by the pointer passed onto the system.
  * This can be seen as an "append" operation. Should break if an already existing
  * gitid by the name specified is found (we want to prevent duplicates).

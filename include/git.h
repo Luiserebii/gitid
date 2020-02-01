@@ -30,6 +30,11 @@ void git_set_user_global(git_user* user);
 void git_set_user_local(git_user* user);
 
 /**
+ * Sets the local user for a repository, taking a prefix to use with the command.
+ */
+void git_set_user_local_prefix(git_user* user, char* prefix);
+
+/**
  * Performs a git clone, using the options struct passed.
  */
 void git_clone(git_clone_opts* opts);

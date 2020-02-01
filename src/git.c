@@ -78,6 +78,23 @@ void git_set_user_local(git_user* user) {
     minsystem(cmd);
 }
 
+void git_set_user_local_prefix(git_user* user, char* prefix) {
+    char escapebuffer[GIT_USER_BUFFER_MAX];
+    char cmd[GIT_CMD_MAXSTRING]; 
+    strcpy(cmd, prefix);
+    strcat(cmd, " && git config --local user.name ");
+    strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    strcat(cmd, " && git config --local user.email ");
+    strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    if(user->signing_key) {
+        strcat(cmd, " && git config --local user.signingkey ");
+        strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    }
+
+    //TODO: Figure out how to handle non-zero exit codes
+    minsystem(cmd);
+}
+
 void git_clone(git_clone_opts* opts) {
     char cmd[GIT_CLONE_CMD_MAXSTRING] = "git clone";
 

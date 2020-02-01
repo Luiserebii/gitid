@@ -43,6 +43,28 @@ void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     fclose(sys_gitids);
 }
 
+void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
+    //Initialize new vector an attempt a load
+    vector_gitid_id* v = vector_init_gitid_id();
+    gitid_get_system_gitid_ids(v);
+
+    //Look for matching
+    gitid_id* match;
+    match = vector_get_id_gitid_id(v, id_name);
+    
+    //If nothing found, print error and break
+    if(id == NULL) {
+        fprintf(stderr, "Error: No git id found under the name \"%s\"\n", *(shift->sval));
+        exit(1);
+    }
+
+    //Set ID to found one
+    gitid_id_set(id, match);
+
+    //Finally, free vector
+    vector_free_gitid_id(v);
+}
+
 void gitid_new_system_gitid_id(gitid_id* id) {
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
