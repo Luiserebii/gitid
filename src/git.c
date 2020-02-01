@@ -80,7 +80,7 @@ void git_set_user_local(git_user* user) {
 
 void git_set_user_local_prefix(git_user* user, char* prefix) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
-    char cmd[GIT_CMD_MAXSTRING]; 
+    char cmd[GIT_CMD_MAXSTRING];
     strcpy(cmd, prefix);
     strcat(cmd, " && git config --local user.name ");
     strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);

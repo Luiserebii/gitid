@@ -21,7 +21,7 @@
     void struct##_set_##member(struct* struct_param, const char* char_param) { \
         free(struct_param->member);                                            \
         if(char_param) {                                                       \
-            struct_param->member = safemalloc(strlen(char_param) + 1);             \
+            struct_param->member = safemalloc(strlen(char_param) + 1);         \
             strcpy(struct_param->member, char_param);                          \
         }                                                                      \
     }

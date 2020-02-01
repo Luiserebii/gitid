@@ -27,7 +27,8 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
                  struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift,
                  struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user,
                  struct arg_str* email, struct arg_str* sigkey, struct arg_end* end);
-int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift, struct arg_end* end);
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
+                  struct arg_end* end);
 CLI_MODE identifyMode(struct arg_rex* clone);
 
 int main(int argc, char** argv) {
@@ -75,11 +76,10 @@ int main(int argc, char** argv) {
     struct arg_end* clone_end;
 
     void* clone_argtable[] = {
-        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), 
-        repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
-        clone_shift = arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
-        clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), 
-        clone_end = arg_end(20)};
+        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
+        clone_shift =
+            arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
+        clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
         fprintf(stderr, "%s: insufficient memory\n", PRG_NAME);
@@ -151,7 +151,8 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
     }
 }
 
-int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift, struct arg_end* end) {
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
+                  struct arg_end* end) {
     /**
      * Process flags
      */
@@ -160,7 +161,7 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
     git_clone_opts_set_repo(opts, *(repo->sval));
 
     git_clone(opts);
-    
+
     //If shift, cd into cloned dir and set identity
     //Note that if --directory is specified, this can really change things
     if(clone_shift->count) {
@@ -184,12 +185,17 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         char buffer[1000];
         strcpy(buffer, "cd ");
         strcat(buffer, name);
-        printf("Running: %s", buffer);
-        //Attempt to cd
-        //git_set_user_local_prefix()
-        //Finally, ls
-        exit(0);
+        printf("Runningfre: %s", buffer);
 
+        //Look for matching git_id
+        gitid_id* id = gitid_id_init();
+        gitid_get_system_gitid_id(*(clone_shift->sval), id);
+
+        //Attempt to cd and set
+        git_set_user_local_prefix(id->user, buffer);
+        //Finally, free
+        gitid_id_free(id);
+        exit(0);
     }
 
     //Free
