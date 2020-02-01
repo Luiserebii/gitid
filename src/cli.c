@@ -186,12 +186,8 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         strcat(buffer, name);
         printf("Running: %s", buffer);
         //Attempt to cd
-        runcmd(buffer, 1000, buffer);
+        //git_set_user_local_prefix()
         //Finally, ls
-        runcmd("cd data && ls -lha", 1000, buffer);
-        printf("%s", buffer);
-        runcmd("cd data && ls -lha", 1000, buffer);
-        printf("%s", buffer);
         exit(0);
 
     }
@@ -261,33 +257,15 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
     }
 
     if(shift->count != 0) {
-        //TODO: I just spotted an early bug here, we have a case where a gitid
-        //that has no signing key that is set, will not actually clear the signing
-        //key used, it'll just overwrite user.name and user.email.
-
         //Assert not both --global and --local
         if(global->count && local->count) {
             fputs("Error: --global and --local both specified\n", stderr);
             exit(1);
         }
 
-        //Try to obtain all vectors
-        vector_gitid_id* v = vector_init_gitid_id();
-        gitid_get_system_gitid_ids(v);
-
-        gitid_id* id;
-        //Look for matching
-        for(gitid_id** it = v->head; it != v->avail; ++it) {
-            if(strcmp((*it)->id_name, *(shift->sval)) == 0) {
-                id = *it;
-                break;
-            }
-        }
-        //If nothing found, print error and break
-        if(id == NULL) {
-            fprintf(stderr, "Error: No git id found under the name \"%s\"\n", *(shift->sval));
-            exit(1);
-        }
+        //Look for matching git_id
+        gitid_id* id = gitid_id_init();
+        gitid_get_system_gitid_id(*(shift->sval), id);
 
         //Finally, set
         if(!local->count) {
@@ -296,8 +274,8 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
             gitid_shift_gitid_id_local(id);
         }
 
-        //And, finally, free vector (no need to free id)
-        vector_free_gitid_id(v);
+        //And, finally, free id
+        gitid_id_free(id);
         return 0;
     }
 

@@ -91,7 +91,7 @@ gitid_id* vector_at_gitid_id(vector_gitid_id* v, size_t n);
  * Returns a pointer to a gitid_id by searching for the first with the name passed.
  * If nothing was found, NULL is returned.
  */
-gitid_id* vector_get_id_gitid_id(vector_gitid_id* v, char* id_name);
+gitid_id* vector_get_id_gitid_id(vector_gitid_id* v, const char* id_name);
 
 /**
  * 

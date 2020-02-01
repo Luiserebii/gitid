@@ -54,7 +54,7 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
     
     //If nothing found, print error and break
     if(id == NULL) {
-        fprintf(stderr, "Error: No git id found under the name \"%s\"\n", *(shift->sval));
+        fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
         exit(1);
     }
 
