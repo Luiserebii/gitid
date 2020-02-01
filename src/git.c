@@ -54,9 +54,13 @@ void git_set_user_global(git_user* user) {
     strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     strcat(cmd, " && git config --global user.email ");
     strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    //Logic with setting signingkey will depend on whether it exists or not, but will
+    //happen regardless so as to clear if non-existant
+    strcat(cmd, " && git config --global user.signingkey ");
     if(user->signing_key) {
-        strcat(cmd, " && git config --global user.signingkey ");
         strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    } else {
+        strcat(cmd, "\"\"");
     }
 
     //TODO: Figure out how to handle non-zero exit codes
@@ -69,9 +73,11 @@ void git_set_user_local(git_user* user) {
     strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     strcat(cmd, " && git config --local user.email ");
     strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    strcat(cmd, " && git config --global user.signingkey ");
     if(user->signing_key) {
-        strcat(cmd, " && git config --local user.signingkey ");
         strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    } else {
+        strcat(cmd, "\"\"");
     }
 
     //TODO: Figure out how to handle non-zero exit codes
@@ -86,9 +92,11 @@ void git_set_user_local_prefix(git_user* user, char* prefix) {
     strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
     strcat(cmd, " && git config --local user.email ");
     strcpy(escapebuffer, user->email), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    strcat(cmd, " && git config --global user.signingkey ");
     if(user->signing_key) {
-        strcat(cmd, " && git config --local user.signingkey ");
         strcpy(escapebuffer, user->signing_key), escapesh(escapebuffer), strcat(cmd, escapebuffer);
+    } else {
+        strcat(cmd, "\"\"");
     }
 
     //TODO: Figure out how to handle non-zero exit codes

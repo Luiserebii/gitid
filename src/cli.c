@@ -171,7 +171,7 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         char name[1000];
         strcpy(name, *(repo->sval));
         parseGitURLName(name);
-        
+
         char buffer[1000];
         strcpy(buffer, "cd ");
         strcat(buffer, name);
