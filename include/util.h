@@ -48,4 +48,9 @@ void trimNewline(char* str);
  */
 void* safemalloc(size_t size);
 
+/**
+ * Parses out the name of the repository from a git repository URL.
+ */
+void parseGitURLName(char* url);
+
 #endif

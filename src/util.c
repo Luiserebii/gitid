@@ -89,3 +89,46 @@ void* safemalloc(size_t size) {
     }
     return ptr;
 }
+
+void parseGitURLName(char* url) {
+    char* rslash = strrchr(url, '/');
+    //If this is the last one, remove it and find "true" one
+    if(!rslash[1]) {
+        *rslash = '\0';
+        rslash = strrchr(url, '/');
+    }
+    char* last = url + strlen(url);
+    //Look for the last . to see if we should perhaps truncate
+    char* dot = strrchr(url, '.');
+    if(dot != NULL) {
+        int isDotGit;
+        algorithm_equal(char*, dot, last, ".git", isDotGit);
+        if(isDotGit) {
+            //Check if /.git, which will require a certain kind of processing
+            if(rslash + 1 == dot) {
+                //Using the git-clone documentation, we are parsing for "foo" in "host.xz:foo/.git"
+                //I have a feeling that "host.xz:bar/foo/.git" is also valid, so...
+                char* lslash;
+                algorithm_find_last(dot, rslash, '/', lslash);
+                //If nothing was found, then we need to look for : delimiter
+                if(lslash == rslash) {
+                    char* cln = strrchr(url, ':');
+                    //Semantically, this doesn't make so much sense, just now this is setting the leftmost delimiter char
+                    rslash = cln;
+                } else {
+                    last = rslash;
+                    rslash = lslash;
+                }
+            } else {
+                //Set last to dot to trucate
+                last = dot;
+            }
+        }
+    }
+    //Obtain name
+    char* newLast;
+    algorithm_copy(char*, rslash + 1, last, url, newLast);
+    //Cap off with '\0'
+    *newLast = '\0';
+    printf("URL: %s\n", url);
+}

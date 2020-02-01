@@ -152,36 +152,6 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
     }
 }
 
-void parseGitURLName(char* url) {
-    char* rslash = strrchr(url, '/');
-    //If this is the last one, remove it and find "true" one
-    if(!rslash[1]) {
-        *rslash = '\0';
-        rslash = strrchr(url, '/');
-    }
-    char* last = url + strlen(url);
-    //Look for the last . to see if we should perhaps truncate
-    char* dot = strrchr(url, '.');
-    if(dot != NULL) { 
-        int isDotGit;
-        algorithm_equal(char*, dot, last, ".git", isDotGit);
-        if(isDotGit) {
-            //Check if /.git, which will require a certain kind of processing
-            if(rslash + 1 == dot) {
-                printf("Further processing of a different kind needed, not implemented\n");
-            } else {
-                //Set last to dot to trucate
-                last = dot;
-            }
-        }
-    }
-    //Obtain name
-    char* newLast;
-    algorithm_copy(char*, rslash + 1, last, url, newLast);
-    //Cap off with '\0'
-    *newLast = '\0';
-}
-
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
                   struct arg_end* end) {
     /**
