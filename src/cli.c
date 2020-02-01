@@ -30,6 +30,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
                   struct arg_end* end);
 CLI_MODE identifyMode(struct arg_rex* clone);
+void parseGitURLName(char* url);
 
 int main(int argc, char** argv) {
 
@@ -151,6 +152,30 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
     }
 }
 
+void parseGitURLName(char* url) {
+    char* rslash = strrchr(url, '/');
+    //If this is the last one, remove it and find "true" one
+    if(!rslash[1]) {
+        *rslash = '\0';
+        rslash = strrchr(url, '/');
+    }
+    char* last = url + strlen(url);
+
+    //Assert not /.git, otherwise, we need to do something
+    int isDotGit;
+    algorithm_equal(char*, rslash + 1, last, ".git", isDotGit);
+    if(isDotGit) {
+        printf("Further processing of a different kind needed, not implemented\n")
+    }
+
+    //Obtain name
+    strncpy(url, rslash + 1, last - (rslash + 1));
+    /*char* newLast;
+    algorithm_copy(char*, )
+    //Cap off with '\0'
+    name[last - rslash - 1] = '\0';*/
+}
+
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
                   struct arg_end* end) {
     /**
@@ -167,21 +192,10 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
     if(clone_shift->count) {
         //Parse repo out into "humanish" part
         //TODO: Acquire advice on whether malloc may be better
-        char name[1000]; //= {'\0'};
-        char* rslash = strrchr(*(repo->sval), '/');
-        //If this is the last one, likely GitHub-like URL
-        if(!rslash[1]) {
-            const char* lslash;
-            algorithm_find_last(*(repo->sval), rslash, '/', lslash);
-            //Now, grab the substring
-            size_t last = rslash - lslash;
-            strncpy(name, lslash + 1, last - 1);
-            //Cap off with '\0'
-            name[last - 1] = '\0';
-
-        } else {
-            printf("oh nuts\n");
-        }
+        char name[1000];
+        strcpy(name, *(repo->sval));
+        parseGitURLName(name);
+        
         char buffer[1000];
         strcpy(buffer, "cd ");
         strcat(buffer, name);
@@ -189,10 +203,10 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
 
         //Look for matching git_id
         gitid_id* id = gitid_id_init();
-        gitid_get_system_gitid_id(*(clone_shift->sval), id);
+        //gitid_get_system_gitid_id(*(clone_shift->sval), id);
 
         //Attempt to cd and set
-        git_set_user_local_prefix(id->user, buffer);
+        //git_set_user_local_prefix(id->user, buffer);
         //Finally, free
         gitid_id_free(id);
         exit(0);
