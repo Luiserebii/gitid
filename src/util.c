@@ -130,5 +130,4 @@ void parseGitURLName(char* url) {
     algorithm_copy(char*, rslash + 1, last, url, newLast);
     //Cap off with '\0'
     *newLast = '\0';
-    printf("URL: %s\n", url);
 }

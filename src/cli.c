@@ -179,10 +179,10 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
 
         //Look for matching git_id
         gitid_id* id = gitid_id_init();
-        //gitid_get_system_gitid_id(*(clone_shift->sval), id);
+        gitid_get_system_gitid_id(*(clone_shift->sval), id);
 
         //Attempt to cd and set
-        //git_set_user_local_prefix(id->user, buffer);
+        git_set_user_local_prefix(id->user, buffer);
         //Finally, free
         gitid_id_free(id);
         exit(0);
