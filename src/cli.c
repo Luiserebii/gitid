@@ -20,6 +20,7 @@
 
 void write_glossary(FILE* stream, void** argtable);
 int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list, struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift, struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user, struct arg_str* email, struct arg_str* sigkey, struct arg_lit* help, struct arg_end* end);
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_lit* help, struct arg_end* end);
 
 int main(int argc, char** argv) {
 
@@ -80,12 +81,9 @@ int main(int argc, char** argv) {
     int nerrors_main = arg_parse(argc, argv, main_argtable);
     int nerrors_clone = arg_parse(argc, argv, clone_argtable);
 
-    //Check for --help as a special case, before checking for errors
-    if(help->count && !nerrors_main) {
+    //Check for --help as a special case if used with errors, auto-print the main --help
+    if(help->count && !clone_cmd->count) {
         write_glossary(stdout, main_argtable);
-        clean(main_argtable, clone_argtable, 0);
-    } else if(clone_help->count) {
-        arg_print_glossary(stdout, clone_argtable, "  %-25s %s\n");
         clean(main_argtable, clone_argtable, 0);
     }
 
@@ -112,8 +110,32 @@ int main(int argc, char** argv) {
         fclose(sys_gitids);
     }
     
-    int ret_code = process_main(main_argtable, version, about, list, new, update, delete, shift, current, global, local, user, email, sigkey, help, end);
+    int ret_code;
+    //TODO: Clean this up, perhaps by having an enum MODE - MAIN, CLONE, as there can be multiple
+    if(!clone_cmd->count) {
+        ret_code = process_main(main_argtable, version, about, list, new, update, delete, shift, current, global, local, user, email, sigkey, help, end);
+    } else {
+        ret_code = process_clone(clone_argtable, clone_cmd, repo, clone_help, clone_end);
+    }
     clean(main_argtable, clone_argtable, ret_code);
+}
+
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_lit* help, struct arg_end* end) {
+    /**
+     * Process flags
+     */
+    if(help->count) {
+        fprintf(stdout, "Usage: %s clone", PRG_NAME);
+        //Print one-line syntax for main argtable
+        arg_print_syntax(stdout, argtable, "\n");
+        fprintf(stdout,
+                "A command line tool allowing for easy shifting between git identities (username, email, and signing "
+                "key).\n\n");
+        arg_print_glossary(stdout, argtable, "  %-25s %s\n");
+        return 0;
+    }
+
+    return 0;
 }
 
 int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list, struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift, struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user, struct arg_str* email, struct arg_str* sigkey, struct arg_lit* help, struct arg_end* end) {
@@ -121,6 +143,11 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
     /**
      * Process flags
      */
+    if(help->count) {
+        write_glossary(stdout, argtable);
+        return 0;
+    }
+
     if(version->count != 0) {
         printf(PRG_VERSION "\n");
         return 0;
@@ -293,3 +320,5 @@ void write_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "  %-25s %s\n", "--email=<email>", "specify email");
     fprintf(stream, "  %-25s %s\n", "--sigkey=<sigket>", "specify signing key (key-id format: LONG)");
 }
+
+
