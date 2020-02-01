@@ -173,7 +173,11 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
             const char* lslash;
             algorithm_find_last(*(repo->sval), rslash, '/', lslash);
             //Now, grab the substring
-            strncpy(name, lslash + 1, rslash - lslash);
+            size_t last = rslash - lslash;
+            strncpy(name, lslash + 1, last - 1);
+            //Cap off with '\0'
+            name[last - 1] = '\0';
+
         } else {
             printf("oh nuts\n");
         }
@@ -184,7 +188,9 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         //Attempt to cd
         runcmd(buffer, 1000, buffer);
         //Finally, ls
-        runcmd("ls -lha", 1000, buffer);
+        runcmd("cd data && ls -lha", 1000, buffer);
+        printf("%s", buffer);
+        runcmd("cd data && ls -lha", 1000, buffer);
         printf("%s", buffer);
         exit(0);
 
