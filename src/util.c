@@ -109,14 +109,14 @@ void parseGitURLName(char* url) {
                 //Using the git-clone documentation, we are parsing for "foo" in "host.xz:foo/.git"
                 //I have a feeling that "host.xz:bar/foo/.git" is also valid, so...
                 char* lslash;
-                algorithm_find_last(dot, rslash, '/', lslash);
+                algorithm_find_last(url, rslash, '/', lslash);
+                last = rslash;
                 //If nothing was found, then we need to look for : delimiter
-                if(lslash == rslash) {
+                if(lslash == url - 1) {
                     char* cln = strrchr(url, ':');
                     //Semantically, this doesn't make so much sense, just now this is setting the leftmost delimiter char
                     rslash = cln;
                 } else {
-                    last = rslash;
                     rslash = lslash;
                 }
             } else {
