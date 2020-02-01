@@ -160,20 +160,26 @@ void parseGitURLName(char* url) {
         rslash = strrchr(url, '/');
     }
     char* last = url + strlen(url);
-
-    //Assert not /.git, otherwise, we need to do something
-    int isDotGit;
-    algorithm_equal(char*, rslash + 1, last, ".git", isDotGit);
-    if(isDotGit) {
-        printf("Further processing of a different kind needed, not implemented\n")
+    //Look for the last . to see if we should perhaps truncate
+    char* dot = strrchr(url, '.');
+    if(dot != NULL) { 
+        int isDotGit;
+        algorithm_equal(char*, dot, last, ".git", isDotGit);
+        if(isDotGit) {
+            //Check if /.git, which will require a certain kind of processing
+            if(rslash + 1 == dot) {
+                printf("Further processing of a different kind needed, not implemented\n");
+            } else {
+                //Set last to dot to trucate
+                last = dot;
+            }
+        }
     }
-
     //Obtain name
-    strncpy(url, rslash + 1, last - (rslash + 1));
-    /*char* newLast;
-    algorithm_copy(char*, )
+    char* newLast;
+    algorithm_copy(char*, rslash + 1, last, url, newLast);
     //Cap off with '\0'
-    name[last - rslash - 1] = '\0';*/
+    *newLast = '\0';
 }
 
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
