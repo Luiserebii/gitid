@@ -1,8 +1,10 @@
 #include "../include/git-user.h"
 #include "../include/git.h"
 #include "../include/gitid.h"
+#include "../include/util.h"
 #include "../include/vector-gitid-id.h"
 #include "../lib/argtable3/argtable3.h"
+#include "../lib/c-stl/include/algorithm.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -136,7 +138,7 @@ int main(int argc, char** argv) {
         ret_code = process_main(main_argtable, version, about, list, new, update, delete, shift, current, global, local,
                                 user, email, sigkey, end);
     } else {
-        ret_code = process_clone(clone_argtable, clone_cmd, repo, clone_end);
+        ret_code = process_clone(clone_argtable, clone_cmd, repo, clone_shift, clone_end);
     }
     clean(main_argtable, clone_argtable, ret_code);
 }
@@ -164,14 +166,14 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
     if(clone_shift->count) {
         //Parse repo out into "humanish" part
         //TODO: Acquire advice on whether malloc may be better
-        char name[1000];
-        char* rslash = strrchr(*(repo->sval), "/");
+        char name[1000]; //= {'\0'};
+        char* rslash = strrchr(*(repo->sval), '/');
         //If this is the last one, likely GitHub-like URL
         if(!rslash[1]) {
-            char* lslash;
-            algorithm_find(*(repo->sval), rslash, '/', lslash);
+            const char* lslash;
+            algorithm_find_last(*(repo->sval), rslash, '/', lslash);
             //Now, grab the substring
-            strncpy(name, lslash, rslash - lslash);
+            strncpy(name, lslash + 1, rslash - lslash);
         } else {
             printf("oh nuts\n");
         }

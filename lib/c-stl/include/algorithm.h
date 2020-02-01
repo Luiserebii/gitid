@@ -57,7 +57,7 @@
  * Searches through [begin, end) for val. Returns a pointer to the found value through
  * res, or end if nothing found. 
  *
- * Ex: algorithm_find(int*, nums, nums + sz, 100);
+ * Ex: algorithm_find(nums, nums + sz, 100, first100);
  */
 #define algorithm_find(begin, end, val, res) \
     {                                        \
@@ -65,6 +65,22 @@
         while(res != end && *res != val) {   \
             ++res;                           \
         }                                    \
+    }
+
+/**
+ * algorithm_find_last(begin, end, val, res)
+ *
+ * Searches through [begin, end) for val. Returns a pointer to the last found value through
+ * res, or end if nothing found. 
+ *
+ * Ex: algorithm_find_last(nums, nums + sz, 100, last100);
+ */
+#define algorithm_find_last(begin, end, val, res)       \
+    {                                              \
+        res = end - 1;                             \
+        while(res != begin - 1 && *res != val) {   \
+            --res;                                 \
+        }                                          \
     }
 
 /**
