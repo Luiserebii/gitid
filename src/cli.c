@@ -72,7 +72,8 @@ int main(int argc, char** argv) {
     struct arg_end* clone_end;
 
     void* clone_argtable[] = {
-        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
+        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), 
+        repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
         clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
@@ -149,7 +150,11 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
     /**
      * Process flags
      */
-
+    git_clone_opts* opts = git_clone_opts_init();
+    git_clone_opts_set_repo(opts, *(repo->sval));
+    git_clone(opts);
+    
+    git_clone_opts_free(opts);
     return 0;
 }
 
