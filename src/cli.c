@@ -25,7 +25,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
                  struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift,
                  struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user,
                  struct arg_str* email, struct arg_str* sigkey, struct arg_end* end);
-int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_end* end);
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift, struct arg_end* end);
 CLI_MODE identifyMode(struct arg_rex* clone);
 
 int main(int argc, char** argv) {
@@ -68,13 +68,16 @@ int main(int argc, char** argv) {
 
     struct arg_rex* clone_cmd;
     struct arg_str* repo;
+    struct arg_str* clone_shift;
     struct arg_lit* clone_help;
     struct arg_end* clone_end;
 
     void* clone_argtable[] = {
         clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), 
         repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
-        clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
+        clone_shift = arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
+        clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), 
+        clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
         fprintf(stderr, "%s: insufficient memory\n", PRG_NAME);
@@ -146,14 +149,46 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
     }
 }
 
-int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_end* end) {
+int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift, struct arg_end* end) {
     /**
      * Process flags
      */
+    //Initialize a new git_clone_opts and set repo
     git_clone_opts* opts = git_clone_opts_init();
     git_clone_opts_set_repo(opts, *(repo->sval));
+
     git_clone(opts);
     
+    //If shift, cd into cloned dir and set identity
+    //Note that if --directory is specified, this can really change things
+    if(clone_shift->count) {
+        //Parse repo out into "humanish" part
+        //TODO: Acquire advice on whether malloc may be better
+        char name[1000];
+        char* rslash = strrchr(*(repo->sval), "/");
+        //If this is the last one, likely GitHub-like URL
+        if(!rslash[1]) {
+            char* lslash;
+            algorithm_find(*(repo->sval), rslash, '/', lslash);
+            //Now, grab the substring
+            strncpy(name, lslash, rslash - lslash);
+        } else {
+            printf("oh nuts\n");
+        }
+        char buffer[1000];
+        strcpy(buffer, "cd ");
+        strcat(buffer, name);
+        printf("Running: %s", buffer);
+        //Attempt to cd
+        runcmd(buffer, 1000, buffer);
+        //Finally, ls
+        runcmd("ls -lha", 1000, buffer);
+        printf("%s", buffer);
+        exit(0);
+
+    }
+
+    //Free
     git_clone_opts_free(opts);
     return 0;
 }
