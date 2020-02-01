@@ -53,7 +53,7 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
     match = vector_get_id_gitid_id(v, id_name);
     
     //If nothing found, print error and break
-    if(id == NULL) {
+    if(match == NULL) {
         fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
         exit(1);
     }

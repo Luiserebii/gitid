@@ -10,7 +10,7 @@
  * This defines a function which, if the member is uninitialized, allocates 
  * the signing_key field, and takes an optional char* to set the newly allocated field to. 
  *
- * If NULL is passed, only allocation occurs. 
+ * If NULL is passed, nothing occurs, except for the deallocation of the struct_param member.
  *
  * The macro will substitute struct as the struct type being used (e.g. animal),
  * member with the name of the member being allocated/modified (e.g. name), struct_param
@@ -20,8 +20,8 @@
 #define define_struct_set_string(struct, member, struct_param, char_param)     \
     void struct##_set_##member(struct* struct_param, const char* char_param) { \
         free(struct_param->member);                                            \
-        struct_param->member = safemalloc(strlen(char_param) + 1);             \
         if(char_param) {                                                       \
+            struct_param->member = safemalloc(strlen(char_param) + 1);             \
             strcpy(struct_param->member, char_param);                          \
         }                                                                      \
     }
