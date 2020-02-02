@@ -200,14 +200,18 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
     }
 
     if(list->count != 0) {
-        fputs("All registered identities:\n", stdout);
         //Intialize a vector, and grab all system gitids
         vector_gitid_id* v = vector_init_gitid_id();
         gitid_get_system_gitid_ids(v);
-        //Write to stdout
-        for(gitid_id** it = v->head; it != v->avail; ++it) {
-            putc('\n', stdout);
-            gitid_id_write(*it, stdout);
+        if(vector_size_gitid_id(v)) {
+            //Write to stdout
+            fputs("All registered identities:\n", stdout);
+            for(gitid_id** it = v->head; it != v->avail; ++it) {
+                putc('\n', stdout);
+                gitid_id_write(*it, stdout);
+            }
+        } else {
+            fputs("No identities registered yet!\n", stdout);
         }
         //Free
         vector_free_gitid_id(v);
@@ -251,8 +255,10 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
         //Finally, set
         if(!local->count) {
             gitid_shift_gitid_id_global(id);
+            printf("Shifted global git identity to: %s\n", id->id_name);
         } else {
             gitid_shift_gitid_id_local(id);
+            printf("Shifted local git identity to: %s\n", id->id_name);
         }
 
         //And, finally, free id
