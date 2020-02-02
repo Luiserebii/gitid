@@ -1,3 +1,4 @@
+#include "../include/cli.h"
 #include "../include/git-user.h"
 #include "../include/git.h"
 #include "../include/gitid.h"
@@ -11,26 +12,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#define PRG_NAME "gitid"
-#define PRG_VERSION "0.1.0-alpha"
-
-#define clean(m_argtable, c_argtable, exitcode)                            \
-    arg_freetable(m_argtable, sizeof(m_argtable) / sizeof(m_argtable[0])); \
-    arg_freetable(c_argtable, sizeof(c_argtable) / sizeof(c_argtable[0])); \
-    return exitcode;
-
-typedef enum { MODE_MAIN, MODE_CLONE } CLI_MODE;
-
-void write_glossary(FILE* stream, void** argtable);
-int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about, struct arg_lit* list,
-                 struct arg_str* new, struct arg_str* update, struct arg_str* delete, struct arg_str* shift,
-                 struct arg_lit* current, struct arg_lit* global, struct arg_lit* local, struct arg_str* user,
-                 struct arg_str* email, struct arg_str* sigkey, struct arg_end* end);
-int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
-                  struct arg_end* end);
-CLI_MODE identifyMode(struct arg_rex* clone);
-void parseGitURLName(char* url);
 
 int main(int argc, char** argv) {
 
@@ -245,8 +226,10 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
         //If local not specified, global is default anyways, so print global
         if(!local->count) {
             git_get_user_global(user);
+            fputs("Current global git identity:\n\n", stdout);
         } else {
             git_get_user_local(user);
+            fputs("Current local git identity:\n\n", stdout);
         }
         //Print, and free
         git_user_write(user, stdout);
