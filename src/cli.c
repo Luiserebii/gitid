@@ -161,7 +161,9 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
     git_clone_opts* opts = git_clone_opts_init();
     git_clone_opts_set_repo(opts, *(repo->sval));
 
-    git_clone(opts);
+    if(!git_clone(opts)) {
+        exit(1);
+    }
 
     //If shift, cd into cloned dir and set identity
     //Note that if --directory is specified, this can really change things
@@ -175,7 +177,6 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         char buffer[1000];
         strcpy(buffer, "cd ");
         strcat(buffer, name);
-        printf("Runningfre: %s", buffer);
 
         //Look for matching git_id
         gitid_id* id = gitid_id_init();
@@ -183,6 +184,7 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
 
         //Attempt to cd and set
         git_set_user_local_prefix(id->user, buffer);
+        printf("Set newly cloned repo to ID \"%s\"!\n", *(clone_shift->sval));
         //Finally, free
         gitid_id_free(id);
         exit(0);

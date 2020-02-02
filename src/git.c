@@ -47,7 +47,7 @@ void git_get_user_local(git_user* user) {
     trimNewline(user->name), trimNewline(user->email);
 }
 
-void git_set_user_global(git_user* user) {
+int git_set_user_global(git_user* user) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
     //Copy to buffer, escape, and finally, concatenate the result
@@ -63,11 +63,11 @@ void git_set_user_global(git_user* user) {
         strcat(cmd, "\"\"");
     }
 
-    //TODO: Figure out how to handle non-zero exit codes
-    minsystem(cmd);
+    //Return success based on exit code
+    return minsystem(cmd) ? 0 : 1;
 }
 
-void git_set_user_local(git_user* user) {
+int git_set_user_local(git_user* user) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
     strcpy(escapebuffer, user->name), escapesh(escapebuffer), strcat(cmd, escapebuffer);
@@ -80,11 +80,11 @@ void git_set_user_local(git_user* user) {
         strcat(cmd, "\"\"");
     }
 
-    //TODO: Figure out how to handle non-zero exit codes
-    minsystem(cmd);
+    //Return success based on exit code
+    return minsystem(cmd) ? 0 : 1;
 }
 
-void git_set_user_local_prefix(git_user* user, char* prefix) {
+int git_set_user_local_prefix(git_user* user, char* prefix) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING];
     strcpy(cmd, prefix);
@@ -99,11 +99,11 @@ void git_set_user_local_prefix(git_user* user, char* prefix) {
         strcat(cmd, "\"\"");
     }
 
-    //TODO: Figure out how to handle non-zero exit codes
-    minsystem(cmd);
+    //Return success based on exit code
+    return minsystem(cmd) ? 0 : 1;
 }
 
-void git_clone(git_clone_opts* opts) {
+int git_clone(git_clone_opts* opts) {
     char cmd[GIT_CLONE_CMD_MAXSTRING] = "git clone";
 
     //Check all of the possible options for git clone
@@ -183,6 +183,6 @@ void git_clone(git_clone_opts* opts) {
         strcat(cmd, opts->config);
     }
 
-    //Finally, execute constructed command
-    minsystem(cmd);
+    //Finally, execute constructed command, and return success based on exit code
+    return minsystem(cmd) ? 0 : 1;
 }

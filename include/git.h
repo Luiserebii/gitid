@@ -20,23 +20,23 @@ void git_get_user_global(git_user* user);
 void git_get_user_local(git_user* user);
 
 /**
- * Sets the global user via git
+ * Sets the global user via git. Returns non-zero on success.
  */
-void git_set_user_global(git_user* user);
+int git_set_user_global(git_user* user);
 
 /**
- * Sets the local user for a repository (therefore local)
+ * Sets the local user for a repository (therefore local). Returns non-zero (i.e. 1) on success.
  */
-void git_set_user_local(git_user* user);
+int git_set_user_local(git_user* user);
 
 /**
- * Sets the local user for a repository, taking a prefix to use with the command.
+ * Sets the local user for a repository, taking a prefix to use with the command. Returns non-zero (i.e. 1) on success.
  */
-void git_set_user_local_prefix(git_user* user, char* prefix);
+int git_set_user_local_prefix(git_user* user, char* prefix);
 
 /**
- * Performs a git clone, using the options struct passed.
+ * Performs a git clone, using the options struct passed. Returns non-zero (i.e. 1) on success.
  */
-void git_clone(git_clone_opts* opts);
+int git_clone(git_clone_opts* opts);
 
 #endif
