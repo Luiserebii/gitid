@@ -38,27 +38,30 @@
  * -c, --config <key=value>
  * set config inside the new repository
  */
+
+#define GIT_CLONE_OPTS_VERBOSE              (1 << 0)
+#define GIT_CLONE_OPTS_QUIET                (1 << 1)
+#define GIT_CLONE_OPTS_PROGRESS             (1 << 2)
+#define GIT_CLONE_OPTS_NO_CHECKOUT          (1 << 3)
+#define GIT_CLONE_OPTS_BARE                 (1 << 4)
+#define GIT_CLONE_OPTS_MIRROR               (1 << 5)
+#define GIT_CLONE_OPTS_LOCAL                (1 << 6)
+#define GIT_CLONE_OPTS_NO_HARDLINKS         (1 << 7)
+#define GIT_CLONE_OPTS_SHARED               (1 << 8)
+#define GIT_CLONE_OPTS_RECURSIVE            (1 << 9)
+#define GIT_CLONE_OPTS_RECURSE_SUBMODULES   (1 << 10)
+#define GIT_CLONE_OPTS_DISSOCIATE           (1 << 11)
+#define GIT_CLONE_OPTS_SINGLE_BRANCH        (1 << 12)
+
 typedef struct {
     char* repo;
-    int verbose;
-    int quiet;
-    int progress;
-    int no_checkout;
-    int bare;
-    int mirror;
-    int local;
-    int no_hardlinks;
-    int shared;
-    int recursive;
-    int recurse_submodules;
+    int flags;
     char* template;
     char* reference;
-    int dissociate;
     char* origin;
     char* branch;
     char* upload_pack;
     char* depth;
-    int single_branch;
     char* seperate_git_dir;
     char* config;
 } git_clone_opts;

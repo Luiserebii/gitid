@@ -23,13 +23,13 @@ A command line tool allowing for easy shifting between git identities (username,
 Additional flags:
 
 -c, --current, --s, --shift:
-  --global                  global (option for -s and -c)
-  --local                   local (option for -s and -c)
+  --global                  refer to global git config
+  --local                   refer to local git config (repository-level)
 
 -n, --new, -u, --update:
   --user=<username>         specify username
   --email=<email>           specify email
-  --sigkey=<sigket>         specify signing key (key-id format: LONG)
+  --sigkey=<sigkey>         specify signing key (key-id format: LONG)
 ```
 
 ## Building
@@ -41,7 +41,7 @@ Building is very simple, simply run `make`, and it'll produce an executable `git
 To install, simply extract the tool into a preferred directory, build, and create a soft link. For example, if you are looking to place the tool in your home directory:
 ```
 unzip gitid-0.2.0-alpha.zip -d ~/
-cd ~/gitid-0.2.0-alpha.zip
+cd ~/gitid-0.2.0-alpha
 make
 sudo ln -s ~/gitid-0.2.0-alpha/gitid /usr/local/bin/gitid
 ```

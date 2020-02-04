@@ -10,9 +10,7 @@ git_clone_opts* git_clone_opts_init() {
     git_clone_opts* opts = safemalloc(sizeof(git_clone_opts));
 
     //Initialize fields
-    opts->verbose = opts->quiet = opts->progress = opts->no_checkout = opts->bare = opts->mirror = opts->local =
-        opts->no_hardlinks = opts->shared = opts->recursive = opts->recurse_submodules = opts->dissociate =
-            opts->single_branch = 0;
+    opts->flags = 0;
     opts->repo = opts->template = opts->reference = opts->origin = opts->branch = opts->upload_pack = opts->depth =
         opts->seperate_git_dir = opts->config = NULL;
 
@@ -33,9 +31,7 @@ git_clone_opts* git_clone_opts_safe_init(const char* rp) {
     git_clone_opts_set_repo(opts, rp);
 
     //Initialize rest of fields
-    opts->verbose = opts->quiet = opts->progress = opts->no_checkout = opts->bare = opts->mirror = opts->local =
-        opts->no_hardlinks = opts->shared = opts->recursive = opts->recurse_submodules = opts->dissociate =
-            opts->single_branch = 0;
+    opts->flags = 0;
     opts->template = opts->reference = opts->origin = opts->branch = opts->upload_pack = opts->depth =
         opts->seperate_git_dir = opts->config = NULL;
 
