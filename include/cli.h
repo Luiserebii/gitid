@@ -4,7 +4,9 @@
 #include "../lib/argtable3/argtable3.h"
 
 #define PRG_NAME "gitid"
-#define PRG_VERSION "0.1.0-alpha"
+#define PRG_VERSION "0.2.0-alpha"
+#define PRG_DESCRIPTION \
+    "A command line tool allowing for easy shifting between git identities (username, email, and signing key)."
 
 #define clean(m_argtable, c_argtable, exitcode)                            \
     arg_freetable(m_argtable, sizeof(m_argtable) / sizeof(m_argtable[0])); \
@@ -32,5 +34,10 @@ void write_main_glossary(FILE* stream, void** argtable);
  * Uses argtable arg_xxx structs to determine and return current mode of program.
  */
 CLI_MODE identifyMode(struct arg_rex* clone);
+
+/**
+ * Function meant to run before all else; populates constants, particularly filepaths based on $HOME.
+ */
+void setup_constants();
 
 #endif

@@ -12,7 +12,6 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
-void setupconstants();
 
 /**
  * arg_xxx* for main_argtable
@@ -67,7 +66,7 @@ static struct arg_end* clone_end;
 
 int main(int argc, char** argv) {
 
-    setupconstants();
+    setup_constants();
 
     void* main_argtable[] = {version = arg_litn("v", "version", 0, 1, "output the version number"),
                              about = arg_litn("a", "about", 0, 1, "about this tool"),
@@ -130,19 +129,14 @@ int main(int argc, char** argv) {
     //Check for --help early so as to not get caught up in errors (e.g. git clone --help)
     //would break otherwise, since <repo> is required
     if(help->count && mode == MODE_MAIN) {
-
         write_main_glossary(stdout, main_argtable);
         clean(main_argtable, clone_argtable, 0);
-
     } else if(clone_help->count && mode == MODE_CLONE) {
-
         fprintf(stdout, "Usage: %s clone", PRG_NAME);
         //Print one-line syntax for main argtable
         arg_print_syntax(stdout, clone_argtable, "\n");
-        fprintf(stdout,
-                "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-                "key).\n\n");
-        arg_print_glossary(stdout, clone_argtable, "  %-25s %s\n");
+        fprintf(stdout, PRG_DESCRIPTION "\n\n");
+        arg_print_glossary(stdout, clone_argtable, "  %-35s %s\n");
         return 0;
     }
 
@@ -158,8 +152,8 @@ int main(int argc, char** argv) {
     }
 
     /**
-         * Setup (check if no file, if none, make a blank one)
-         */
+     * Setup (check if no file, if none, make a blank one)
+     */
     //Attempt the creation of the data dir; if it already exists, this'll
     //fail anyways (lazy solution, perhaps has issues)
     mkdir(GITID_SYSTEM_FOLDER, 0775);
@@ -328,9 +322,7 @@ int process_main(void** argtable) {
 
     if(about->count != 0) {
         printf(PRG_NAME "\n");
-        printf(
-            "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-            "key).\n");
+        printf(PRG_DESCRIPTION "\n");
         printf("Version: %s\n", PRG_VERSION);
         printf("Author: Luiserebii\nCheck me out on GitHub at: https://github.com/Luiserebii!\n");
         return 0;
@@ -470,9 +462,7 @@ void write_main_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "Usage: %s", PRG_NAME);
     //Print one-line syntax for main argtable
     arg_print_syntax(stream, argtable, "\n");
-    fprintf(stream,
-            "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-            "key).\n\n");
+    fprintf(stream, PRG_DESCRIPTION "\n\n");
     arg_print_glossary(stream, argtable, "  %-25s %s\n");
     fputs("\nAdditional flags:\n\n-c, --current, --s, --shift:\n", stream);
     fprintf(stream, "  %-25s %s\n", "--global", "refer to global git config");
@@ -483,7 +473,7 @@ void write_main_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "  %-25s %s\n", "--sigkey=<sigkey>", "specify signing key (key-id format: LONG)");
 }
 
-void setupconstants() {
+void setup_constants() {
     generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
     generate_path_home(GITID_SYSTEM_FOLDER, GITID_SYSTEM_REL_FOLDER);
 }
