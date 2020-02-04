@@ -36,6 +36,18 @@ Additional flags:
 
 Building is very simple, simply run `make`, and it'll produce an executable `gitid`.
 
+## Installation
+### Linux
+To install, simply extract the tool into a preferred directory, build, and create a soft link. For example, if you are looking to place the tool in your home directory:
+```
+unzip gitid-0.2.0-alpha.zip -d ~/
+cd ~/gitid-0.2.0-alpha.zip
+make
+sudo ln -s ~/gitid-0.2.0-alpha/gitid /usr/local/bin/gitid
+```
+
+Doing this should make it globally accessible via `gitid`. 
+
 ## Testing
 
 Run `make && ./a.out` in the [test/](./test) directory to run all tests. For simplicity, some tests are not automated, and ask for runner confirmation to ensure that the output is valid (e.g. `gitid_id_min_write`).
