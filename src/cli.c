@@ -51,6 +51,17 @@ static struct arg_lit* clone_shared;
 static struct arg_lit* clone_recursive;
 static struct arg_lit* clone_recurse_submodules;
 
+static struct arg_str* clone_template;
+static struct arg_str* clone_reference;
+static struct arg_lit* clone_dissociate;
+static struct arg_str* clone_origin;
+static struct arg_str* clone_branch;
+static struct arg_str* clone_upload_pack;
+static struct arg_str* clone_depth;
+static struct arg_lit* clone_single_branch;
+static struct arg_str* clone_seperate_git_dir;
+static struct arg_str* clone_config;
+
 static struct arg_lit* clone_help;
 static struct arg_end* clone_end;
 
@@ -90,6 +101,16 @@ int main(int argc, char** argv) {
         clone_shared = arg_litn("s", "shared", 0, 1, "setup as shared repository"),
         clone_recursive = arg_litn(NULL, "recursive", 0, 1, "initialize submodules in the clone"),
         clone_recurse_submodules = arg_litn(NULL, "recurse-submodules", 0, 1, "initialize submodules in the clone"),
+        clone_template = arg_strn(NULL, "template", "<template-directory>", 0, 1, "directory from which templates will be used"),
+        clone_reference = arg_strn(NULL, "reference", "<repo>", 0, 1, "reference repository"),
+        clone_dissociate = arg_litn(NULL, "dissociate", 0, 1, "use --reference only while cloning"),
+        clone_origin = arg_strn("o", "origin", "<name>", 0, 1, "use <name> instead of 'origin' to track upstream"),
+        clone_branch = arg_strn("b", "branch", "<branch>", 0, 1, "checkout <branch> instead of the remote's HEAD"),
+        clone_upload_pack = arg_strn("u", "upload-pack", "<path>", 0, 1, "path to git-upload-pack on the remote"),
+        clone_depth = arg_strn(NULL, "depth", "<depth>", 0, 1, "create a shallow clone of that depth"),
+        clone_single_branch = arg_litn(NULL, "single-branch", 0, 1, "clone only one branch, HEAD or --branch"),
+        clone_seperate_git_dir = arg_strn(NULL, "seperate-git-dir", "<gitdir>", 0, 1, "separate git dir from working tree"),
+        clone_config = arg_strn("c", "config", "<key=value>", 0, 1, "set config inside the new repository"),
         clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
@@ -196,6 +217,66 @@ int process_clone(void** argtable) {
     
     if(clone_mirror->count) {
         opts->flags |= GIT_CLONE_OPTS_MIRROR;
+    }
+    
+    if(clone_local->count) {
+        opts->flags |= GIT_CLONE_OPTS_LOCAL;
+    }
+
+    if(clone_no_hardlinks->count) {
+        opts->flags |= GIT_CLONE_OPTS_NO_HARDLINKS;
+    }
+
+    if(clone_shared->count) {
+        opts->flags |= GIT_CLONE_OPTS_SHARED;
+    }
+    
+    if(clone_recursive->count) {
+        opts->flags |= GIT_CLONE_OPTS_RECURSIVE;
+    }
+    
+    if(clone_recurse_submodules->count) {
+        opts->flags |= GIT_CLONE_OPTS_RECURSE_SUBMODULES;
+    }
+
+    if(clone_template->count) {
+        
+    }
+    
+    if(clone_reference->count) {
+    
+    }
+    
+    if(clone_dissociate->count) {
+        opts->flags |= GIT_CLONE_OPTS_DISSOCIATE;
+    }
+    
+    if(clone_origin->count) {
+    
+    }
+
+    if(clone_branch->count) {
+    
+    }
+
+    if(clone_upload_pack->count) {
+    
+    }
+
+    if(clone_depth->count) {
+    
+    }
+
+    if(clone_single_branch->count) {
+        opts->flags |= GIT_CLONE_OPTS_SINGLE_BRANCH;
+    }
+
+    if(clone_seperate_git_dir->count) {
+    
+    }
+
+    if(clone_config->count) {
+    
     }
 
     /**
