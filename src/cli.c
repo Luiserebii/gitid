@@ -85,9 +85,9 @@ int main(int argc, char** argv) {
                              sigkey = arg_strn(NULL, "sigkey", "<sigkey>", 0, 1, /*specify signing key*/ NULL),
                              help = arg_litn("h", "help", 0, 1, "display this help and exit"), end = arg_end(20)};
 
-
     void* clone_argtable[] = {
-        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), clone_repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
+        clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL),
+        clone_repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
         clone_shift =
             arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
         clone_verbose = arg_litn("v", "verbose", 0, 1, "be more verbose"),
@@ -101,7 +101,8 @@ int main(int argc, char** argv) {
         clone_shared = arg_litn("s", "shared", 0, 1, "setup as shared repository"),
         clone_recursive = arg_litn(NULL, "recursive", 0, 1, "initialize submodules in the clone"),
         clone_recurse_submodules = arg_litn(NULL, "recurse-submodules", 0, 1, "initialize submodules in the clone"),
-        clone_template = arg_strn(NULL, "template", "<template-directory>", 0, 1, "directory from which templates will be used"),
+        clone_template =
+            arg_strn(NULL, "template", "<template-directory>", 0, 1, "directory from which templates will be used"),
         clone_reference = arg_strn(NULL, "reference", "<repo>", 0, 1, "reference repository"),
         clone_dissociate = arg_litn(NULL, "dissociate", 0, 1, "use --reference only while cloning"),
         clone_origin = arg_strn("o", "origin", "<name>", 0, 1, "use <name> instead of 'origin' to track upstream"),
@@ -109,7 +110,8 @@ int main(int argc, char** argv) {
         clone_upload_pack = arg_strn("u", "upload-pack", "<path>", 0, 1, "path to git-upload-pack on the remote"),
         clone_depth = arg_strn(NULL, "depth", "<depth>", 0, 1, "create a shallow clone of that depth"),
         clone_single_branch = arg_litn(NULL, "single-branch", 0, 1, "clone only one branch, HEAD or --branch"),
-        clone_seperate_git_dir = arg_strn(NULL, "seperate-git-dir", "<gitdir>", 0, 1, "separate git dir from working tree"),
+        clone_seperate_git_dir =
+            arg_strn(NULL, "seperate-git-dir", "<gitdir>", 0, 1, "separate git dir from working tree"),
         clone_config = arg_strn("c", "config", "<key=value>", 0, 1, "set config inside the new repository"),
         clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
@@ -129,76 +131,75 @@ int main(int argc, char** argv) {
     //would break otherwise, since <repo> is required
     if(help->count && mode == MODE_MAIN) {
 
-            write_main_glossary(stdout, main_argtable);
-            clean(main_argtable, clone_argtable, 0);
+        write_main_glossary(stdout, main_argtable);
+        clean(main_argtable, clone_argtable, 0);
 
-        } else if(clone_help->count && mode == MODE_CLONE) {
+    } else if(clone_help->count && mode == MODE_CLONE) {
 
-            fprintf(stdout, "Usage: %s clone", PRG_NAME);
-            //Print one-line syntax for main argtable
-            arg_print_syntax(stdout, clone_argtable, "\n");
-            fprintf(stdout,
-                    "A command line tool allowing for easy shifting between git identities (username, email, and signing "
-                    "key).\n\n");
-            arg_print_glossary(stdout, clone_argtable, "  %-25s %s\n");
-            return 0;
+        fprintf(stdout, "Usage: %s clone", PRG_NAME);
+        //Print one-line syntax for main argtable
+        arg_print_syntax(stdout, clone_argtable, "\n");
+        fprintf(stdout,
+                "A command line tool allowing for easy shifting between git identities (username, email, and signing "
+                "key).\n\n");
+        arg_print_glossary(stdout, clone_argtable, "  %-25s %s\n");
+        return 0;
+    }
 
+    //If there are errors, print them!
+    if(nerrors_main && nerrors_clone) {
+        if(mode == MODE_MAIN) {
+            arg_print_errors(stderr, end, PRG_NAME);
+            clean(main_argtable, clone_argtable, 1);
+        } else {
+            arg_print_errors(stderr, clone_end, PRG_NAME "-clone");
+            clean(main_argtable, clone_argtable, 1);
         }
+    }
 
-        //If there are errors, print them!
-        if(nerrors_main && nerrors_clone) {
-            if(mode == MODE_MAIN) {
-                arg_print_errors(stderr, end, PRG_NAME);
-                clean(main_argtable, clone_argtable, 1);
-            } else {
-                arg_print_errors(stderr, clone_end, PRG_NAME "-clone");
-                clean(main_argtable, clone_argtable, 1);
-            }
-        }
-
-        /**
+    /**
          * Setup (check if no file, if none, make a blank one)
          */
-        //Attempt the creation of the data dir; if it already exists, this'll
-        //fail anyways (lazy solution, perhaps has issues)
-        mkdir(GITID_SYSTEM_FOLDER, 0775);
-        int status = access(GITID_SYSTEM_DATA_FILE, F_OK);
-        if(status == -1) {
-            FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
-            fclose(sys_gitids);
-        }
-
-        //Finally, process options passed
-        int ret_code;
-        if(mode == MODE_MAIN) {
-            ret_code = process_main(main_argtable);
-        } else {
-            ret_code = process_clone(clone_argtable);
-        }
-        clean(main_argtable, clone_argtable, ret_code);
+    //Attempt the creation of the data dir; if it already exists, this'll
+    //fail anyways (lazy solution, perhaps has issues)
+    mkdir(GITID_SYSTEM_FOLDER, 0775);
+    int status = access(GITID_SYSTEM_DATA_FILE, F_OK);
+    if(status == -1) {
+        FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
+        fclose(sys_gitids);
     }
 
-    CLI_MODE identifyMode(struct arg_rex* clone) {
-        if(clone->count) {
-            return MODE_CLONE;
-        } else {
-            return MODE_MAIN;
-        }
+    //Finally, process options passed
+    int ret_code;
+    if(mode == MODE_MAIN) {
+        ret_code = process_main(main_argtable);
+    } else {
+        ret_code = process_clone(clone_argtable);
     }
+    clean(main_argtable, clone_argtable, ret_code);
+}
+
+CLI_MODE identifyMode(struct arg_rex* clone) {
+    if(clone->count) {
+        return MODE_CLONE;
+    } else {
+        return MODE_MAIN;
+    }
+}
 
 int process_clone(void** argtable) {
-    
+
     //Initialize a new git_clone_opts and set repo
     git_clone_opts* opts = git_clone_opts_init();
     git_clone_opts_set_repo(opts, *(clone_repo->sval));
-    
+
     /**
      * Process flags
      */
     if(clone_verbose->count) {
         opts->flags |= GIT_CLONE_OPTS_VERBOSE;
     }
-    
+
     if(clone_quiet->count) {
         opts->flags |= GIT_CLONE_OPTS_QUIET;
     }
@@ -210,15 +211,15 @@ int process_clone(void** argtable) {
     if(clone_no_checkout->count) {
         opts->flags |= GIT_CLONE_OPTS_NO_CHECKOUT;
     }
-    
+
     if(clone_bare->count) {
         opts->flags |= GIT_CLONE_OPTS_BARE;
     }
-    
+
     if(clone_mirror->count) {
         opts->flags |= GIT_CLONE_OPTS_MIRROR;
     }
-    
+
     if(clone_local->count) {
         opts->flags |= GIT_CLONE_OPTS_LOCAL;
     }
@@ -230,41 +231,41 @@ int process_clone(void** argtable) {
     if(clone_shared->count) {
         opts->flags |= GIT_CLONE_OPTS_SHARED;
     }
-    
+
     if(clone_recursive->count) {
         opts->flags |= GIT_CLONE_OPTS_RECURSIVE;
     }
-    
+
     if(clone_recurse_submodules->count) {
         opts->flags |= GIT_CLONE_OPTS_RECURSE_SUBMODULES;
     }
 
     if(clone_template->count) {
-        
+        git_clone_opts_set_template(opts, *(clone_template->sval));
     }
-    
+
     if(clone_reference->count) {
-    
+        git_clone_opts_set_reference(opts, *(clone_reference->sval));
     }
-    
+
     if(clone_dissociate->count) {
         opts->flags |= GIT_CLONE_OPTS_DISSOCIATE;
     }
-    
+
     if(clone_origin->count) {
-    
+        git_clone_opts_set_origin(opts, *(clone_origin->sval));
     }
 
     if(clone_branch->count) {
-    
+        git_clone_opts_set_branch(opts, *(clone_branch->sval));
     }
 
     if(clone_upload_pack->count) {
-    
+        git_clone_opts_set_upload_pack(opts, *(clone_upload_pack->sval));
     }
 
     if(clone_depth->count) {
-    
+        git_clone_opts_set_depth(opts, *(clone_depth->sval));
     }
 
     if(clone_single_branch->count) {
@@ -272,11 +273,11 @@ int process_clone(void** argtable) {
     }
 
     if(clone_seperate_git_dir->count) {
-    
+        git_clone_opts_set_seperate_git_dir(opts, *(clone_seperate_git_dir->sval));
     }
 
     if(clone_config->count) {
-    
+        git_clone_opts_set_config(opts, *(clone_config->sval));
     }
 
     /**
