@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+char GITID_SYSTEM_DATA_FILE[GITID_FILE_MAX];
+
 void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Declare gitid_id for use
     gitid_id* id;

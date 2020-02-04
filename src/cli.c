@@ -12,9 +12,12 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <unistd.h>
+void setupconstants();
 
 int main(int argc, char** argv) {
-   printf("HOME : %s\n", getenv("HOME"));
+
+    setupconstants();
+    
     struct arg_lit* version;
     struct arg_lit* about;
     struct arg_lit* list;
@@ -344,4 +347,8 @@ void write_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "  %-25s %s\n", "--user=<username>", "specify username");
     fprintf(stream, "  %-25s %s\n", "--email=<email>", "specify email");
     fprintf(stream, "  %-25s %s\n", "--sigkey=<sigkey>", "specify signing key (key-id format: LONG)");
+}
+
+void setupconstants() {
+     generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
 }

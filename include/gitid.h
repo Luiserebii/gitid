@@ -5,7 +5,9 @@
 #include "gitid-id.h"
 #include "vector-gitid-id.h"
 
-#define GITID_SYSTEM_DATA_FILE ".gitid/gitids"
+#define GITID_SYSTEM_DATA_REL_FILE ".gitid/gitids"
+#define GITID_FILE_MAX 1000
+extern char GITID_SYSTEM_DATA_FILE[GITID_FILE_MAX];
 
 //Lowest level functions
 /**
