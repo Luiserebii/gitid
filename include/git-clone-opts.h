@@ -38,7 +38,7 @@
  * -c, --config <key=value>
  * set config inside the new repository
  */
-
+// clang-format off
 #define GIT_CLONE_OPTS_VERBOSE              (1 << 0)
 #define GIT_CLONE_OPTS_QUIET                (1 << 1)
 #define GIT_CLONE_OPTS_PROGRESS             (1 << 2)
@@ -52,6 +52,7 @@
 #define GIT_CLONE_OPTS_RECURSE_SUBMODULES   (1 << 10)
 #define GIT_CLONE_OPTS_DISSOCIATE           (1 << 11)
 #define GIT_CLONE_OPTS_SINGLE_BRANCH        (1 << 12)
+// clang-format on
 
 typedef struct {
     char* repo;

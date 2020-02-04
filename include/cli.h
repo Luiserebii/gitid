@@ -24,7 +24,7 @@ int process_main(void** argtable, struct arg_lit* version, struct arg_lit* about
  * Processes the parsed clone_argtable arg_xxx structs, containing most of the control flow logic.
  */
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
-                  struct arg_end* end);
+                  struct arg_lit* clone_verbose, struct arg_end* end);
 /**
  * Writes the main_argtable glossary to the stream passed.
  */

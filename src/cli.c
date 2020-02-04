@@ -57,6 +57,7 @@ int main(int argc, char** argv) {
     struct arg_rex* clone_cmd;
     struct arg_str* repo;
     struct arg_str* clone_shift;
+    struct arg_lit* clone_verbose;
     struct arg_lit* clone_help;
     struct arg_end* clone_end;
 
@@ -64,6 +65,7 @@ int main(int argc, char** argv) {
         clone_cmd = arg_rex1(NULL, NULL, "clone", NULL, 2, NULL), repo = arg_strn(NULL, NULL, "<repo>", 1, 1, NULL),
         clone_shift =
             arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
+        clone_verbose = arg_litn("v", "verbose", 0, 1, "be more verbose"),
         clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
@@ -123,7 +125,7 @@ int main(int argc, char** argv) {
         ret_code = process_main(main_argtable, version, about, list, new, update, delete, shift, current, global, local,
                                 user, email, sigkey, end);
     } else {
-        ret_code = process_clone(clone_argtable, clone_cmd, repo, clone_shift, clone_end);
+        ret_code = process_clone(clone_argtable, clone_cmd, repo, clone_shift, clone_verbose, clone_end);
     }
     clean(main_argtable, clone_argtable, ret_code);
 }
@@ -137,14 +139,21 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
 }
 
 int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, struct arg_str* clone_shift,
-                  struct arg_end* end) {
-    /**
-     * Process flags
-     */
+                  struct arg_lit* clone_verbose, struct arg_end* end) {
     //Initialize a new git_clone_opts and set repo
     git_clone_opts* opts = git_clone_opts_init();
     git_clone_opts_set_repo(opts, *(repo->sval));
 
+    /**
+     * Process flags
+     */
+    if(clone_verbose->count) {
+        opts->flags |= GIT_CLONE_OPTS_VERBOSE;
+    }
+
+    /**
+     * Run git_clone with opts
+     */
     if(!git_clone(opts)) {
         exit(1);
     }
@@ -171,7 +180,6 @@ int process_clone(void** argtable, struct arg_rex* clone, struct arg_str* repo, 
         printf("Set newly cloned repo to ID \"%s\"!\n", *(clone_shift->sval));
         //Finally, free
         gitid_id_free(id);
-        exit(0);
     }
 
     //Free
