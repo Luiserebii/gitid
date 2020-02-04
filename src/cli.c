@@ -40,6 +40,17 @@ static struct arg_rex* clone_cmd;
 static struct arg_str* clone_repo;
 static struct arg_str* clone_shift;
 static struct arg_lit* clone_verbose;
+static struct arg_lit* clone_quiet;
+static struct arg_lit* clone_progress;
+static struct arg_lit* clone_no_checkout;
+static struct arg_lit* clone_bare;
+static struct arg_lit* clone_mirror;
+static struct arg_lit* clone_local;
+static struct arg_lit* clone_no_hardlinks;
+static struct arg_lit* clone_shared;
+static struct arg_lit* clone_recursive;
+static struct arg_lit* clone_recurse_submodules;
+
 static struct arg_lit* clone_help;
 static struct arg_end* clone_end;
 
@@ -69,6 +80,16 @@ int main(int argc, char** argv) {
         clone_shift =
             arg_strn("s", "shift", "<id-name>", 0, 1, "set git identity of repo to registered identity post-clone"),
         clone_verbose = arg_litn("v", "verbose", 0, 1, "be more verbose"),
+        clone_quiet = arg_litn("q", "quiet", 0, 1, "be more quiet"),
+        clone_progress = arg_litn(NULL, "progress", 0, 1, "force progress reporting"),
+        clone_no_checkout = arg_litn("n", "no-checkout", 0, 1, "don't create a checkout"),
+        clone_bare = arg_litn(NULL, "bare", 0, 1, "create a bare repository"),
+        clone_mirror = arg_litn(NULL, "mirror", 0, 1, "create a mirror repository (implies bare)"),
+        clone_local = arg_litn("l", "local", 0, 1, "to clone from a local repository"),
+        clone_no_hardlinks = arg_litn(NULL, "no-hardlinks", 0, 1, "don't use local hardlinks, always copy"),
+        clone_shared = arg_litn("s", "shared", 0, 1, "setup as shared repository"),
+        clone_recursive = arg_litn(NULL, "recursive", 0, 1, "initialize submodules in the clone"),
+        clone_recurse_submodules = arg_litn(NULL, "recurse-submodules", 0, 1, "initialize submodules in the clone"),
         clone_help = arg_litn("h", "help", 0, 1, "display this help and exit"), clone_end = arg_end(20)};
 
     if(arg_nullcheck(main_argtable) != 0 || arg_nullcheck(clone_argtable) != 0) {
@@ -157,6 +178,26 @@ int process_clone(void** argtable) {
         opts->flags |= GIT_CLONE_OPTS_VERBOSE;
     }
     
+    if(clone_quiet->count) {
+        opts->flags |= GIT_CLONE_OPTS_QUIET;
+    }
+
+    if(clone_progress->count) {
+        opts->flags |= GIT_CLONE_OPTS_PROGRESS;
+    }
+
+    if(clone_no_checkout->count) {
+        opts->flags |= GIT_CLONE_OPTS_NO_CHECKOUT;
+    }
+    
+    if(clone_bare->count) {
+        opts->flags |= GIT_CLONE_OPTS_BARE;
+    }
+    
+    if(clone_mirror->count) {
+        opts->flags |= GIT_CLONE_OPTS_MIRROR;
+    }
+
     /**
      * Run git_clone with opts
      */
