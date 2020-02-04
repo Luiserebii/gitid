@@ -17,7 +17,7 @@ void setupconstants();
 int main(int argc, char** argv) {
 
     setupconstants();
-    
+
     struct arg_lit* version;
     struct arg_lit* about;
     struct arg_lit* list;
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
      */
     //Attempt the creation of the data dir; if it already exists, this'll
     //fail anyways (lazy solution, perhaps has issues)
-    mkdir("./data/", 0775);
+    mkdir(GITID_SYSTEM_FOLDER, 0775);
     int status = access(GITID_SYSTEM_DATA_FILE, F_OK);
     if(status == -1) {
         FILE* sys_gitids = fopen(GITID_SYSTEM_DATA_FILE, "w");
@@ -350,5 +350,6 @@ void write_glossary(FILE* stream, void** argtable) {
 }
 
 void setupconstants() {
-     generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
+    generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
+    generate_path_home(GITID_SYSTEM_FOLDER, GITID_SYSTEM_REL_FOLDER);
 }

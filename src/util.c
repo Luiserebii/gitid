@@ -93,7 +93,7 @@ void* safemalloc(size_t size) {
 void generate_path_home(char* buffer, const char* path) {
     //Keep it as static to minimize grabbing of HOME, I suppose
     static char* home = NULL;
-    if(home == NULL) { 
+    if(home == NULL) {
         home = getenv("HOME");
     }
     //Finally, generate path in buffer
