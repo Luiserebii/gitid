@@ -5,7 +5,7 @@
 #include "gitid-id.h"
 #include "vector-gitid-id.h"
 
-#define GITID_SYSTEM_DATA_FILE "./data/gitids"
+#define GITID_SYSTEM_DATA_FILE ".gitid/gitids"
 
 //Lowest level functions
 /**

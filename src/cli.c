@@ -14,7 +14,7 @@
 #include <unistd.h>
 
 int main(int argc, char** argv) {
-
+   printf("HOME : %s\n", getenv("HOME"));
     struct arg_lit* version;
     struct arg_lit* about;
     struct arg_lit* list;
@@ -338,10 +338,10 @@ void write_glossary(FILE* stream, void** argtable) {
             "key).\n\n");
     arg_print_glossary(stream, argtable, "  %-25s %s\n");
     fputs("\nAdditional flags:\n\n-c, --current, --s, --shift:\n", stream);
-    fprintf(stream, "  %-25s %s\n", "--global", "global (option for -s and -c)");
-    fprintf(stream, "  %-25s %s\n", "--local", "local (option for -s and -c)");
+    fprintf(stream, "  %-25s %s\n", "--global", "refer to global git config");
+    fprintf(stream, "  %-25s %s\n", "--local", "refer to local git config (repository-level)");
     fputs("\n-n, --new, -u, --update:\n", stream);
     fprintf(stream, "  %-25s %s\n", "--user=<username>", "specify username");
     fprintf(stream, "  %-25s %s\n", "--email=<email>", "specify email");
-    fprintf(stream, "  %-25s %s\n", "--sigkey=<sigket>", "specify signing key (key-id format: LONG)");
+    fprintf(stream, "  %-25s %s\n", "--sigkey=<sigkey>", "specify signing key (key-id format: LONG)");
 }

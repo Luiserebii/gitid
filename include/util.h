@@ -49,6 +49,13 @@ void trimNewline(char* str);
 void* safemalloc(size_t size);
 
 /**
+ * Generates a filepath relative to the HOME environment variable. Simply put,
+ * if HOME=/home/usr1, and path is .gitid/gitid, the returned path within
+ * the buffer will be /home/usr1/.gitid/gitid.
+ */
+void generate_path_home(char* buffer, const char* path);
+
+/**
  * Parses out the name of the repository from a git repository URL.
  */
 void parseGitURLName(char* url);

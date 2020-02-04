@@ -90,6 +90,21 @@ void* safemalloc(size_t size) {
     return ptr;
 }
 
+void generate_path_home(char* buffer, const char* path) {
+    //Keep it as static to minimize grabbing of HOME, I suppose
+    static char* home = NULL;
+    if(home == NULL) { 
+        home = getenv("HOME");
+    }
+    //Finally, generate path in buffer
+    strcpy(buffer, home);
+    //If we don't have a /, add one
+    if(buffer[strlen(buffer) - 1] != '/') {
+        strcat(buffer, "/");
+    }
+    strcat(buffer, path);
+}
+
 void parseGitURLName(char* url) {
     char* rslash = strrchr(url, '/');
     //If this is the last one, remove it and find "true" one
