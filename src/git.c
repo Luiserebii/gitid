@@ -111,37 +111,37 @@ int git_clone(git_clone_opts* opts) {
         strcat(cmd, " ");
         strcat(cmd, opts->repo);
     }
-    if(opts->verbose) {
+    if(opts->flags & GIT_CLONE_OPTS_VERBOSE) {
         strcat(cmd, " -v");
     }
-    if(opts->quiet) {
+    if(opts->flags & GIT_CLONE_OPTS_QUIET) {
         strcat(cmd, " -q");
     }
-    if(opts->progress) {
+    if(opts->flags & GIT_CLONE_OPTS_PROGRESS) {
         strcat(cmd, " --progress");
     }
-    if(opts->no_checkout) {
+    if(opts->flags & GIT_CLONE_OPTS_NO_CHECKOUT) {
         strcat(cmd, " --no-checkout");
     }
-    if(opts->bare) {
+    if(opts->flags & GIT_CLONE_OPTS_BARE) {
         strcat(cmd, " --bare");
     }
-    if(opts->mirror) {
+    if(opts->flags & GIT_CLONE_OPTS_MIRROR) {
         strcat(cmd, " --mirror");
     }
-    if(opts->local) {
+    if(opts->flags & GIT_CLONE_OPTS_LOCAL) {
         strcat(cmd, " -l");
     }
-    if(opts->no_hardlinks) {
+    if(opts->flags & GIT_CLONE_OPTS_NO_HARDLINKS) {
         strcat(cmd, " --no-hardlinks");
     }
-    if(opts->shared) {
+    if(opts->flags & GIT_CLONE_OPTS_SHARED) {
         strcat(cmd, " -s");
     }
-    if(opts->recursive) {
+    if(opts->flags & GIT_CLONE_OPTS_RECURSIVE) {
         strcat(cmd, " --recursive");
     }
-    if(opts->recurse_submodules) {
+    if(opts->flags & GIT_CLONE_OPTS_RECURSE_SUBMODULES) {
         strcat(cmd, " --recurse-submodules");
     }
     if(opts->template) {
@@ -152,7 +152,7 @@ int git_clone(git_clone_opts* opts) {
         strcat(cmd, " --reference ");
         strcat(cmd, opts->reference);
     }
-    if(opts->dissociate) {
+    if(opts->flags & GIT_CLONE_OPTS_DISSOCIATE) {
         strcat(cmd, "--dissociate");
     }
     if(opts->origin) {
@@ -171,7 +171,7 @@ int git_clone(git_clone_opts* opts) {
         strcat(cmd, " --depth ");
         strcat(cmd, opts->depth);
     }
-    if(opts->single_branch) {
+    if(opts->flags & GIT_CLONE_OPTS_SINGLE_BRANCH) {
         strcat(cmd, " --single-branch");
     }
     if(opts->seperate_git_dir) {
