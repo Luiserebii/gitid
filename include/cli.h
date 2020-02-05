@@ -23,7 +23,7 @@ int process_main(void** argtable);
 /**
  * Processes the parsed clone_argtable arg_xxx structs, containing most of the control flow logic.
  */
-int process_clone(void** argtable);
+int process_clone(/*void** argtable*/);
 
 /**
  * Writes the main_argtable glossary to the stream passed.

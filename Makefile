@@ -1,2 +1,4 @@
+CFLAGS = -g3 -Wall -Wextra
+
 all:
-	cc -g3 -Wall ./src/*.c ./lib/argtable3/*.c -lm -o gitid
+	$(CC) $(CFLAGS) ./src/*.c ./lib/argtable3/*.c -lm -o gitid
