@@ -17,7 +17,7 @@ typedef struct {
 /**
  * Allocates space for a new git_user struct.
  */
-gitid_id* gitid_id_init();
+gitid_id* gitid_id_init(void);
 
 /**
  * Invariant protected: name, username, and email set

@@ -16,7 +16,7 @@ typedef struct {
  * no elements allocated, the struct itself is, so vector_free is necessary
  * for cleanup afterwards.
  */
-vector_gitid_id* vector_init_gitid_id();
+vector_gitid_id* vector_init_gitid_id(void);
 
 /*
  * Initializes an empty vector with the size passed.

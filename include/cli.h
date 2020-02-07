@@ -23,7 +23,7 @@ int process_main(void** argtable);
 /**
  * Processes the parsed clone_argtable arg_xxx structs, containing most of the control flow logic.
  */
-int process_clone(/*void** argtable*/);
+int process_clone(void);
 
 /**
  * Writes the main_argtable glossary to the stream passed.
@@ -38,6 +38,6 @@ CLI_MODE identifyMode(struct arg_rex* clone);
 /**
  * Function meant to run before all else; populates constants, particularly filepaths based on $HOME.
  */
-void setup_constants();
+void setup_constants(void);
 
 #endif

@@ -7,7 +7,7 @@
 
 static void vector_grow_gitid_id(vector_gitid_id* v);
 
-vector_gitid_id* vector_init_gitid_id() {
+vector_gitid_id* vector_init_gitid_id(void) {
     vector_gitid_id* v = (vector_gitid_id*) safemalloc(sizeof(vector_gitid_id));
     v->head = v->avail = v->tail = NULL;
     return v;

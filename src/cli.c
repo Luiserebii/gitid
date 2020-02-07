@@ -473,7 +473,7 @@ void write_main_glossary(FILE* stream, void** argtable) {
     fprintf(stream, "  %-25s %s\n", "--sigkey=<sigkey>", "specify signing key (key-id format: LONG)");
 }
 
-void setup_constants() {
+void setup_constants(void) {
     generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
     generate_path_home(GITID_SYSTEM_FOLDER, GITID_SYSTEM_REL_FOLDER);
 }

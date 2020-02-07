@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 
-git_clone_opts* git_clone_opts_init() {
+git_clone_opts* git_clone_opts_init(void) {
     //Allocate git_clone_opts
     git_clone_opts* opts = safemalloc(sizeof(git_clone_opts));
 

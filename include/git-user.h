@@ -16,7 +16,7 @@ typedef struct {
 /**
  * Allocates space for a new git_user struct.
  */
-git_user* git_user_init();
+git_user* git_user_init(void);
 
 /**
  * This is meant to provide a more OOP constructor, where the invariant

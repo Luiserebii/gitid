@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 
-gitid_id* gitid_id_init() {
+gitid_id* gitid_id_init(void) {
     //Allocate gitid_id
     gitid_id* id = safemalloc(sizeof(gitid_id));
 

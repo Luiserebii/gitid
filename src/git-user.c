@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-git_user* git_user_init() {
+git_user* git_user_init(void) {
     //Allocate for struct
     git_user* user = safemalloc(sizeof(git_user));
 

@@ -70,7 +70,7 @@ typedef struct {
 /**
  * Allocates space for a new git_clone_opts struct.
  */
-git_clone_opts* git_clone_opts_init();
+git_clone_opts* git_clone_opts_init(void);
 
 /**
  *
