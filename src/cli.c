@@ -168,7 +168,7 @@ int main(int argc, char** argv) {
     if(mode == MODE_MAIN) {
         ret_code = process_main(main_argtable);
     } else {
-        ret_code = process_clone(/*clone_argtable*/);
+        ret_code = process_clone();
     }
     clean(main_argtable, clone_argtable, ret_code);
 }
@@ -181,7 +181,7 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
     }
 }
 
-int process_clone(/*void** argtable*/) {
+int process_clone(void) {
 
     //Initialize a new git_clone_opts and set repo
     git_clone_opts* opts = git_clone_opts_init();
