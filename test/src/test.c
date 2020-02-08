@@ -27,6 +27,7 @@ void test_parseGitURLName();
 void test_escapesh();
 void test_runcmd();
 void test_trimNewline();
+void test_safestrcpy();
 
 void setUp() {}
 void tearDown() {}
@@ -51,6 +52,7 @@ int main() {
     RUN_TEST(test_escapesh);
     RUN_TEST(test_runcmd);
     RUN_TEST(test_trimNewline);
+    RUN_TEST(test_safestrcpy);
     return UNITY_END();
 }
 
@@ -414,4 +416,28 @@ void test_trimNewline() {
     char exp[] = "Hello";
     trimNewline(s);
     TEST_ASSERT_EQUAL_STRING(exp, s);
+}
+
+void test_safestrcpy() {
+    char buffer[10];
+    int sz = sizeof(buffer);
+
+    char s1[] = "";
+    char s2[] = "hello";
+    char s3[] = "chicken";
+    char s4[] = "I am a loooooooong string";
+    
+    char exp1[] = "";
+    char exp2[] = "hello";
+    char exp3[] = "chicken";
+    char exp4[] = "I am a lo";
+
+    safestrcpy(buffer, s1, sz);
+    TEST_ASSERT_EQUAL_STRING(exp1, buffer);
+    safestrcpy(buffer, s2, sz);
+    TEST_ASSERT_EQUAL_STRING(exp2, buffer);
+    safestrcpy(buffer, s3, sz);
+    TEST_ASSERT_EQUAL_STRING(exp3, buffer);
+    safestrcpy(buffer, s4, sz);
+    TEST_ASSERT_EQUAL_STRING(exp4, buffer);
 }
