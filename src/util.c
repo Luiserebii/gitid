@@ -81,6 +81,12 @@ void trimNewline(char* str) {
     }
 }
 
+void safestrcpy(char* dest, char* src, size_t lim) {
+    while(--lim && (*dest++ = *src++))
+        ;
+    *dest = '\0';
+}
+
 void* safemalloc(size_t size) {
     void* ptr = malloc(size);
     if(ptr == NULL) {
@@ -90,19 +96,19 @@ void* safemalloc(size_t size) {
     return ptr;
 }
 
-void generate_path_home(char* buffer, const char* path) {
+void generate_path_home(char* buffer, const char* path, size_t buffer_lim) {
     //Keep it as static to minimize grabbing of HOME, I suppose
     static char* home = NULL;
     if(home == NULL) {
         home = getenv("HOME");
     }
     //Finally, generate path in buffer
-    strcpy(buffer, home);
+    safestrcpy(buffer, home, buffer_lim);
     //If we don't have a /, add one
     if(buffer[strlen(buffer) - 1] != '/') {
-        strcat(buffer, "/");
+        strncat(buffer, "/", buffer_lim - (strlen(buffer) + 1));
     }
-    strcat(buffer, path);
+    strncat(buffer, path, buffer_lim - (strlen(buffer) + 1));
 }
 
 void parseGitURLName(char* url) {

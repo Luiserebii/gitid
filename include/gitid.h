@@ -3,14 +3,14 @@
 
 #include "git-user.h"
 #include "gitid-id.h"
+#include "limits.h"
 #include "vector-gitid-id.h"
 
 #define GITID_SYSTEM_REL_FOLDER ".gitid"
 #define GITID_SYSTEM_DATA_REL_FILE GITID_SYSTEM_REL_FOLDER "/gitids"
-#define GITID_FILEPATH_MAX 1000
 
-extern char GITID_SYSTEM_DATA_FILE[GITID_FILEPATH_MAX];
-extern char GITID_SYSTEM_FOLDER[GITID_FILEPATH_MAX];
+extern char GITID_SYSTEM_DATA_FILE[FILEPATH_MAX];
+extern char GITID_SYSTEM_FOLDER[FILEPATH_MAX];
 
 //Lowest level functions
 /**

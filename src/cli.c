@@ -2,6 +2,7 @@
 #include "../include/git-user.h"
 #include "../include/git.h"
 #include "../include/gitid.h"
+#include "../include/limits.h"
 #include "../include/util.h"
 #include "../include/vector-gitid-id.h"
 #include "../lib/argtable3/argtable3.h"
@@ -474,6 +475,6 @@ void write_main_glossary(FILE* stream, void** argtable) {
 }
 
 void setup_constants(void) {
-    generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE);
-    generate_path_home(GITID_SYSTEM_FOLDER, GITID_SYSTEM_REL_FOLDER);
+    generate_path_home(GITID_SYSTEM_DATA_FILE, GITID_SYSTEM_DATA_REL_FILE, FILEPATH_MAX);
+    generate_path_home(GITID_SYSTEM_FOLDER, GITID_SYSTEM_REL_FOLDER, FILEPATH_MAX);
 }

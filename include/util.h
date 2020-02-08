@@ -44,6 +44,13 @@ char* minfgets(char* s, int n, FILE* stream);
 void trimNewline(char* str);
 
 /**
+ * Guarantees copying lim-1 chars to the destination string, reserving at least
+ * one for a null character ('\0'). Strings copied are thus guaranteed to be
+ * null-terminated, and provides safety by truncating silently.
+ */
+void safestrcpy(char* dest, char* src, size_t lim);
+
+/**
  * Wrapper function to handle all malloc() cases of failure.
  */
 void* safemalloc(size_t size);
@@ -52,8 +59,10 @@ void* safemalloc(size_t size);
  * Generates a filepath relative to the HOME environment variable. Simply put,
  * if HOME=/home/usr1, and path is .gitid/gitid, the returned path within
  * the buffer will be /home/usr1/.gitid/gitid.
+ *
+ * The buffer is suggested to use PATH_MAX + 1 limit.
  */
-void generate_path_home(char* buffer, const char* path);
+void generate_path_home(char* buffer, const char* path, size_t buffer_lim);
 
 /**
  * Parses out the name of the repository from a git repository URL.
