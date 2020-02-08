@@ -53,22 +53,22 @@ int git_set_user_global(git_user* user) {
     //Copy to buffer, escape, and finally, concatenate the result
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer); 
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
-    strncat(cmd, " && git config --global user.email ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --global user.email ", GIT_CMD_MAXSTRING);
     safestrcpy(escapebuffer, user->email, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer);
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     //Logic with setting signingkey will depend on whether it exists or not, but will
     //happen regardless so as to clear if non-existent
-    strncat(cmd, " && git config --global user.signingkey ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --global user.signingkey ", GIT_CMD_MAXSTRING);
     if(user->signing_key) {
         safestrcpy(escapebuffer, user->signing_key, GIT_USER_BUFFER_MAX);
         escapesh(escapebuffer);
-        strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
-        strncat(cmd, "\"\"", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, "\"\"", GIT_CMD_MAXSTRING);
     }
 
     //Return success based on exit code
@@ -81,22 +81,22 @@ int git_set_user_local(git_user* user) {
     //Copy to buffer, escape, and finally, concatenate the result
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer); 
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
-    strncat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING);
     safestrcpy(escapebuffer, user->email, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer);
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     //Logic with setting signingkey will depend on whether it exists or not, but will
     //happen regardless so as to clear if non-existent
-    strncat(cmd, " && git config --local user.signingkey ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --local user.signingkey ", GIT_CMD_MAXSTRING);
     if(user->signing_key) {
         safestrcpy(escapebuffer, user->signing_key, GIT_USER_BUFFER_MAX);
         escapesh(escapebuffer);
-        strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
-        strncat(cmd, "\"\"", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, "\"\"", GIT_CMD_MAXSTRING);
     }
 
     //Return success based on exit code
@@ -109,25 +109,25 @@ int git_set_user_local_prefix(git_user* user, char* prefix) {
 
     safestrcpy(cmd, prefix, GIT_USER_BUFFER_MAX);
 
-    strncat(cmd, " && git config --local user.name ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --local user.name ", GIT_CMD_MAXSTRING);
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer); 
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
-    strncat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING);
     safestrcpy(escapebuffer, user->email, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer);
-    strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     //Logic with setting signingkey will depend on whether it exists or not, but will
     //happen regardless so as to clear if non-existent
-    strncat(cmd, " && git config --local user.signingkey ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+    safestrcat(cmd, " && git config --local user.signingkey ", GIT_CMD_MAXSTRING);
     if(user->signing_key) {
         safestrcpy(escapebuffer, user->signing_key, GIT_USER_BUFFER_MAX);
         escapesh(escapebuffer);
-        strncat(cmd, escapebuffer, GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
-        strncat(cmd, "\"\"", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
+        safestrcat(cmd, "\"\"", GIT_CMD_MAXSTRING);
     }
 
     //Return success based on exit code
@@ -139,79 +139,79 @@ int git_clone(git_clone_opts* opts) {
 
     //Check all of the possible options for git clone
     if(opts->repo) {
-        strcat(cmd, " ");
-        strcat(cmd, opts->repo);
+        safestrcat(cmd, " ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->repo, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_VERBOSE) {
-        strcat(cmd, " -v");
+        safestrcat(cmd, " -v", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_QUIET) {
-        strcat(cmd, " -q");
+        safestrcat(cmd, " -q", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_PROGRESS) {
-        strcat(cmd, " --progress");
+        safestrcat(cmd, " --progress", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_NO_CHECKOUT) {
-        strcat(cmd, " --no-checkout");
+        safestrcat(cmd, " --no-checkout", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_BARE) {
-        strcat(cmd, " --bare");
+        safestrcat(cmd, " --bare", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_MIRROR) {
-        strcat(cmd, " --mirror");
+        safestrcat(cmd, " --mirror", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_LOCAL) {
-        strcat(cmd, " -l");
+        safestrcat(cmd, " -l", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_NO_HARDLINKS) {
-        strcat(cmd, " --no-hardlinks");
+        safestrcat(cmd, " --no-hardlinks", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_SHARED) {
-        strcat(cmd, " -s");
+        safestrcat(cmd, " -s", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_RECURSIVE) {
-        strcat(cmd, " --recursive");
+        safestrcat(cmd, " --recursive", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_RECURSE_SUBMODULES) {
-        strcat(cmd, " --recurse-submodules");
+        safestrcat(cmd, " --recurse-submodules", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->template) {
-        strcat(cmd, " --template ");
-        strcat(cmd, opts->template);
+        safestrcat(cmd, " --template ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->template, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->reference) {
-        strcat(cmd, " --reference ");
-        strcat(cmd, opts->reference);
+        safestrcat(cmd, " --reference ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->reference, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_DISSOCIATE) {
-        strcat(cmd, "--dissociate");
+        safestrcat(cmd, "--dissociate", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->origin) {
-        strcat(cmd, " -o ");
-        strcat(cmd, opts->origin);
+        safestrcat(cmd, " -o ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->origin, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->branch) {
-        strcat(cmd, " -b ");
-        strcat(cmd, opts->branch);
+        safestrcat(cmd, " -b ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->branch, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->upload_pack) {
-        strcat(cmd, " -u ");
-        strcat(cmd, opts->upload_pack);
+        safestrcat(cmd, " -u ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->upload_pack, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->depth) {
-        strcat(cmd, " --depth ");
-        strcat(cmd, opts->depth);
+        safestrcat(cmd, " --depth ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->depth, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->flags & GIT_CLONE_OPTS_SINGLE_BRANCH) {
-        strcat(cmd, " --single-branch");
+        safestrcat(cmd, " --single-branch", GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->seperate_git_dir) {
-        strcat(cmd, " --seperate-git-dir ");
-        strcat(cmd, opts->seperate_git_dir);
+        safestrcat(cmd, " --seperate-git-dir ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->seperate_git_dir, GIT_CLONE_CMD_MAXSTRING);
     }
     if(opts->config) {
-        strcat(cmd, " -c ");
-        strcat(cmd, opts->config);
+        safestrcat(cmd, " -c ", GIT_CLONE_CMD_MAXSTRING);
+        safestrcat(cmd, opts->config, GIT_CLONE_CMD_MAXSTRING);
     }
 
     //Finally, execute constructed command, and return success based on exit code

@@ -106,9 +106,9 @@ void generate_path_home(char* buffer, const char* path, size_t buffer_lim) {
     safestrcpy(buffer, home, buffer_lim);
     //If we don't have a /, add one
     if(buffer[strlen(buffer) - 1] != '/') {
-        strncat(buffer, "/", buffer_lim - (strlen(buffer) + 1));
+        safestrcat(buffer, "/", buffer_lim);
     }
-    strncat(buffer, path, buffer_lim - (strlen(buffer) + 1));
+    safestrcat(buffer, path, buffer_lim);
 }
 
 void parseGitURLName(char* url) {
