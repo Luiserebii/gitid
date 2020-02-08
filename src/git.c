@@ -107,6 +107,8 @@ int git_set_user_local_prefix(git_user* user, char* prefix) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING];
 
+    safestrcpy(cmd, prefix, GIT_USER_BUFFER_MAX);
+
     strncat(cmd, " && git config --local user.name ", GIT_CMD_MAXSTRING - strlen(cmd) - 1);
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
     escapesh(escapebuffer); 
