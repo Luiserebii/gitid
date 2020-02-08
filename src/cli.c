@@ -288,12 +288,12 @@ int process_clone(void) {
         //Parse repo out into "humanish" part
         //TODO: Acquire advice on whether malloc may be better
         char name[1000];
-        strcpy(name, opts->repo);
+        safestrcpy(name, opts->repo, 1000);
         parseGitURLName(name);
 
         char buffer[1000];
-        strcpy(buffer, "cd ");
-        strcat(buffer, name);
+        safestrcpy(buffer, "cd ", 1000);
+        safestrcat(buffer, name, 1000);
 
         //Look for matching git_id
         gitid_id* id = gitid_id_init();

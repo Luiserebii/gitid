@@ -52,7 +52,7 @@ int git_set_user_global(git_user* user) {
     char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
     //Copy to buffer, escape, and finally, concatenate the result
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
-    escapesh(escapebuffer); 
+    escapesh(escapebuffer);
     safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     safestrcat(cmd, " && git config --global user.email ", GIT_CMD_MAXSTRING);
@@ -80,7 +80,7 @@ int git_set_user_local(git_user* user) {
     char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
     //Copy to buffer, escape, and finally, concatenate the result
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
-    escapesh(escapebuffer); 
+    escapesh(escapebuffer);
     safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     safestrcat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING);
@@ -111,7 +111,7 @@ int git_set_user_local_prefix(git_user* user, char* prefix) {
 
     safestrcat(cmd, " && git config --local user.name ", GIT_CMD_MAXSTRING);
     safestrcpy(escapebuffer, user->name, GIT_USER_BUFFER_MAX);
-    escapesh(escapebuffer); 
+    escapesh(escapebuffer);
     safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
 
     safestrcat(cmd, " && git config --local user.email ", GIT_CMD_MAXSTRING);
