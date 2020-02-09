@@ -1,4 +1,6 @@
 # gitid
+![gitid-logo](https://serebii.io/projects/img/gitid-black-padded-rounded.png)
+
 ![GitHub](https://img.shields.io/github/license/Luiserebii/gitid?color=222222)
 [![CircleCI](https://circleci.com/gh/Luiserebii/gitid.svg?style=svg)](https://circleci.com/gh/Luiserebii/gitid)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cdba0bbafbf2465eac0e3f1e8302342a)](https://www.codacy.com/manual/Luiserebii/gitid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Luiserebii/gitid&amp;utm_campaign=Badge_Grade)
