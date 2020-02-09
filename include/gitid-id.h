@@ -36,17 +36,17 @@ declare_struct_set_string(gitid_id, id_name, id, id_n);
  * change may be values such as strings, which are freed and re-allocated 
  * using the set_string macro.
  */
-void gitid_id_set(gitid_id* dest, gitid_id* src);
+void gitid_id_set(gitid_id* dest, const gitid_id* src);
 
 /**
  * Writes git_id struct to a FILE* stream.
  */
-void gitid_id_write(gitid_id* id, FILE* stream);
+void gitid_id_write(const gitid_id* id, FILE* stream);
 
 /**
  * Writes git_id struct to a FILE* stream, in a minimal format.
  */
-void gitid_id_min_write(gitid_id* id, FILE* stream);
+void gitid_id_min_write(const gitid_id* id, FILE* stream);
 
 /**
  * Reads git_id struct from a FILE* stream, expecting the minimal format.

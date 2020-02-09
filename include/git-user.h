@@ -45,12 +45,12 @@ declare_struct_set_string(git_user, signing_key, user, sk);
  * The only pointers which may change may be values such as strings, 
  * which are freed and re-allocated using the set_string macro.
  */
-void git_user_set(git_user* dest, git_user* src);
+void git_user_set(git_user* dest, const git_user* src);
 
 /**
  * Writes git_user to FILE* stream.
  */
-void git_user_write(git_user* user, FILE* stream);
+void git_user_write(const git_user* user, FILE* stream);
 
 /**
  * Clears all members, resetting them to NULL, but does not deallocate the struct.

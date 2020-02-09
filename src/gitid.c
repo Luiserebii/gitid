@@ -90,14 +90,15 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
     }
 
     //Add the new identity to be added
-    vector_push_back_gitid_id(v, id);
+    //(for const-correctness, we create a kind of copy here to push)
+    gitid_id* copy_id = gitid_id_init();
+    gitid_id_set(copy_id, id);
+    vector_push_back_gitid_id(v, copy_id);
 
     //Set
     gitid_set_system_gitid_ids(v);
 
-    //Finally, remove the last element (so we don't kill the pointer
-    //when we free) and free
-    vector_erase_gitid_id(v, v->head + vector_size_gitid_id(v) - 1);
+    //Finally, free all elements
     vector_free_gitid_id(v);
 }
 
