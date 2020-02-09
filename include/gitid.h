@@ -35,7 +35,7 @@ void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
  * from the vector onto the system's. This will cause an overwrite, not append.
  */
 #define gitid_set_system_gitid_ids(v_gitid_id) gitid_set_system_gitid_ids_file(v_gitid_id, GITID_SYSTEM_DATA_FILE)
-void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn);
+void gitid_set_system_gitid_ids_file(const vector_gitid_id* v, const char* fn);
 
 //Slightly higher level, these call the above two get/set functions; get to obtain system ids to process, and set to save to the system once more
 //A minor note about these functions: they similarly will segfault if a file is not found,
@@ -52,14 +52,14 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id);
  * This can be seen as an "append" operation. Should break if an already existing
  * gitid by the name specified is found (we want to prevent duplicates).
  */
-void gitid_new_system_gitid_id(gitid_id* git_id);
+void gitid_new_system_gitid_id(const gitid_id* git_id);
 
 /**
  * Updates a system gitid of the ID id_name and replaces it with the details
  * found in the gitid_id pointer passed. Should break if the gitid is not found
  * on the system by printing an error and exiting.
  */
-void gitid_update_system_gitid_id(gitid_id* id, const char* id_name);
+void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name);
 
 /**
  * Deletes a system gitid of the ID id_name. Should break if the gitid is not found

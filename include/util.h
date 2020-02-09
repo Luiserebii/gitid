@@ -48,7 +48,7 @@ void trimNewline(char* str);
  * one for a null character ('\0'). Strings copied are thus guaranteed to be
  * null-terminated, and provides safety by truncating silently.
  */
-void safestrcpy(char* dest, char* src, size_t lim);
+void safestrcpy(char* dest, const char* src, size_t lim);
 
 /**
  * Guarantees concatenating as many characters as possible from src to dest.

@@ -34,7 +34,7 @@ void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     fclose(sys_gitids);
 }
 
-void gitid_set_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
+void gitid_set_system_gitid_ids_file(const vector_gitid_id* v, const char* fn) {
     //Open file stream to system file in write mode
     FILE* sys_gitids = fopen(fn, "w");
 
@@ -69,7 +69,7 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
     vector_free_gitid_id(v);
 }
 
-void gitid_new_system_gitid_id(gitid_id* id) {
+void gitid_new_system_gitid_id(const gitid_id* id) {
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
@@ -101,7 +101,7 @@ void gitid_new_system_gitid_id(gitid_id* id) {
     vector_free_gitid_id(v);
 }
 
-void gitid_update_system_gitid_id(gitid_id* id, const char* id_name) {
+void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name) {
     //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);

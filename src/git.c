@@ -47,7 +47,7 @@ void git_get_user_local(git_user* user) {
     trimNewline(user->name), trimNewline(user->email);
 }
 
-int git_set_user_global(git_user* user) {
+int git_set_user_global(const git_user* user) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --global user.name ";
     //Copy to buffer, escape, and finally, concatenate the result
@@ -75,7 +75,7 @@ int git_set_user_global(git_user* user) {
     return minsystem(cmd) ? 0 : 1;
 }
 
-int git_set_user_local(git_user* user) {
+int git_set_user_local(const git_user* user) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING] = "git config --local user.name ";
     //Copy to buffer, escape, and finally, concatenate the result
@@ -103,7 +103,7 @@ int git_set_user_local(git_user* user) {
     return minsystem(cmd) ? 0 : 1;
 }
 
-int git_set_user_local_prefix(git_user* user, char* prefix) {
+int git_set_user_local_prefix(const git_user* user, const char* prefix) {
     char escapebuffer[GIT_USER_BUFFER_MAX];
     char cmd[GIT_CMD_MAXSTRING];
 
@@ -134,7 +134,7 @@ int git_set_user_local_prefix(git_user* user, char* prefix) {
     return minsystem(cmd) ? 0 : 1;
 }
 
-int git_clone(git_clone_opts* opts) {
+int git_clone(const git_clone_opts* opts) {
     char cmd[GIT_CLONE_CMD_MAXSTRING] = "git clone";
 
     //Check all of the possible options for git clone

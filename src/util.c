@@ -66,7 +66,6 @@ char* minfgets(char* s, int n, FILE* stream) {
     char* sret;
     if((sret = fgets(s, n, stream)) == NULL) {
         perror("fgets");
-        fprintf(stderr, "Dumping buffer contents:\n%s\n", s);
         exit(1);
     }
     return sret;
@@ -81,7 +80,7 @@ void trimNewline(char* str) {
     }
 }
 
-void safestrcpy(char* dest, char* src, size_t lim) {
+void safestrcpy(char* dest, const char* src, size_t lim) {
     while(--lim && (*dest++ = *src++))
         ;
     *dest = '\0';

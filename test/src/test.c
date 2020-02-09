@@ -426,11 +426,13 @@ void test_safestrcpy() {
     char s2[] = "hello";
     char s3[] = "chicken";
     char s4[] = "I am a loooooooong string";
-    
+    char s5[] = "smol";
+
     char exp1[] = "";
     char exp2[] = "hello";
     char exp3[] = "chicken";
     char exp4[] = "I am a lo";
+    char exp5[] = "smol";
 
     safestrcpy(buffer, s1, sz);
     TEST_ASSERT_EQUAL_STRING(exp1, buffer);
@@ -440,4 +442,6 @@ void test_safestrcpy() {
     TEST_ASSERT_EQUAL_STRING(exp3, buffer);
     safestrcpy(buffer, s4, sz);
     TEST_ASSERT_EQUAL_STRING(exp4, buffer);
+    safestrcpy(buffer, s5, sz);
+    TEST_ASSERT_EQUAL_STRING(exp5, buffer);
 }
