@@ -62,6 +62,11 @@ void safestrcpy(char* dest, const char* src, size_t lim);
 void* safemalloc(size_t size);
 
 /**
+ * Wrapper function to handle all realloc() cases of failure.
+ */
+void* saferealloc(void* p, size_t size);
+
+/**
  * Generates a filepath relative to the HOME environment variable. Simply put,
  * if HOME=/home/usr1, and path is .gitid/gitid, the returned path within
  * the buffer will be /home/usr1/.gitid/gitid.

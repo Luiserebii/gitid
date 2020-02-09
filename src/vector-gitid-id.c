@@ -91,7 +91,7 @@ gitid_id** vector_end_gitid_id(vector_gitid_id* v) {
 void vector_grow_gitid_id(vector_gitid_id* v) {
     size_t old_size = vector_size_gitid_id(v);
     size_t n_size = v->head ? old_size * 2 : 1;
-    v->head = (gitid_id**) realloc(v->head, sizeof(gitid_id*) * n_size);
+    v->head = (gitid_id**) saferealloc(v->head, sizeof(gitid_id*) * n_size);
     v->avail = v->head + old_size;
     v->tail = v->head + n_size;
 }

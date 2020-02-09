@@ -95,6 +95,15 @@ void* safemalloc(size_t size) {
     return ptr;
 }
 
+void* saferealloc(void* p, size_t size) {
+    void* ptr = realloc(p, size);
+    if(ptr == NULL) {
+        perror("realloc");
+        exit(1);
+    }
+    return ptr;
+}
+
 void generate_path_home(char* buffer, const char* path, size_t buffer_lim) {
     //Keep it as static to minimize grabbing of HOME, I suppose
     static char* home = NULL;
