@@ -36,19 +36,26 @@ Additional flags:
 
 ## Building
 
-Building is very simple, simply run `make`, and it'll produce an executable `gitid`.
+Building is very simple, simply run `make`, and it'll produce an executable `gitid`. Alternatively, one can build with the Autotools files provided:
+```
+make autogen
+mkdir build && cd build
+../configure
+make
+```
 
 ## Installation
 ### Linux
-To install, simply extract the tool into a preferred directory, build, and create a soft link. For example, if you are looking to place the tool in your home directory:
+To install, simply build with Autotools and install with the following commands:
 ```
-unzip gitid-0.2.1-alpha.zip -d ~/
-cd ~/gitid-0.2.1-alpha
+make autogen
+mkdir build && cd build
+../configure
 make
-sudo ln -s ~/gitid-0.2.1-alpha/gitid /usr/local/bin/gitid
+make install
 ```
 
-Doing this should make it globally accessible via `gitid`. 
+The tool should now be installed under the name `gitid`.
 
 ## Testing
 
