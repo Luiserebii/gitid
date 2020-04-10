@@ -5,3 +5,24 @@ a.out
 gitid
 test/tmp
 data
+
+# Autotools files:
+
+autoscan.log
+configure.scan
+aclocal.m4
+compile
+config.h.in
+configure
+COPYING
+depcomp
+INSTALL
+install-sh
+Makefile.in
+missing
+AUTHORS
+NEWS
+README
+ChangeLog
+autom4te.cache
+
