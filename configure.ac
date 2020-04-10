@@ -29,5 +29,4 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([memset mkdir rmdir setenv strchr strcspn strrchr strtol])
 
 AC_CONFIG_FILES([Makefile])
-
 AC_OUTPUT
