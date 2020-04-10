@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.69])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_INIT([gitid], [0.2.1-alpha], [luis@serebii.io])
 AC_CONFIG_SRCDIR([test/lib/unity.h])
 AC_CONFIG_HEADERS([config.h])
 
