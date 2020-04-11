@@ -3,7 +3,6 @@
 
 AC_PREREQ([2.69])
 AC_INIT([gitid], [0.2.1-alpha], [luis@serebii.io])
-AC_CONFIG_SRCDIR([test/lib/unity.h])
 AC_CONFIG_HEADERS([config.h])
 
 # Checks for programs.

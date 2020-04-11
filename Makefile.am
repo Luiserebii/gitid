@@ -7,7 +7,7 @@ gitid_SOURCES=$(gitid_src) $(argtable3_src)
 gitid_CFLAGS=-Wall -Wextra -Wstrict-prototypes
 
 gitid_inc=./include/cli.h ./include/git-clone-opts.h ./include/git.h ./include/gitid.h ./include/gitid-id.h ./include/git-user.h ./include/limits.h ./include/struct.h ./include/util.h ./include/vector-gitid-id.h
-argtable3_inc=./lib/argtable3/argtable3.h
+argtable3_inc=./lib/argtable3/argtable3.h ./lib/argtable3/argtable3_private.h ./lib/argtable3/getopt.h
 cstl_inc=./lib/c-stl/include/algorithm.h ./lib/c-stl/include/vector.h
 
 pkginclude_HEADERS=$(gitid_inc) $(argtable3_inc) $(cstl_inc)
