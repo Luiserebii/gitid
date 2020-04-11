@@ -9,6 +9,10 @@ gitid:
 lint:
 	./scripts/lint.sh
 
+.PHONY: test
+test:
+	cd test && make && ./a.out
+
 #### Autotools scripts:
 
 .PHONY: autogen

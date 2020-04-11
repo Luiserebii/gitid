@@ -36,7 +36,13 @@ Additional flags:
 
 ## Building
 
-Building is very simple, simply run `make`, and it'll produce an executable `gitid`. Alternatively, one can build with the Autotools files provided:
+### Make
+
+Building with make is very simple, simply run `make`, and it'll produce an executable `gitid`. 
+
+### Autotools
+
+Alternatively, one can build with Autotools provided:
 ```
 make autogen
 mkdir build && cd build
@@ -44,8 +50,11 @@ mkdir build && cd build
 make
 ```
 
+The commands above are also avaliable as `make autobuild` for convenience. Similarly, `make distcheck` will test the build for distribution.
+
 ## Installation
-### Linux
+
+### Unix-like OS (e.g. Linux, BSD, Mac OS)
 To install, simply build with Autotools and install with the following commands:
 ```
 make autogen
@@ -54,6 +63,8 @@ mkdir build && cd build
 make
 make install
 ```
+
+Note that `make install` may need to be executed with higher permissions.
 
 The tool should now be installed under the name `gitid`.
 
