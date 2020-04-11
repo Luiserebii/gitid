@@ -18,16 +18,16 @@ autogen:
 .PHONY: autobuild
 autobuild:
 	./scripts/autogen.sh
-	mkdir -p build && cd build
-	../configure
+	mkdir -p build && cd build && \
+	../configure && \
 	make
 
 .PHONY: autodistcheck
-autobuild:
+autodistcheck:
 	./scripts/autogen.sh
-	mkdir -p build && cd build
-	../configure
-	make
+	mkdir -p build && cd build && \
+	../configure && \
+	make && \
 	make distcheck
 
 .PHONY: autoclean
