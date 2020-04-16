@@ -10,6 +10,7 @@
 
 #include <stdio.h>
 
+#define GITID_ID_BUFFER_MIN 20
 #define GITID_ID_ENDING_DELIMITER "____________"
 
 typedef struct {

@@ -72,6 +72,45 @@ char* minfgets(char* s, int n, FILE* stream) {
     return sret;
 }
 
+/**
+ * string-like version of fgets(). Error-checked.
+ *
+ * Reads characters into the string until either a newline
+ * or EOF is encountered. If a newline is encountered, it is
+ * included with the string.
+ */
+void string_fgets(string* s, FILE* stream) {
+    int c;
+    while((c = getc(stream)) != EOF) {
+        string_push_back(s, c);
+        if(c == '\n') { 
+            break;
+        }
+    }
+    if(c == EOF && ferror(stream)) {
+        perror("getc");
+        exit(1);
+    }
+}
+
+/**
+ * string-like version of fgets(). Error-checked.
+ *
+ * Reads characters into the string until either a newline
+ * or EOF is encountered. If a newline is encountered, it is
+ * NOT included with the string.
+ */
+void string_fgets_min(string* s, FILE* stream) {
+    int c;
+    while((c = getc(stream)) != EOF && c != '\n') {
+        string_push_back(s, c);
+    }
+    if(c == EOF && ferror(stream)) {
+        perror("getc");
+        exit(1);
+    }
+}
+
 void trimNewline(char* str) {
     for(; *str; ++str) {
         if(*str == '\n') {
