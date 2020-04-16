@@ -3,14 +3,16 @@
 
 #include "../include/struct.h"
 
+#define CSTL_MALLOC safemalloc
+#define CSTL_REALLOC saferealloc
+#include <cstl/string.h>
+
 #include <stdio.h>
 
-#define GIT_USER_BUFFER_MAX 1000
-
 typedef struct {
-    char* name;
-    char* email;
-    char* signing_key;
+    string* name;
+    string* email;
+    string* signing_key;
 } git_user;
 
 /**
@@ -27,15 +29,6 @@ git_user* git_user_init(void);
  * and the application ends.
  */
 git_user* git_user_safe_init(const char* n, const char* e);
-
-/**
- * void git_user_set_name(git_user* user, const char* n);
- * void git_user_set_email(git_user* user, const char* e);
- * void git_user_set_signing_key(git_user* user, const char* sk);
- */
-declare_struct_set_string(git_user, name, user, n);
-declare_struct_set_string(git_user, email, user, e);
-declare_struct_set_string(git_user, signing_key, user, sk);
 
 /**
  * Set the values of dest to the values of src. Note that the function
