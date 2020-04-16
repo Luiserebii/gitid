@@ -6,6 +6,7 @@
 #define CSTL_MALLOC safemalloc
 #define CSTL_REALLOC saferealloc
 #include <cstl/string.h>
+#include <cstl/algorithm.h>
 
 #include <stdio.h>
 
@@ -75,16 +76,16 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 
     //Test to see if next is ending, or not
     string_fgets_min(buf1, stream);
-    minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
 
     //Check if ending delimiter
-    if(strncmp(buffer1, GITID_ID_ENDING_DELIMITER, sizeof(GITID_ID_ENDING_DELIMITER) - 1) == 0) {
+    int equal;
+    algorithm_equal(char*, string_begin(buf1), string_end(buf2), GITID_ID_ENDING_DELIMITER, equal);
+    if(equal) {
         return;
     }
 
     //Otherwise, set signing key into struct
-    trimNewline(buffer1);
-    git_user_set_signing_key(id->user, buffer1);
+    string_assign(id->user->signing_key, string_begin(buf1), string_end(buf1));
 
     //Read ending delimiter so as to complete read of one entity
     int res;
