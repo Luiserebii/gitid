@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <cstl/algorithm.h>
+
 #include "../include/util.h"
-#include "../lib/c-stl/include/algorithm.h"
 
 void escapesh(char* str) {
     //Declare and load buffer with copy of str

@@ -1,7 +1,8 @@
-CFLAGS = -g3 -Wall -Wextra -Wstrict-prototypes
+INCLUDE_FLAGS=-I./lib/C-STL/include
+CFLAGS = -g3 -Wall -Wextra -Wstrict-prototypes $(INCLUDE_FLAGS)
 
 gitid:
-	$(CC) $(CFLAGS) ./src/*.c ./lib/argtable3/*.c -lm -o gitid
+	$(CC) $(CFLAGS) ./src/*.c ./lib/argtable3/*.c ./lib/C-STL/src/*.c -lm -o gitid
 
 #### Development-related scripts:
 

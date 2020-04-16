@@ -42,7 +42,7 @@ Building with make is very simple, simply run `make`, and it'll produce an execu
 
 ### Autotools
 
-Alternatively, one can build with Autotools provided:
+Alternatively, one can build with Autotools:
 ```
 make autogen
 mkdir build && cd build

@@ -6,7 +6,8 @@
 #include "../include/util.h"
 #include "../include/vector-gitid-id.h"
 #include "../lib/argtable3/argtable3.h"
-#include "../lib/c-stl/include/algorithm.h"
+
+#include <cstl/algorithm.h>
 
 #include <stdio.h>
 #include <stdlib.h>
