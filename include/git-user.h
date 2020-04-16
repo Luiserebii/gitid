@@ -46,7 +46,8 @@ void git_user_set(git_user* dest, const git_user* src);
 void git_user_write(const git_user* user, FILE* stream);
 
 /**
- * Clears all members, resetting them to NULL, but does not deallocate the struct.
+ * Clears all members, clearing recursively (in this case, by calling string_free) 
+ * but does not deallocate the struct.
  */
 void git_user_clear(git_user* user);
 

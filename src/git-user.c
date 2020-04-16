@@ -35,42 +35,36 @@ git_user* git_user_safe_init(const char* n, const char* e) {
     user->email = string_init_cstr(e);
 
     //Initialize other values
-    user->signing_key = NULL;
+    user->signing_key = string_init();
 
     return user;
-}
+
 
 void git_user_set(git_user* dest, const git_user* src) {
-    dest->name = 
-    git_user_set_name(dest, src->name);
-    git_user_set_email(dest, src->email);
-    if(src->signing_key) {
-        git_user_set_signing_key(dest, src->signing_key);
-    }
+    string_assign(dest, string_begin(src->name), string_end(src->name));
+    string_assign(dest, string_begin(src->email), string_end(src->email));
+    string_assign(dest, string_begin(src->signing_key), string_end(src->signing_key));
 }
 
 void git_user_write(const git_user* user, FILE* stream) {
-    fprintf(stream, "Name: %s\nEmail: %s\n", user->name, user->email);
-    if(user->signing_key) {
-        fprintf(stream, "Signing Key: %s\n", user->signing_key);
+    fprintf(stream, "Name: %s\nEmail: %s\n", string_cstr(user->name), string_cstr(user->email));
+    if(string_size(user->signing_key)) {
+        fprintf(stream, "Signing Key: %s\n", string_cstr(user->signing_key));
     }
 }
 
 void git_user_clear(git_user* user) {
-    //Free members
-    free(user->name);
-    free(user->email);
-    free(user->signing_key);
-
-    //Reset to NULL
-    user->name = user->email = user->signing_key = NULL;
+    //Clear members
+    string_clear(user->name);
+    string_clear(user->email);
+    string_clear(user->signing_key);
 }
 
 void git_user_free(git_user* user) {
     //Free members
-    free(user->name);
-    free(user->email);
-    free(user->signing_key);
+    string_free(user->name);
+    string_free(user->email);
+    string_free(user->signing_key);
 
     //Free struct
     free(user);

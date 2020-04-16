@@ -4,13 +4,16 @@
 #include "../include/git-user.h"
 #include "../include/struct.h"
 
+#define CSTL_MALLOC safemalloc
+#define CSTL_REALLOC saferealloc
+#include <cstl/string.h>
+
 #include <stdio.h>
 
-#define GITID_ID_BUFFER_MAX 1000
 #define GITID_ID_ENDING_DELIMITER "____________"
 
 typedef struct {
-    char* id_name;
+    string* id_name;
     git_user* user;
 } gitid_id;
 
@@ -23,11 +26,6 @@ gitid_id* gitid_id_init(void);
  * Invariant protected: name, username, and email set
  */
 gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e);
-
-/**
- * void gitid_id_set_name(gitid_id* opts, const char* n);
- */
-declare_struct_set_string(gitid_id, id_name, id, id_n);
 
 /**
  * Set the values of dest to the values of src. Note that the function

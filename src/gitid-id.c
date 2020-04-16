@@ -3,15 +3,18 @@
 #include "../include/struct.h"
 #include "../include/util.h"
 
+#define CSTL_MALLOC safemalloc
+#define CSTL_REALLOC saferealloc
+#include <cstl/string.h>
+
 #include <stdio.h>
-#include <string.h>
 
 gitid_id* gitid_id_init(void) {
     //Allocate gitid_id
     gitid_id* id = safemalloc(sizeof(gitid_id));
 
     //Initialize fields
-    id->id_name = NULL;
+    id->id_name = string_init();
     id->user = git_user_init();
 
     return id;
