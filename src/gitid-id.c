@@ -25,11 +25,9 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
         fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
         exit(1);
     }
-    //Allocate gitid_id
+    //Allocate gitid_id and initialize members
     gitid_id* id = safemalloc(sizeof(gitid_id));
-    //Initialize to NULL so we don't get errors by set_id_name TODO: make this... a little less hacky
-    id->id_name = NULL;
-    gitid_id_set_id_name(id, id_n);
+    id->id_name = string_init_cstr(id_n);
 
     //Initialize git-user
     id->user = git_user_safe_init(n, e);
@@ -37,29 +35,24 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
     return id;
 }
 
-/**
- * MACRO use: Define struct functions for each char* member
- */
-define_struct_set_string(gitid_id, id_name, opts, id_n);
-
 void gitid_id_set(gitid_id* dest, const gitid_id* src) {
     //Set id_name, and...
-    gitid_id_set_id_name(dest, src->id_name);
+    string_assign(dest->id_name, string_begin(src->id_name), string_end(src->id_name));
     //Set the user
     git_user_set(dest->user, src->user);
 }
 
 void gitid_id_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", id->id_name, id->user->name, id->user->email);
-    if(id->user->signing_key) {
-        fprintf(stream, "Signing Key: %s\n", id->user->signing_key);
+    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", string_cstr(id->id_name), string_cstr(id->user->name), string_cstr(id->user->email));
+    if(string_size(id->user->signing_key)) {
+        fprintf(stream, "Signing Key: %s\n", string_cstr(id->user->signing_key));
     }
 }
 
 void gitid_id_min_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "%s\n%s\n%s\n", id->id_name, id->user->name, id->user->email);
-    if(id->user->signing_key) {
-        fprintf(stream, "%s\n", id->user->signing_key);
+    fprintf(stream, "%s\n%s\n%s\n", string_cstr(id->id_name), string_cstr(id->user->name), string_cstr(id->user->email));
+    if(string_size(id->user->signing_key)) {
+        fprintf(stream, "%s\n", string_cstr(id->user->signing_key));
     }
     //Close with ending ___
     fprintf(stream, GITID_ID_ENDING_DELIMITER "\n");
@@ -106,17 +99,14 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 }
 
 void gitid_id_clear(gitid_id* id) {
-    //Free members
-    free(id->id_name);
+    //Clear members
+    string_clear(id->id_name);
     git_user_clear(id->user);
-
-    //Reset to NULL
-    id->id_name = NULL;
 }
 
 void gitid_id_free(gitid_id* id) {
     //Free members
-    free(id->id_name);
+    string_free(id->id_name);
     git_user_free(id->user);
 
     //Free struct

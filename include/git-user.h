@@ -48,6 +48,9 @@ void git_user_write(const git_user* user, FILE* stream);
 /**
  * Clears all members, clearing recursively (in this case, by calling string_free) 
  * but does not deallocate the struct.
+ *
+ * The important this is that all members are left in a valid state, so string
+ * members are still allocated (and handle their own memory clearing).
  */
 void git_user_clear(git_user* user);
 
