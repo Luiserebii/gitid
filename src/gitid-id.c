@@ -59,24 +59,22 @@ void gitid_id_min_write(const gitid_id* id, FILE* stream) {
 }
 
 void gitid_id_min_read(gitid_id* id, FILE* stream) {
-    char buffer1[GITID_ID_BUFFER_MAX];
-    char buffer2[GITID_ID_BUFFER_MAX];
-    char buffer3[GITID_ID_BUFFER_MAX];
+    string* buf1 = string_init_capacity(GITID_ID_BUFFER_MIN);
+    string* buf2 = string_init_capacity(GITID_ID_BUFFER_MIN);
+    string* buf3 = string_init_capacity(GITID_ID_BUFFER_MIN);
 
     //Load into buffers
-    minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
-    minfgets(buffer2, GITID_ID_BUFFER_MAX, stream);
-    minfgets(buffer3, GITID_ID_BUFFER_MAX, stream);
-
-    //Trim newlines off
-    trimNewline(buffer1), trimNewline(buffer2), trimNewline(buffer3);
+    string_fgets_min(buf1, stream);
+    string_fgets_min(buf2, stream);
+    string_fgets_min(buf3, stream);
 
     //Set into gitid_id
-    gitid_id_set_id_name(id, buffer1);
-    git_user_set_name(id->user, buffer2);
-    git_user_set_email(id->user, buffer3);
+    string_assign(id->id_name, string_begin(buf1), string_end(buf1));
+    string_assign(id->user->name, string_begin(buf2), string_end(buf2));
+    string_assign(id->user->email, string_begin(buf3), string_end(buf3));
 
     //Test to see if next is ending, or not
+    string_fgets_min(buf1, stream);
     minfgets(buffer1, GITID_ID_BUFFER_MAX, stream);
 
     //Check if ending delimiter

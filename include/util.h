@@ -39,6 +39,24 @@ int minsystem(const char* str);
 char* minfgets(char* s, int n, FILE* stream);
 
 /**
+ * string-like version of fgets(). Error-checked.
+ *
+ * Reads characters into the string until either a newline
+ * or EOF is encountered. If a newline is encountered, it is
+ * included with the string.
+ */
+void string_fgets(string* s, FILE* stream);
+
+/**
+ * string-like version of fgets(). Error-checked.
+ *  
+ * Reads characters into the string until either a newline
+ * or EOF is encountered. If a newline is encountered, it is
+ * NOT included with the string.
+ */
+void string_fgets_min(string* s, FILE* stream);
+
+/**
  * Trims the string at the first newline character found.
  */
 void trimNewline(char* str);
