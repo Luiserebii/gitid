@@ -51,7 +51,7 @@ void neo_escapesh(string* str) {
     for(char* it = buffer; *it; ++it) {
         if(*it == '\'') {
             //Write '\''
-            string_insert(str, string_end(), escapestr + escsz - 1);
+            string_insert_range(str, string_end(str), escapestr, escapestr + escsz - 1);
         } else {
             string_push_back(*it);
         }

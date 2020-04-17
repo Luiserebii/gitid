@@ -63,7 +63,7 @@ int git_set_user_global(const git_user* user) {
     string_cat(cmd, escbuf);
     string_clear(escbuf);
 
-    string_cat(cmd, " && git config --global user.email ");
+    string_cat_cstr(cmd, " && git config --global user.email ");
     string_assign(escbuf, string_begin(user->email), string_end(user->email));
     neo_escapesh(escbuf);
     string_cat(cmd, escbuf);
@@ -71,12 +71,11 @@ int git_set_user_global(const git_user* user) {
 
     //Logic with setting signing key will depend on whether it exists or not, but will
     //happen regardless so as to clear if non-existent
-    strcat(cmd, " && git config --global user.signingkey ");
+    string_cat_cstr(cmd, " && git config --global user.signingkey ");
     if(string_size(user->signing_key)) {
         string_assign(escbuf, string_begin(user->signing_key), string_end(user->signing_key));
         neo_escapesh(escbuf);
         string_cat(cmd, escbuf);
-        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
         char blank[] = "\"\"";
         string_insert_range(cmd, string_end(cmd), blank, blank + 2);
@@ -100,18 +99,17 @@ int git_set_user_local(const git_user* user) {
     string_cat(cmd, escbuf);
     string_clear(escbuf);
 
-    string_cat(cmd, " && git config --local user.email ");
+    string_cat_cstr(cmd, " && git config --local user.email ");
     string_assign(escbuf, string_begin(user->email), string_end(user->email));
     neo_escapesh(escbuf);
     string_cat(cmd, escbuf);
     string_clear(escbuf);
 
-    strcat(cmd, " && git config --local user.signingkey ");
+    string_cat_cstr(cmd, " && git config --local user.signingkey ");
     if(string_size(user->signing_key)) {
         string_assign(escbuf, string_begin(user->signing_key), string_end(user->signing_key));
         neo_escapesh(escbuf);
         string_cat(cmd, escbuf);
-        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
         char blank[] = "\"\"";
         string_insert_range(cmd, string_end(cmd), blank, blank + 2);
@@ -128,32 +126,25 @@ int git_set_user_local(const git_user* user) {
 
 int git_set_user_local_prefix(const git_user* user, const char* prefix) {
     string* escbuf = string_init_capacity(GIT_USER_BUFFER_MIN);
-    string* cmd = string_init();
+    string* cmd = string_init_cstr(prefix);
 
-    //Roll up to the last char
-    const char* prefix_end = prefix;
-    for(; prefix_end != '\0'; ++prefix_end)
-        ;
-    string_assign(cmd, prefix, prefix_end);
-
-    string_cat(cmd, " && git config --local user.name ");
+    string_cat_cstr(cmd, " && git config --local user.name ");
     string_assign(escbuf, string_begin(user->name), string_end(user->name));
     neo_escapesh(escbuf);
     string_cat(cmd, escbuf);
     string_clear(escbuf);
 
-    string_cat(cmd, " && git config --local user.email ");
+    string_cat_cstr(cmd, " && git config --local user.email ");
     string_assign(escbuf, string_begin(user->email), string_end(user->email));
     neo_escapesh(escbuf);
     string_cat(cmd, escbuf);
     string_clear(escbuf);
 
-    strcat(cmd, " && git config --local user.signingkey ");
+    string_cat_cstr(cmd, " && git config --local user.signingkey ");
     if(string_size(user->signing_key)) {
         string_assign(escbuf, string_begin(user->signing_key), string_end(user->signing_key));
         neo_escapesh(escbuf);
         string_cat(cmd, escbuf);
-        safestrcat(cmd, escapebuffer, GIT_CMD_MAXSTRING);
     } else {
         char blank[] = "\"\"";
         string_insert_range(cmd, string_end(cmd), blank, blank + 2);

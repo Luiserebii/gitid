@@ -387,10 +387,10 @@ int process_main(void** argtable) {
         //Finally, set
         if(!local->count) {
             gitid_shift_gitid_id_global(id);
-            printf("Shifted global git identity to: %s\n", id->id_name);
+            printf("Shifted global git identity to: %s\n", string_cstr(id->id_name));
         } else {
             gitid_shift_gitid_id_local(id);
-            printf("Shifted local git identity to: %s\n", id->id_name);
+            printf("Shifted local git identity to: %s\n", string_cstr(id->id_name));
         }
 
         //And, finally, free id

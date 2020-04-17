@@ -15,6 +15,7 @@
  * behavior can arise.
  */
 void escapesh(char* str);
+void neo_escapesh(string* str);
 
 /**
  * A wrapped call of the popen() function. Prints any error to the standard 
@@ -23,6 +24,7 @@ void escapesh(char* str);
  * Writes the command's output to out if successful.
  */
 void runcmd(const char* command, int maxline, char* out);
+void neo_runcmd(const char* command, string* out);
 
 /**
  * A wrapped call of the stdlib int system() function. Prints any error

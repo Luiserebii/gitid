@@ -3,6 +3,8 @@
 #include "../include/limits.h"
 #include "../include/vector-gitid-id.h"
 
+#include <cstl/string.h>
+
 #include <stdlib.h>
 #include <string.h>
 
@@ -87,7 +89,7 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
 
     //Throw error and break if not unique
     if(!unique) {
-        fprintf(stderr, "Error: git id already exists under the name \"%s\"\n", id->id_name);
+        fprintf(stderr, "Error: git id already exists under the name \"%s\"\n", string_cstr(id->id_name));
         exit(1);
     }
 

@@ -38,7 +38,7 @@ git_user* git_user_safe_init(const char* n, const char* e) {
     user->signing_key = string_init();
 
     return user;
-
+}
 
 void git_user_set(git_user* dest, const git_user* src) {
     string_assign(dest->name, string_begin(src->name), string_end(src->name));
