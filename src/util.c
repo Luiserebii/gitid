@@ -4,6 +4,7 @@
 
 #include <cstl/algorithm.h>
 #include <cstl/string.h>
+#include <cstl/cstring.h>
 
 #include "../include/util.h"
 
@@ -155,12 +156,6 @@ void trimNewline(char* str) {
             break;
         }
     }
-}
-
-void safestrcpy(char* dest, const char* src, size_t lim) {
-    while(--lim && (*dest++ = *src++))
-        ;
-    *dest = '\0';
 }
 
 void* safemalloc(size_t size) {

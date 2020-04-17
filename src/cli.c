@@ -9,6 +9,7 @@
 
 #include <cstl/algorithm.h>
 #include <cstl/string.h>
+#include <cstl/cstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -100,7 +101,7 @@ int main(int argc, char** argv) {
         clone_mirror = arg_litn(NULL, "mirror", 0, 1, "create a mirror repository (implies bare)"),
         clone_local = arg_litn("l", "local", 0, 1, "to clone from a local repository"),
         clone_no_hardlinks = arg_litn(NULL, "no-hardlinks", 0, 1, "don't use local hardlinks, always copy"),
-        clone_shared = arg_litn("s", "shared", 0, 1, "setup as shared repository"),
+        clone_shared = arg_litn(NULL, "shared", 0, 1, "setup as shared repository"),
         clone_recursive = arg_litn(NULL, "recursive", 0, 1, "initialize submodules in the clone"),
         clone_recurse_submodules = arg_litn(NULL, "recurse-submodules", 0, 1, "initialize submodules in the clone"),
         clone_template =

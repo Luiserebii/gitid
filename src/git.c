@@ -4,6 +4,7 @@
 #include "../include/util.h"
 
 #include <cstl/string.h>
+#include <cstl/cstring.h>
 
 #include <stdio.h>
 #include <stdlib.h>

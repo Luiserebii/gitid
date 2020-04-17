@@ -51,6 +51,27 @@ void string_cat_cstr(string* str, const char* s) {
     string_insert_range(str, string_end(str), s, end);
 }
 
+int string_cmp_cstr(const string* s1, const char* s2) {
+    const char* it1 = string_begin(s1);
+    for(; *it1 == *s2; ++it1, ++s2) {
+        if(*it1 == '\0') {
+            return 0;
+        }
+    }
+    return *it1 - *s2;
+}
+
+int string_cmp(const string* s1, const string* s2) {
+    const char* it1 = string_begin(s1);
+    const char* it2 = string_begin(s2);
+    for(; *it1 == *it2; ++it1, ++it2) {
+        if(*it1 == '\0') {
+            return 0;
+        }
+    }
+    return *it1 - *it2;
+}
+
 const char* string_cstr(string* str) {
     //Grow capacity if necessary
     if(str->avail == str->tail) {

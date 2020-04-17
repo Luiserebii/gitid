@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef CSTL_VECTOR_H
+#define CSTL_VECTOR_H
 
 #include <assert.h>
 #include <stdlib.h>
@@ -33,6 +33,10 @@
 
 #ifndef CSTL_REALLOC
 #define CSTL_REALLOC realloc
+#endif
+
+#ifndef CSTL_FREE
+#define CSTL_FREE free
 #endif
 
 /**
@@ -206,12 +210,12 @@
     /*                                                                                              \
      * Returns the first pointer in the vector's sequence.                                          \
      */                                                                                             \
-    vector_type* prefix##begin##suffix(struct_name* v);                                             \
+    vector_type* prefix##begin##suffix(const struct_name* v);                                       \
                                                                                                     \
     /*                                                                                              \
      * Returns the last pointer in the vector's sequence.                                           \
      */                                                                                             \
-    vector_type* prefix##end##suffix(struct_name* v);                                               \
+    vector_type* prefix##end##suffix(const struct_name* v);                                         \
                                                                                                     \
     /*                                                                                              \
      * Returns the current size of the vector.                                                      \
@@ -416,9 +420,9 @@
         return v->avail -= diff;                                                                     \
     }                                                                                                \
                                                                                                      \
-    vector_type* prefix##begin##suffix(struct_name* v) { return v->head; }                           \
+    vector_type* prefix##begin##suffix(const struct_name* v) { return v->head; }                     \
                                                                                                      \
-    vector_type* prefix##end##suffix(struct_name* v) { return v->avail; }                            \
+    vector_type* prefix##end##suffix(const struct_name* v) { return v->avail; }                      \
                                                                                                      \
     void prefix##autogrow##suffix(struct_name* v) {                                                  \
         size_t old_sz = prefix##size##suffix(v);                                                     \
@@ -461,13 +465,13 @@
     }                                                                                                \
                                                                                                      \
     void prefix##clear##suffix(struct_name* v) {                                                     \
-        free(v->head);                                                                               \
+        CSTL_FREE(v->head);                                                                          \
         v->head = v->avail = v->tail = NULL;                                                         \
     }                                                                                                \
                                                                                                      \
     void prefix##free##suffix(struct_name* v) {                                                      \
-        free(v->head);                                                                               \
-        free(v);                                                                                     \
+        CSTL_FREE(v->head);                                                                          \
+        CSTL_FREE(v);                                                                                \
     }
 
 #endif

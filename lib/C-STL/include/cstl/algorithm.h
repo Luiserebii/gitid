@@ -17,8 +17,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef ALGORITHM_H
-#define ALGORITHM_H
+#ifndef CSTL_ALGORITHM_H
+#define CSTL_ALGORITHM_H
 
 /**
  * algorithm_copy(type, begin, end, dest, res)
