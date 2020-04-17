@@ -53,8 +53,14 @@ void string_cat_cstr(string* str, const char* s) {
 
 int string_cmp_cstr(const string* s1, const char* s2) {
     const char* it1 = string_begin(s1);
-    for(; *it1 == *s2; ++it1, ++s2)
-        ;
+    for(; *it1 == *s2; ++it1, ++s2) {
+        //It's possible for 0s the follow the end of a string;
+        //as in, *it1 == *s2 && *it1 == '\0' is more than possible;
+        //so we need to perform this check here...
+        if(*s2 == '\0') {
+            return 0;
+        }
+    }
     if(*s2 == '\0') {
         return 0;
     }

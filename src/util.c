@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include <cstl/algorithm.h>
-#include <cstl/string.h>
 #include <cstl/cstring.h>
+#include <cstl/string.h>
 
 #include "../include/util.h"
 

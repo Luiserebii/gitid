@@ -3,8 +3,8 @@
 #include "../include/git-user.h"
 #include "../include/util.h"
 
-#include <cstl/string.h>
 #include <cstl/cstring.h>
+#include <cstl/string.h>
 
 #include <stdio.h>
 #include <stdlib.h>

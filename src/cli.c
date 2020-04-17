@@ -8,8 +8,8 @@
 #include "../lib/argtable3/argtable3.h"
 
 #include <cstl/algorithm.h>
-#include <cstl/string.h>
 #include <cstl/cstring.h>
+#include <cstl/string.h>
 
 #include <stdio.h>
 #include <stdlib.h>
