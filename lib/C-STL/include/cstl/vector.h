@@ -144,6 +144,13 @@
     struct_name* prefix##copy##suffix(const struct_name* src);                                      \
                                                                                                     \
     /*                                                                                              \
+     * Assigns the contents of vector dest to src, overwriting any current contents.                \
+     * The size is adjusted to the number of elements assigned, and allocation may occur            \
+     * if needed.                                                                                   \
+     */                                                                                             \
+    void prefix##asn##suffix(struct_name* dest, const struct_name* src);                            \
+                                                                                                    \
+    /*                                                                                              \
      * Assigns the values [first, last) to the vector, overwriting any current contents.            \
      * The size is adjusted to the number of elements assigned, and allocation may occur            \
      * if needed.                                                                                   \
@@ -328,6 +335,10 @@
         /* Copy over values */                                                                       \
         algorithm_min_copy(vector_type*, src->head, src->avail, copy->head);                         \
         return copy;                                                                                 \
+    }                                                                                                \
+                                                                                                     \
+    void prefix##asn##suffix(struct_name* dest, const struct_name* src) {                            \
+        prefix##assign##suffix(dest, prefix##begin##suffix(src), prefix##end##suffix(src));          \
     }                                                                                                \
                                                                                                      \
     void prefix##assign##suffix(struct_name* v, const vector_type* first, const vector_type* last) { \

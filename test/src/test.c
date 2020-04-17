@@ -102,7 +102,7 @@ void test_gitid_set_system_gitid_ids() {
     //Push all of sample data as gitid_ids onto the vector
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    string_set_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
+    string_asn_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
 
     //Finally, write to file
@@ -177,9 +177,9 @@ void test_git_set_user_global() {
     char n[] = "End of Evangello";
     char e[] = "endofeva@meme.io";
     char sigkey[] = "3V@01";
-    string_set_cstr(user->name, n);
-    string_set_cstr(user->email, e);
-    string_set_cstr(user->signing_key, sigkey);
+    string_asn_cstr(user->name, n);
+    string_asn_cstr(user->email, e);
+    string_asn_cstr(user->signing_key, sigkey);
 
     git_set_user_global(user);
 
@@ -218,7 +218,7 @@ void test_vector_gitid_id() {
     //Push all of sample data as gitid_ids onto the vector
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    string_set_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
+    string_asn_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
 
     //Assert current state
@@ -248,10 +248,10 @@ void test_vector_gitid_id() {
 void test_gitid_id_write() {
     gitid_id* id = gitid_id_init();
     
-    string_set_cstr(id->id_name, "Luiserebii");
-    string_set_cstr(id->user->name, "Luiserebii");
-    string_set_cstr(id->user->email, "luis@serebii.io");
-    string_set_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(id->id_name, "Luiserebii");
+    string_asn_cstr(id->user->name, "Luiserebii");
+    string_asn_cstr(id->user->email, "luis@serebii.io");
+    string_asn_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -267,10 +267,10 @@ void test_gitid_id_write() {
 void test_gitid_id_min_write() {
     gitid_id* id = gitid_id_init();
     
-    string_set_cstr(id->id_name, "Luiserebii");
-    string_set_cstr(id->user->name, "Luiserebii");
-    string_set_cstr(id->user->email, "luis@serebii.io");
-    string_set_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(id->id_name, "Luiserebii");
+    string_asn_cstr(id->user->name, "Luiserebii");
+    string_asn_cstr(id->user->email, "luis@serebii.io");
+    string_asn_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -313,9 +313,9 @@ void test_gitid_id_read() {
 void test_git_user_write() {
     git_user* user = git_user_init();
     
-    string_set_cstr(user->name, "Luiserebii");
-    string_set_cstr(user->email, "luis@serebii.io");
-    string_set_cstr(user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(user->name, "Luiserebii");
+    string_asn_cstr(user->email, "luis@serebii.io");
+    string_asn_cstr(user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 

@@ -37,7 +37,7 @@ string* string_init_cstr(const char* s) {
     return str;
 }
 
-void string_set_cstr(string* str, const char* s) {
+void string_asn_cstr(string* str, const char* s) {
     const char* end = s;
     for(; *end != '\0'; ++end)
         ;

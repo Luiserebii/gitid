@@ -409,11 +409,11 @@ int process_main(void** argtable) {
         //Construct gitid_id
         gitid_id* new_id = gitid_id_init();
 
-        string_set_cstr(new_id->id_name, *(new->sval));
-        string_set_cstr(new_id->user->name, *(user->sval));
-        string_set_cstr(new_id->user->email, *(email->sval));
+        string_asn_cstr(new_id->id_name, *(new->sval));
+        string_asn_cstr(new_id->user->name, *(user->sval));
+        string_asn_cstr(new_id->user->email, *(email->sval));
         if(sigkey->count) {
-            string_set_cstr(new_id->user->signing_key, *(sigkey->sval));
+            string_asn_cstr(new_id->user->signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to add
@@ -436,11 +436,11 @@ int process_main(void** argtable) {
 
         //Construct gitid_id
         gitid_id* upd_id = gitid_id_init();
-        string_set_cstr(upd_id->id_name, *(update->sval));
-        string_set_cstr(upd_id->user->name, *(user->sval));
-        string_set_cstr(upd_id->user->email, *(email->sval));
+        string_asn_cstr(upd_id->id_name, *(update->sval));
+        string_asn_cstr(upd_id->user->name, *(user->sval));
+        string_asn_cstr(upd_id->user->email, *(email->sval));
         if(sigkey->count) {
-            string_set_cstr(upd_id->user->signing_key, *(sigkey->sval));
+            string_asn_cstr(upd_id->user->signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to update

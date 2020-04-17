@@ -39,7 +39,7 @@ string* string_init_cstr(const char* s);
  * Sets the contents of the string to the char* passed. If there is not enough space,
  * the string will expand to fit the string.
  */
-void string_set_cstr(string* str, const char* s);
+void string_asn_cstr(string* str, const char* s);
 
 /**
  * Concatenates the string src to the end of the string dest.
