@@ -48,7 +48,7 @@ void gitid_set_system_gitid_ids_file(const vector_gitid_id* v, const char* fn) {
 }
 
 void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
-    //Initialize new vector an attempt a load
+    //Initialize new vector and attempt a load
     vector_gitid_id* v = vector_init_gitid_id();
     gitid_get_system_gitid_ids(v);
 
@@ -77,7 +77,9 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
     //Look for the id_name to determine uniqueness
     int unique = 1;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp((*it)->id_name, id->id_name) == 0) {
+        int equal;
+        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), string_begin(id->id_name), equal);
+        if(equal) {
             unique = 0;
             break;
         }
@@ -110,7 +112,9 @@ void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name) {
     //Look for the id_name, and set
     gitid_id* upd_id = NULL;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp((*it)->id_name, id_name) == 0) {
+        int equal;
+        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), id_name, equal);
+        if(equal) {
             upd_id = *it;
             break;
         }
@@ -134,22 +138,24 @@ void gitid_delete_system_gitid_id(const char* id_name) {
     gitid_get_system_gitid_ids(v);
 
     //Look for the id to delete
-    gitid_id** upd_id = NULL;
+    gitid_id** del_id = NULL;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp((*it)->id_name, id_name) == 0) {
-            upd_id = it;
+        int equal;
+        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), id_name, equal);
+        if(equal) {
+            del_id = it;
             break;
         }
     }
 
     //If nothing found, print error and break
-    if(upd_id == NULL) {
+    if(del_id == NULL) {
         fprintf(stderr, "Error: No git id found under the name \"%s\"\n", id_name);
         exit(1);
     }
 
     //Erase and free element, write, and free vector
-    vector_erase_free_gitid_id(v, upd_id);
+    vector_erase_free_gitid_id(v, del_id);
     gitid_set_system_gitid_ids(v);
     vector_free_gitid_id(v);
 }
