@@ -330,9 +330,9 @@ void test_git_user_write() {
 void test_git_user_init() {
     git_user* user = git_user_init();
 
-    TEST_ASSERT_EQUAL_PTR(user->name, NULL);
-    TEST_ASSERT_EQUAL_PTR(user->email, NULL);
-    TEST_ASSERT_EQUAL_PTR(user->signing_key, NULL);
+    TEST_ASSERT_EQUAL_INT(0, string_size(user->name));
+    TEST_ASSERT_EQUAL_INT(0, string_size(user->email));
+    TEST_ASSERT_EQUAL_INT(0, string_size(user->signing_key));
 
     git_user_free(user);
 }
