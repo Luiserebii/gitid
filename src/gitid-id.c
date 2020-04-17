@@ -38,7 +38,7 @@ gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e) {
 
 void gitid_id_set(gitid_id* dest, const gitid_id* src) {
     //Set id_name, and...
-    string_assign(dest->id_name, string_begin(src->id_name), string_end(src->id_name));
+    string_asn(dest->id_name, src->id_name);
     //Set the user
     git_user_set(dest->user, src->user);
 }
@@ -72,9 +72,9 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     string_fgets_min(buf3, stream);
 
     //Set into gitid_id
-    string_assign(id->id_name, string_begin(buf1), string_end(buf1));
-    string_assign(id->user->name, string_begin(buf2), string_end(buf2));
-    string_assign(id->user->email, string_begin(buf3), string_end(buf3));
+    string_asn(id->id_name, buf1);
+    string_asn(id->user->name, buf2);
+    string_asn(id->user->email, buf3);
 
     //Test to see if next is ending, or not
     string_clear(buf1);
@@ -86,7 +86,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     }
 
     //Otherwise, set signing key into struct
-    string_assign(id->user->signing_key, string_begin(buf1), string_end(buf1));
+    string_asn(id->user->signing_key, buf1);
 
     //Read ending delimiter so as to complete read of one entity
     int res;

@@ -41,9 +41,9 @@ git_user* git_user_safe_init(const char* n, const char* e) {
 }
 
 void git_user_set(git_user* dest, const git_user* src) {
-    string_assign(dest->name, string_begin(src->name), string_end(src->name));
-    string_assign(dest->email, string_begin(src->email), string_end(src->email));
-    string_assign(dest->signing_key, string_begin(src->signing_key), string_end(src->signing_key));
+    string_asn(dest->name, src->name);
+    string_asn(dest->email, src->email);
+    string_asn(dest->signing_key, src->signing_key);
 }
 
 void git_user_write(const git_user* user, FILE* stream) {
