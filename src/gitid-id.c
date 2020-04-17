@@ -81,7 +81,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     string_fgets_min(buf1, stream);
 
     //Check if ending delimiter
-    if(string_cmp_cstr(buf1, GITID_ID_ENDING_DELIMITER)) {
+    if(string_cmp_cstr(buf1, GITID_ID_ENDING_DELIMITER) == 0) {
         return;
     }
 
