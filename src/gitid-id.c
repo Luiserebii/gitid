@@ -77,11 +77,12 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     string_assign(id->user->email, string_begin(buf3), string_end(buf3));
 
     //Test to see if next is ending, or not
+    string_clear(buf1);
     string_fgets_min(buf1, stream);
 
     //Check if ending delimiter
     int equal;
-    algorithm_equal(char*, string_begin(buf1), string_end(buf2), GITID_ID_ENDING_DELIMITER, equal);
+    algorithm_equal(char*, string_begin(buf1), string_end(buf1), GITID_ID_ENDING_DELIMITER, equal);
     if(equal) {
         return;
     }

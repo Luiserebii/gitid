@@ -63,15 +63,15 @@ void test_gitid_get_system_gitid_ids() {
     
     //Assert each data piece, and size
     TEST_ASSERT_EQUAL_INT(2, vector_size_gitid_id(v));
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v->head))->id_name);
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", (*(v->head))->user->name);
-    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", (*(v->head))->user->email);
-    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", (*(v->head))->user->signing_key);
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr((*(v->head))->id_name));
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr((*(v->head))->user->name));
+    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", string_cstr((*(v->head))->user->email));
+    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", string_cstr((*(v->head))->user->signing_key));
     
-    TEST_ASSERT_EQUAL_STRING("cheem", (*(v->head + 1))->id_name);
-    TEST_ASSERT_EQUAL_STRING("I am cheem", (*(v->head + 1))->user->name);
-    TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", (*(v->head + 1))->user->email);
-    TEST_ASSERT_EQUAL_PTR(NULL, (*(v->head + 1))->user->signing_key);
+    TEST_ASSERT_EQUAL_STRING("cheem", string_cstr((*(v->head + 1))->id_name));
+    TEST_ASSERT_EQUAL_STRING("I am cheem", string_cstr((*(v->head + 1))->user->name));
+    TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", string_cstr((*(v->head + 1))->user->email));
+    TEST_ASSERT_EQUAL_INT(0, string_size((*(v->head + 1))->user->signing_key));
     
     //Free vector
     vector_free_gitid_id(v);
