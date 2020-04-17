@@ -136,16 +136,16 @@ void test_git_get_user_global() {
 
     //Finally, try confirming the get
     runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->name, buffer);
-    TEST_ASSERT_EQUAL_STRING(user->name, n);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), n);
 
     runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->email, buffer);
-    TEST_ASSERT_EQUAL_STRING(user->email, e);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), e);
 
     runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->signing_key, buffer);
-    TEST_ASSERT_EQUAL_STRING(user->signing_key, sigkey);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), sigkey);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
@@ -184,13 +184,13 @@ void test_git_set_user_global() {
 
     //Finally, try confirming the set
     runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->name, buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), buffer);
 
     runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->email, buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), buffer);
 
     runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(user->signing_key, buffer);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), buffer);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
@@ -221,24 +221,24 @@ void test_vector_gitid_id() {
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
 
     //Assert current state
-    TEST_ASSERT_EQUAL_STRING(id_data2[3], vector_at_gitid_id(ids, 1)->user->signing_key);
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 2)->id_name);
+    TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(vector_at_gitid_id(ids, 1)->user->signing_key));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(vector_at_gitid_id(ids, 2)->id_name));
     TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
 
     //Attempt erase of second element
     vector_erase_free_gitid_id(ids, ids->head + 1);
 
     //Make assertions of first and third (now second) elements
-    TEST_ASSERT_EQUAL_STRING(id_data1[1], vector_at_gitid_id(ids, 0)->user->name);
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], vector_at_gitid_id(ids, 1)->id_name);
+    TEST_ASSERT_EQUAL_STRING(id_data1[1], string_cstr(vector_at_gitid_id(ids, 0)->user->name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(vector_at_gitid_id(ids, 1)->id_name));
 
     //Test vector_get_id_gitid_id by searching for one
     gitid_id* id = vector_get_id_gitid_id(ids, id_data3[0]);
 
     //Assert that we found our one
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], id->id_name);
-    TEST_ASSERT_EQUAL_STRING(id_data3[1], id->user->name);
-    TEST_ASSERT_EQUAL_STRING(id_data3[2], id->user->email);
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(id->id_name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[1], string_cstr(id->user->name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[2], string_cstr(id->user->email));
 
     //Finally, attempt to free the entire vector (this should result in positives from valgrind)
     vector_free_gitid_id(ids);
