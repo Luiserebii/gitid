@@ -58,6 +58,9 @@ void string_cat_cstr(string* str, const char* s);
  * If s1 < s2, then the result is a negative integer (i.e. n < 0).
  * If s1 > s2, then the result is a positive integer (i.e. n > 0).
  * If s1 == s2, then the result is 0.
+ *
+ * NOTE/TODO: Known bug, this function will segfault if the string is empty.
+ * Will need to re-think an invariant, or this function.
  */
 int string_cmp_cstr(const string* s1, const char* s2);
 

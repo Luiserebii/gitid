@@ -263,7 +263,8 @@
                                                                                                     \
     /*                                                                                              \
      * Clears all elements allocated to the vector, but does not deallocate                         \
-     * the vector itself.                                                                           \
+     * the vector itself. No elements are deallocated necessarily either, simply sets the vector    \
+     * in a state for those elements to become overwritten.                                         \
      */                                                                                             \
     void prefix##clear##suffix(struct_name* v);                                                     \
                                                                                                     \
@@ -464,10 +465,7 @@
         v->avail -= (prefix##size##suffix(v) - n);                                                   \
     }                                                                                                \
                                                                                                      \
-    void prefix##clear##suffix(struct_name* v) {                                                     \
-        CSTL_FREE(v->head);                                                                          \
-        v->head = v->avail = v->tail = NULL;                                                         \
-    }                                                                                                \
+    void prefix##clear##suffix(struct_name* v) { v->avail = v->head; }                               \
                                                                                                      \
     void prefix##free##suffix(struct_name* v) {                                                      \
         CSTL_FREE(v->head);                                                                          \
