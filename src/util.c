@@ -127,7 +127,7 @@ void string_fgets(string* s, FILE* stream) {
     int c;
     while((c = getc(stream)) != EOF) {
         string_push_back(s, c);
-        if(c == '\n') { 
+        if(c == '\n') {
             break;
         }
     }

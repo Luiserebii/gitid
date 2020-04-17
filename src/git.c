@@ -21,11 +21,11 @@ void git_get_user_global(git_user* user) {
      * NOTE: This causes a deallocation, due to the string_clear() functionality (may need to fix up) 
      ***************************************************************************************************/
     string_clear(buf);
-    
+
     neo_runcmd("git config --global user.email", buf);
     string_assign(user->email, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
-    
+
     neo_runcmd("git config --global user.signingkey", buf);
     //Check if we obtained something
     if(string_size(buf)) {
@@ -41,11 +41,11 @@ void git_get_user_local(git_user* user) {
     neo_runcmd("git config --local user.name", buf);
     string_assign(user->name, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
-    
+
     neo_runcmd("git config --local user.email", buf);
     string_assign(user->email, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
-    
+
     neo_runcmd("git config --local user.signingkey", buf);
     //Check if we obtained something
     if(string_size(buf)) {
@@ -82,7 +82,7 @@ int git_set_user_global(const git_user* user) {
     }
 
     int suc = minsystem(string_cstr(cmd));
-    
+
     string_free(escbuf);
     string_free(cmd);
 
@@ -116,7 +116,7 @@ int git_set_user_local(const git_user* user) {
     }
 
     int suc = minsystem(string_cstr(cmd));
-    
+
     string_free(escbuf);
     string_free(cmd);
 
@@ -151,7 +151,7 @@ int git_set_user_local_prefix(const git_user* user, const char* prefix) {
     }
 
     int suc = minsystem(string_cstr(cmd));
-    
+
     string_free(escbuf);
     string_free(cmd);
 

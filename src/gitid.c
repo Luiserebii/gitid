@@ -80,7 +80,8 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
     int unique = 1;
     for(gitid_id** it = v->head; it != v->avail; ++it) {
         int equal;
-        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), string_begin(id->id_name), equal);
+        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), string_begin(id->id_name),
+                        equal);
         if(equal) {
             unique = 0;
             break;

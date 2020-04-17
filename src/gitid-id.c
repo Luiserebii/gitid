@@ -5,8 +5,8 @@
 
 #define CSTL_MALLOC safemalloc
 #define CSTL_REALLOC saferealloc
-#include <cstl/string.h>
 #include <cstl/algorithm.h>
+#include <cstl/string.h>
 
 #include <stdio.h>
 
@@ -44,14 +44,16 @@ void gitid_id_set(gitid_id* dest, const gitid_id* src) {
 }
 
 void gitid_id_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", string_cstr(id->id_name), string_cstr(id->user->name), string_cstr(id->user->email));
+    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", string_cstr(id->id_name), string_cstr(id->user->name),
+            string_cstr(id->user->email));
     if(string_size(id->user->signing_key)) {
         fprintf(stream, "Signing Key: %s\n", string_cstr(id->user->signing_key));
     }
 }
 
 void gitid_id_min_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "%s\n%s\n%s\n", string_cstr(id->id_name), string_cstr(id->user->name), string_cstr(id->user->email));
+    fprintf(stream, "%s\n%s\n%s\n", string_cstr(id->id_name), string_cstr(id->user->name),
+            string_cstr(id->user->email));
     if(string_size(id->user->signing_key)) {
         fprintf(stream, "%s\n", string_cstr(id->user->signing_key));
     }
