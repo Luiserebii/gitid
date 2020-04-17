@@ -32,6 +32,36 @@ void escapesh(char* str) {
     *str++ = '\'', *str = '\0';
 }
 
+void neo_escapesh(string* str) {
+    //Declare and load buffer with copy of str
+    char* buffer = safemalloc(string_size(str) + 1);
+    strcpy(buffer, string_cstr(str));
+
+    //Clear string
+    string_clear(str);
+
+    //Escape string to write
+    char escapestr[] = "'\\''";
+    int escsz = sizeof(escapestr) / sizeof(char);
+
+    //Write initial '
+    string_push_back(str, '\'');
+
+    //Write escaped values to str
+    for(char* it = buffer; *it; ++it) {
+        if(*it == '\'') {
+            //Write '\''
+            string_insert(str, string_end(), escapestr + escsz - 1);
+        } else {
+            string_push_back(*it);
+        }
+    }
+    //Close with ', and finally, '\0'
+    string_push_back(str, '\'');
+
+    free(buffer);
+}
+
 void runcmd(const char* command, int maxline, char* out) {
     FILE* proc;
     //Process logic in case of failure
