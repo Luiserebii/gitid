@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include <cstl/algorithm.h>
+#include <cstl/string.h>
 
 #include "../include/util.h"
 
@@ -45,6 +46,26 @@ void runcmd(const char* command, int maxline, char* out) {
     }
     //Close out
     *out = '\0';
+
+    //Close process and return
+    if(pclose(proc) == -1) {
+        perror("pclose");
+        exit(1);
+    }
+}
+
+void neo_runcmd(const char* command, string* out) {
+    FILE* proc;
+    //Process logic in case of failure
+    if((proc = popen(command, "r")) == NULL) {
+        perror("popen");
+        exit(1);
+    }
+    //Copy all output to string out
+    int c;
+    for(int i = 0; (c = getc(proc)) != EOF; ++i) {
+        string_push_back(c);
+    }
 
     //Close process and return
     if(pclose(proc) == -1) {

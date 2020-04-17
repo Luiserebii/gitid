@@ -3,6 +3,8 @@
 #include "../include/git-user.h"
 #include "../include/util.h"
 
+#include <cstl/string.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -10,41 +12,44 @@
 void git_get_user_global(git_user* user) {
     //String buffer to hold char results from commands temporarily, so they can be
     //dynamically allocated and fit to size afterwards
-    char buffer[GIT_USER_BUFFER_MAX];
+    string* buf = string_init_capacity(GIT_USER_BUFFER_MIN);
 
-    runcmd("git config --global user.name", GIT_USER_BUFFER_MAX, buffer);
-    git_user_set_name(user, buffer);
-    runcmd("git config --global user.email", GIT_USER_BUFFER_MAX, buffer);
-    git_user_set_email(user, buffer);
-    runcmd("git config --global user.signingkey", GIT_USER_BUFFER_MAX, buffer);
+    neo_runcmd("git config --global user.name", buf);
+    string_assign(user->name, string_begin(buf), string_end(buf) - 1);
+    /** ************************************************************************************************* 
+     * NOTE: This causes a deallocation, due to the string_clear() functionality (may need to fix up) 
+     ***************************************************************************************************/
+    string_clear(buf);
+    
+    neo_runcmd("git config --global user.email", buf);
+    string_assign(user->email, string_begin(buf), string_end(buf) - 1);
+    string_clear(buf);
+    
+    neo_runcmd("git config --global user.signingkey", buf);
     //Check if we obtained something
-    if(*buffer) {
-        git_user_set_signing_key(user, buffer);
-        trimNewline(user->signing_key);
+    if(string_size(buf)) {
+        string_assign(user->signing_key, string_begin(buf), string_end(buf) - 1);
     }
-
-    //Trim all inputs
-    trimNewline(user->name), trimNewline(user->email);
 }
 
 void git_get_user_local(git_user* user) {
     //String buffer to hold char results from commands temporarily, so they can be
     //dynamically allocated and fit to size afterwards
-    char buffer[GIT_USER_BUFFER_MAX];
+    string* buf = string_init_capacity(GIT_USER_BUFFER_MIN);
 
-    runcmd("git config --local user.name", GIT_USER_BUFFER_MAX, buffer);
-    git_user_set_name(user, buffer);
-    runcmd("git config --local user.email", GIT_USER_BUFFER_MAX, buffer);
-    git_user_set_email(user, buffer);
-    runcmd("git config --local user.signingkey", GIT_USER_BUFFER_MAX, buffer);
+    neo_runcmd("git config --local user.name", buf);
+    string_assign(user->name, string_begin(buf), string_end(buf) - 1);
+    string_clear(buf);
+    
+    neo_runcmd("git config --local user.email", buf);
+    string_assign(user->email, string_begin(buf), string_end(buf) - 1);
+    string_clear(buf);
+    
+    neo_runcmd("git config --local user.signingkey", buf);
     //Check if we obtained something
-    if(*buffer) {
-        git_user_set_signing_key(user, buffer);
-        trimNewline(user->signing_key);
+    if(string_size(buf)) {
+        string_assign(user->signing_key, string_begin(buf), string_end(buf) - 1);
     }
-
-    //Trim all inputs
-    trimNewline(user->name), trimNewline(user->email);
 }
 
 int git_set_user_global(const git_user* user) {

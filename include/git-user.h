@@ -9,6 +9,8 @@
 
 #include <stdio.h>
 
+#define GIT_USER_BUFFER_MIN 20
+
 typedef struct {
     string* name;
     string* email;

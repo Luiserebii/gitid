@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <cstl/string.h>
+
 /**
  * Escapes any ' by replacing with '\'', wrapping the entire
  * string in '' to treat as a literal.
