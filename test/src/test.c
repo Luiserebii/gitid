@@ -6,11 +6,12 @@
 #include "../../include/git-user.h"
 #include "../../include/util.h"
 
+#include <cstl/string.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-
 
 void test_gitid_get_system_gitid_ids();
 void test_gitid_set_system_gitid_ids();
@@ -21,7 +22,6 @@ void test_gitid_id_write();
 void test_gitid_id_min_write();
 void test_gitid_id_read();
 void test_git_user_init();
-void test_git_user_set_functions();
 void test_git_user_write();
 void test_parseGitURLName();
 void test_escapesh();
@@ -45,7 +45,6 @@ int main() {
     RUN_TEST(test_gitid_id_read);
 
     RUN_TEST(test_git_user_init);    
-    RUN_TEST(test_git_user_set_functions);
     RUN_TEST(test_git_user_write);
 
     RUN_TEST(test_parseGitURLName);
@@ -102,7 +101,7 @@ void test_gitid_set_system_gitid_ids() {
     //Push all of sample data as gitid_ids onto the vector
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    git_user_set_signing_key(vector_at_gitid_id(ids, 1)->user, id_data2[3]);
+    string_set_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
 
     //Finally, write to file
@@ -177,9 +176,9 @@ void test_git_set_user_global() {
     char n[] = "End of Evangello";
     char e[] = "endofeva@meme.io";
     char sigkey[] = "3V@01";
-    git_user_set_name(user, n);
-    git_user_set_email(user, e);
-    git_user_set_signing_key(user, sigkey);
+    string_set_cstr(user->name, n);
+    string_set_cstr(user->email, e);
+    string_set_cstr(user->signing_key, sigkey);
 
     git_set_user_global(user);
 
@@ -218,7 +217,7 @@ void test_vector_gitid_id() {
     //Push all of sample data as gitid_ids onto the vector
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    git_user_set_signing_key(vector_at_gitid_id(ids, 1)->user, id_data2[3]);
+    string_set_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
     vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
 
     //Assert current state
@@ -248,10 +247,10 @@ void test_vector_gitid_id() {
 void test_gitid_id_write() {
     gitid_id* id = gitid_id_init();
     
-    gitid_id_set_id_name(id, "Luiserebii");
-    git_user_set_name(id->user, "Luiserebii");
-    git_user_set_email(id->user, "luis@serebii.io");
-    git_user_set_signing_key(id->user, "3B7E2D68E27CBBCF");
+    string_set_cstr(id->id_name, "Luiserebii");
+    string_set_cstr(id->user->name, "Luiserebii");
+    string_set_cstr(id->user->email, "luis@serebii.io");
+    string_set_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -267,10 +266,10 @@ void test_gitid_id_write() {
 void test_gitid_id_min_write() {
     gitid_id* id = gitid_id_init();
     
-    gitid_id_set_id_name(id, "Luiserebii");
-    git_user_set_name(id->user, "Luiserebii");
-    git_user_set_email(id->user, "luis@serebii.io");
-    git_user_set_signing_key(id->user, "3B7E2D68E27CBBCF");
+    string_set_cstr(id->id_name, "Luiserebii");
+    string_set_cstr(id->user->name, "Luiserebii");
+    string_set_cstr(id->user->email, "luis@serebii.io");
+    string_set_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -313,9 +312,9 @@ void test_gitid_id_read() {
 void test_git_user_write() {
     git_user* user = git_user_init();
     
-    git_user_set_name(user, "Luiserebii");
-    git_user_set_email(user, "luis@serebii.io");
-    git_user_set_signing_key(user, "3B7E2D68E27CBBCF");
+    string_set_cstr(user->name, "Luiserebii");
+    string_set_cstr(user->email, "luis@serebii.io");
+    string_set_cstr(user->signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
@@ -325,23 +324,6 @@ void test_git_user_write() {
     git_user_write(user, tmp);
 
     fclose(tmp);
-    git_user_free(user);
-}
-
-void test_git_user_set_functions() {
-    char n[] = "Luiserebii";
-    char e[] = "luis@serebii.io";
-    char sigkey[] = "3B7E2D68E27CBBCF";
-    git_user* user = git_user_init();
-
-    git_user_set_name(user, n);
-    git_user_set_email(user, e);
-    git_user_set_signing_key(user, sigkey);
-
-    TEST_ASSERT_EQUAL_STRING(n, user->name);
-    TEST_ASSERT_EQUAL_STRING(e, user->email);
-    TEST_ASSERT_EQUAL_STRING(sigkey, user->signing_key);
-
     git_user_free(user);
 }
 
