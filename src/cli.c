@@ -8,6 +8,7 @@
 #include "../lib/argtable3/argtable3.h"
 
 #include <cstl/algorithm.h>
+#include <cstl/string.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -406,11 +407,12 @@ int process_main(void** argtable) {
 
         //Construct gitid_id
         gitid_id* new_id = gitid_id_init();
-        gitid_id_set_id_name(new_id, *(new->sval));
-        git_user_set_name(new_id->user, *(user->sval));
-        git_user_set_email(new_id->user, *(email->sval));
+
+        string_set_cstr(new_id->id_name, *(new->sval));
+        string_set_cstr(new_id->user->name, *(user->sval));
+        string_set_cstr(new_id->user->email, *(email->sval));
         if(sigkey->count) {
-            git_user_set_signing_key(new_id->user, *(sigkey->sval));
+            string_set_cstr(new_id->user->signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to add
@@ -433,11 +435,11 @@ int process_main(void** argtable) {
 
         //Construct gitid_id
         gitid_id* upd_id = gitid_id_init();
-        gitid_id_set_id_name(upd_id, *(update->sval));
-        git_user_set_name(upd_id->user, *(user->sval));
-        git_user_set_email(upd_id->user, *(email->sval));
+        string_set_cstr(upd_id->id_name, *(update->sval));
+        string_set_cstr(upd_id->user->name, *(user->sval));
+        string_set_cstr(upd_id->user->email, *(email->sval));
         if(sigkey->count) {
-            git_user_set_signing_key(upd_id->user, *(sigkey->sval));
+            string_set_cstr(upd_id->user->signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to update
