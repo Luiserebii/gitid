@@ -110,7 +110,9 @@ gitid_id* vector_at_gitid_id(vector_gitid_id* v, size_t n) {
 
 gitid_id* vector_get_id_gitid_id(vector_gitid_id* v, const char* id_name) {
     for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(strcmp(id_name, (*it)->id_name) == 0) {
+        int equal;
+        algorithm_equal(char*, string_begin((*it)->id_name), string_end((*it)->id_name), id_name, equal);
+        if(equal) {
             return *it;
         }
     }
