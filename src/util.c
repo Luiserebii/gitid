@@ -53,7 +53,7 @@ void neo_escapesh(string* str) {
             //Write '\''
             string_insert_range(str, string_end(str), escapestr, escapestr + escsz - 1);
         } else {
-            string_push_back(*it);
+            string_push_back(str, *it);
         }
     }
     //Close with ', and finally, '\0'
@@ -94,7 +94,7 @@ void neo_runcmd(const char* command, string* out) {
     //Copy all output to string out
     int c;
     for(int i = 0; (c = getc(proc)) != EOF; ++i) {
-        string_push_back(c);
+        string_push_back(out, c);
     }
 
     //Close process and return
