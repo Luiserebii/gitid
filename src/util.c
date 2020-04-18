@@ -8,32 +8,7 @@
 
 #include "../include/util.h"
 
-void escapesh(char* str) {
-    //Declare and load buffer with copy of str
-    char buffer[strlen(str) + 1];
-    strcpy(buffer, str);
-
-    //Escape string to write
-    char escapestr[] = "'\\''";
-    int escsz = sizeof(escapestr) / sizeof(char);
-
-    //Write initial '
-    *str++ = '\'';
-
-    //Write escaped values to str
-    for(char* it = buffer; *it; ++it) {
-        if(*it == '\'') {
-            //Write '\''
-            algorithm_copy(char*, escapestr, escapestr + escsz - 1, str, str);
-        } else {
-            *str++ = *it;
-        }
-    }
-    //Close with ', and finally, '\0'
-    *str++ = '\'', *str = '\0';
-}
-
-void neo_escapesh(string* str) {
+void escapesh(string* str) {
     //Declare and load buffer with copy of str
     char* buffer = safemalloc(string_size(str) + 1);
     strcpy(buffer, string_cstr(str));

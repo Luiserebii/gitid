@@ -372,9 +372,9 @@ void test_parseGitURLName() {
 }
 
 void test_escapesh() {
-    char s1[100] = "ls -lha";
-    char s2[100] = "Fun Giraffe' 'ls -lha'";
-    char s3[100] = "'Meme Team'";
+    string* s1 = string_init_cstr("ls -lha");
+    string* s2 = string_init_cstr("Fun Giraffe' 'ls -lha'");
+    string* s3 = string_init_cstr("'Meme Team'");
 
     char exp1[] = "'ls -lha'";
     char exp2[] = "'Fun Giraffe'\\'' '\\''ls -lha'\\'''";
@@ -384,9 +384,9 @@ void test_escapesh() {
     escapesh(s2);
     escapesh(s3);
 
-    TEST_ASSERT_EQUAL_STRING(s1, exp1);
-    TEST_ASSERT_EQUAL_STRING(s2, exp2);
-    TEST_ASSERT_EQUAL_STRING(s3, exp3);
+    TEST_ASSERT_EQUAL_STRING(exp1, string_cstr(s1));
+    TEST_ASSERT_EQUAL_STRING(exp2, string_cstr(s2));
+    TEST_ASSERT_EQUAL_STRING(exp3, string_cstr(s3));
 }
 
 void test_runcmd() {

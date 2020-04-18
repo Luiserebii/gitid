@@ -14,8 +14,7 @@
  * plus 3 characters for each ' the string contains. Otherwise, undefined
  * behavior can arise.
  */
-void escapesh(char* str);
-void neo_escapesh(string* str);
+void escapesh(string* str);
 
 /**
  * A wrapped call of the popen() function. Prints any error to the standard 
