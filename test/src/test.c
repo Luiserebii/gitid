@@ -140,10 +140,12 @@ void test_git_get_user_global() {
     runcmd("git config --global user.name", buf), string_pop_back(buf);
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), string_cstr(buf));
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), n);
+    string_clear(buf);
 
     runcmd("git config --global user.email", buf), string_pop_back(buf);
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), string_cstr(buf));
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), e);
+    string_clear(buf);
 
     runcmd("git config --global user.signingkey", buf), string_pop_back(buf);
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), string_cstr(buf));
