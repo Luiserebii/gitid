@@ -464,7 +464,7 @@
                                                                                                      \
     void prefix##grow##suffix(struct_name* v, size_t n) {                                            \
         size_t old_sz = prefix##size##suffix(v);                                                     \
-        assert(n > old_sz);                                                                          \
+        assert(n >= old_sz);                                                                         \
         /* Realloc and set pointers as appropriate */                                                \
         v->head = (vector_type*) CSTL_REALLOC(v->head, sizeof(vector_type) * n);                     \
         v->avail = v->head + old_sz;                                                                 \
