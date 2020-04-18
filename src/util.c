@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include <cstl/algorithm.h>
-#include <cstl/string.h>
 #include <cstl/cstring.h>
+#include <cstl/string.h>
 
 #include "../include/util.h"
 
@@ -68,15 +68,6 @@ int minsystem(const char* str) {
     }
 }
 
-char* minfgets(char* s, int n, FILE* stream) {
-    char* sret;
-    if((sret = fgets(s, n, stream)) == NULL) {
-        perror("fgets");
-        exit(1);
-    }
-    return sret;
-}
-
 void string_fgets(string* s, FILE* stream) {
     int c;
     while((c = getc(stream)) != EOF) {
@@ -99,15 +90,6 @@ void string_fgets_min(string* s, FILE* stream) {
     if(c == EOF && ferror(stream)) {
         perror("getc");
         exit(1);
-    }
-}
-
-void trimNewline(char* str) {
-    for(; *str; ++str) {
-        if(*str == '\n') {
-            *str = '\0';
-            break;
-        }
     }
 }
 

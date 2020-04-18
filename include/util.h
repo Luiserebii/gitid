@@ -33,14 +33,6 @@ void runcmd(const char* command, string* out);
 int minsystem(const char* str);
 
 /**
- * A wrapped call of the fgets() function. Prints any error to the standard
- * error stream and exits.
- *
- * Returns the char* returned by fgets otherwise.
- */
-char* minfgets(char* s, int n, FILE* stream);
-
-/**
  * string-like version of fgets(). Error-checked.
  *
  * Reads characters into the string until either a newline
@@ -57,11 +49,6 @@ void string_fgets(string* s, FILE* stream);
  * NOT included with the string.
  */
 void string_fgets_min(string* s, FILE* stream);
-
-/**
- * Trims the string at the first newline character found.
- */
-void trimNewline(char* str);
 
 /**
  * Wrapper function to handle all malloc() cases of failure.
