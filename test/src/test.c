@@ -114,6 +114,7 @@ void test_gitid_set_system_gitid_ids() {
 
 void test_git_get_user_global() { 
     char buffer[1000];
+    string* buf = string_init();
     //Create a temporary directory, and set it to TMPDIR
     //as a way to safely rm -rf it
     char tmpdir[] = "/tmp/tmp.XXXXXX";
@@ -130,22 +131,22 @@ void test_git_get_user_global() {
     char cmd[1000];
     sprintf(cmd, "git config --global user.name '%s' && git config --global user.email '%s'"
             "&& git config --global user.signingkey '%s'", n, e, sigkey);
-    runcmd(cmd, 1000, buffer);
+    runcmd(cmd, buf);
 
     git_user* user = git_user_init();
     git_get_user_global(user);
 
     //Finally, try confirming the get
-    runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), buffer);
+    runcmd("git config --global user.name", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), string_cstr(buf));
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), n);
 
-    runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), buffer);
+    runcmd("git config --global user.email", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), string_cstr(buf));
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), e);
 
-    runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), buffer);
+    runcmd("git config --global user.signingkey", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), string_cstr(buf));
     TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), sigkey);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
@@ -164,6 +165,7 @@ void test_git_get_user_global() {
 
 void test_git_set_user_global() { 
     char buffer[1000];
+    string* buf = string_init();
     //Create a temporary directory, and set it to TMPDIR
     //as a way to safely rm -rf it
     char tmpdir[] = "/tmp/tmp.XXXXXX";
@@ -184,14 +186,16 @@ void test_git_set_user_global() {
     git_set_user_global(user);
 
     //Finally, try confirming the set
-    runcmd("git config --global user.name", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), buffer);
+    runcmd("git config --global user.name", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), string_cstr(buf));
+    string_clear(buf);
 
-    runcmd("git config --global user.email", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), buffer);
+    runcmd("git config --global user.email", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), string_cstr(buf));
+    string_clear(buf);
 
-    runcmd("git config --global user.signingkey", 1000, buffer), trimNewline(buffer);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), buffer);
+    runcmd("git config --global user.signingkey", buf), string_pop_back(buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), string_cstr(buf));
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
@@ -387,11 +391,10 @@ void test_runcmd() {
     char cmd[] = "echo hello";
     char exp[] = "hello\n";
 
-    int maxsz = 100;
-    char res[maxsz];
-    
-    runcmd(cmd, maxsz, res);
-    TEST_ASSERT_EQUAL_STRING(exp, res);
+    string* res = string_init_capacity(10);
+
+    runcmd(cmd, res);
+    TEST_ASSERT_EQUAL_STRING(exp, string_cstr(res));
 }
 
 void test_trimNewline() {

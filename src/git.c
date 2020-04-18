@@ -16,18 +16,15 @@ void git_get_user_global(git_user* user) {
     string* buf = string_init_capacity(GIT_USER_BUFFER_MIN);
 
     //Note the -1, for trimming off the '\n'
-    neo_runcmd("git config --global user.name", buf);
+    run_cmd("git config --global user.name", buf);
     string_assign(user->name, string_begin(buf), string_end(buf) - 1);
-    /** ************************************************************************************************* 
-     * NOTE: This causes a deallocation, due to the string_clear() functionality (may need to fix up) 
-     ***************************************************************************************************/
     string_clear(buf);
 
-    neo_runcmd("git config --global user.email", buf);
+    run_cmd("git config --global user.email", buf);
     string_assign(user->email, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
 
-    neo_runcmd("git config --global user.signingkey", buf);
+    run_cmd("git config --global user.signingkey", buf);
     //Check if we obtained something
     if(string_size(buf)) {
         string_assign(user->signing_key, string_begin(buf), string_end(buf) - 1);
@@ -39,15 +36,15 @@ void git_get_user_local(git_user* user) {
     //dynamically allocated and fit to size afterwards
     string* buf = string_init_capacity(GIT_USER_BUFFER_MIN);
 
-    neo_runcmd("git config --local user.name", buf);
+    run_cmd("git config --local user.name", buf);
     string_assign(user->name, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
 
-    neo_runcmd("git config --local user.email", buf);
+    run_cmd("git config --local user.email", buf);
     string_assign(user->email, string_begin(buf), string_end(buf) - 1);
     string_clear(buf);
 
-    neo_runcmd("git config --local user.signingkey", buf);
+    run_cmd("git config --local user.signingkey", buf);
     //Check if we obtained something
     if(string_size(buf)) {
         string_assign(user->signing_key, string_begin(buf), string_end(buf) - 1);

@@ -3,8 +3,8 @@
 #include <string.h>
 
 #include <cstl/algorithm.h>
-#include <cstl/cstring.h>
 #include <cstl/string.h>
+#include <cstl/cstring.h>
 
 #include "../include/util.h"
 
@@ -63,29 +63,7 @@ void neo_escapesh(string* str) {
     free(buffer);
 }
 
-void runcmd(const char* command, int maxline, char* out) {
-    FILE* proc;
-    //Process logic in case of failure
-    if((proc = popen(command, "r")) == NULL) {
-        perror("popen");
-        exit(1);
-    }
-    //Copy all output to string out
-    int c;
-    for(int i = 0; (c = getc(proc)) != EOF && i < maxline - 1; ++i) {
-        *out++ = c;
-    }
-    //Close out
-    *out = '\0';
-
-    //Close process and return
-    if(pclose(proc) == -1) {
-        perror("pclose");
-        exit(1);
-    }
-}
-
-void neo_runcmd(const char* command, string* out) {
+void runcmd(const char* command, string* out) {
     FILE* proc;
     //Process logic in case of failure
     if((proc = popen(command, "r")) == NULL) {
