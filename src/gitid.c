@@ -13,7 +13,7 @@ char GITID_SYSTEM_FOLDER[FILEPATH_MAX];
 
 void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
     //Declare gitid_id for use
-    gitid_id* id;
+    gitid_id id;
 
     //Open file stream to system file
     FILE* sys_gitids = fopen(fn, "r");
@@ -24,12 +24,12 @@ void gitid_get_system_gitid_ids_file(vector_gitid_id* v, const char* fn) {
         //hit the end
         ungetc(c, sys_gitids);
 
-        //Intialize and attempt a read into an id
-        id = gitid_id_init();
-        gitid_id_min_read(id, sys_gitids);
+        //Initialize and attempt a read into an id
+        gitid_id_init(&id);
+        gitid_id_min_read(&id, sys_gitids);
 
         //Finally, push onto vector
-        vector_push_back_gitid_id(v, id);
+        vector_gitid_id_push_back_r(v, &id);
     }
 
     //Close stream
@@ -41,8 +41,8 @@ void gitid_set_system_gitid_ids_file(const vector_gitid_id* v, const char* fn) {
     FILE* sys_gitids = fopen(fn, "w");
 
     //Iterate through vector and write each one
-    for(gitid_id** it = v->head; it != v->avail; ++it) {
-        gitid_id_min_write(*it, sys_gitids);
+    for(gitid_id* it = v->head; it != v->avail; ++it) {
+        gitid_id_min_write(it, sys_gitids);
     }
 
     //Close stream
@@ -51,12 +51,12 @@ void gitid_set_system_gitid_ids_file(const vector_gitid_id* v, const char* fn) {
 
 void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
     //Initialize new vector and attempt a load
-    vector_gitid_id* v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids(v);
+    vector_gitid_id v;
+    vector_gitid_id_init(&v);
+    gitid_get_system_gitid_ids(&v);
 
     //Look for matching
-    gitid_id* match;
-    match = vector_get_id_gitid_id(v, id_name);
+    gitid_id* match = vector_gitid_id_get_id(&v, id_name);
 
     //If nothing found, print error and break
     if(match == NULL) {
@@ -67,8 +67,9 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
     //Set ID to found one
     gitid_id_set(id, match);
 
-    //Finally, free vector
-    vector_free_gitid_id(v);
+    //Finally, deinit vector elements, and vector itself
+    vector_gitid_id_deinit_r(&v);
+    vector_gitid_id_deinit(&v);
 }
 
 void gitid_new_system_gitid_id(const gitid_id* id) {
