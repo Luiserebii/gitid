@@ -213,105 +213,122 @@ void test_git_set_user_global() {
 
 void test_vector_gitid_id() {
     //Initialize gitid_id vector
-    vector_gitid_id* ids = vector_init_gitid_id();
+    vector_gitid_id ids;
+    vector_init_gitid_id(&v);
+
     //Sample data
     char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
     char* id_data2[] = {"notcheem", "uncheem prime", "uncheemz@meme.io", "A2FJ39SA"};
     char* id_data3[] = {"secret cheem", "???", "???@???.cheem"};
     
     //Push all of sample data as gitid_ids onto the vector
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    string_asn_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
+    gitid_id id;
 
+    gitid_id_safe_init(&id, id_data1[0], id_data1[1], id_data1[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
+
+    string_asn_cstr(&id.id_name, id_data2[0]);
+    string_asn_cstr(&id.user.name, id_data2[1]);
+    string_asn_cstr(&id.user.email, id_data2[2]);
+    string_asn_cstr(&id.user.signing_key, id_data2[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
+
+    string_asn_cstr(&id.id_name, id_data3[0]);
+    string_asn_cstr(&id.user.name, id_data3[1]);
+    string_asn_cstr(&id.user.email, id_data3[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
+    
     //Assert current state
-    TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(vector_at_gitid_id(ids, 1)->user->signing_key));
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(vector_at_gitid_id(ids, 2)->id_name));
-    TEST_ASSERT_EQUAL_INT(3, vector_size_gitid_id(ids));
+    TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(&vector_gitid_id_at(&ids, 1)->user.signing_key));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&vector_gitid_id_at(&ids, 2)->id_name));
+    TEST_ASSERT_EQUAL_INT(3, vector_gitid_id_size(&ids));
 
     //Attempt erase of second element
-    vector_erase_free_gitid_id(ids, ids->head + 1);
+    vector_gitid_id_erase_deinit(&ids, vector_gitid_id_begin(&ids) + 1);
 
     //Make assertions of first and third (now second) elements
-    TEST_ASSERT_EQUAL_STRING(id_data1[1], string_cstr(vector_at_gitid_id(ids, 0)->user->name));
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(vector_at_gitid_id(ids, 1)->id_name));
+    TEST_ASSERT_EQUAL_STRING(id_data1[1], string_cstr(&vector_at_gitid_id(ids, 0)->user.name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&vector_at_gitid_id(ids, 1)->id_name));
 
     //Test vector_get_id_gitid_id by searching for one
-    gitid_id* id = vector_get_id_gitid_id(ids, id_data3[0]);
+    gitid_id* idp = vector_gitid_id_get_id(&ids, id_data3[0]);
 
     //Assert that we found our one
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(id->id_name));
-    TEST_ASSERT_EQUAL_STRING(id_data3[1], string_cstr(id->user->name));
-    TEST_ASSERT_EQUAL_STRING(id_data3[2], string_cstr(id->user->email));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&idp->id_name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[1], string_cstr(&idp->user.name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[2], string_cstr(&idp->user.email));
 
     //Finally, attempt to free the entire vector (this should result in positives from valgrind)
-    vector_free_gitid_id(ids);
+    vector_gitid_id_deinit_r(&ids);
+    vector_gitid_id_deinit(&ids);
 }
 
 void test_gitid_id_write() {
-    gitid_id* id = gitid_id_init();
+    gitid_id id;
+    gitid_id_init(&id);
     
-    string_asn_cstr(id->id_name, "Luiserebii");
-    string_asn_cstr(id->user->name, "Luiserebii");
-    string_asn_cstr(id->user->email, "luis@serebii.io");
-    string_asn_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(&id.id_name, "Luiserebii");
+    string_asn_cstr(&id.user.name, "Luiserebii");
+    string_asn_cstr(&id.user.email, "luis@serebii.io");
+    string_asn_cstr(&id.user.signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
     //program, note this
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_write", "w");
     TEST_ASSERT(tmp != NULL);
-    gitid_id_write(id, tmp);
+    gitid_id_write(&id, tmp);
 
     fclose(tmp);
-    gitid_id_free(id);
+    gitid_id_deinit(&id);
 }
 
 void test_gitid_id_min_write() {
-    gitid_id* id = gitid_id_init();
+    gitid_id id;
+    gitid_id_init(&id);
     
-    string_asn_cstr(id->id_name, "Luiserebii");
-    string_asn_cstr(id->user->name, "Luiserebii");
-    string_asn_cstr(id->user->email, "luis@serebii.io");
-    string_asn_cstr(id->user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(&id.id_name, "Luiserebii");
+    string_asn_cstr(&id.user.name, "Luiserebii");
+    string_asn_cstr(&id.user.email, "luis@serebii.io");
+    string_asn_cstr(&id.user.signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
     //program, note this
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_min_write", "w");
-    gitid_id_min_write(id, tmp);
+    gitid_id_min_write(&id, tmp);
 
     fclose(tmp);
-    gitid_id_free(id);
+    gitid_id_deinit(&id);
 }
 
 void test_gitid_id_read() {
     char fname1[] = "./data/single_gitid_id_1";
     char fname2[] = "./data/single_gitid_id_2";
 
-    gitid_id* id = gitid_id_init();
+    gitid_id id;
+    gitid_id_init(&id);
 
     //Attempt to open first file for reading
     FILE* f = fopen(fname1, "r");
-    gitid_id_min_read(id, f);
+    gitid_id_min_read(&id, f);
 
     //Write input to temporary file
     FILE* tmp = fopen("./tmp/tmp_test_gitid_id_read_1", "w");
-    gitid_id_min_write(id, tmp);
+    gitid_id_min_write(&id, tmp);
     fclose(f), fclose(tmp);
 
     //Testing second file
-    gitid_id_clear(id);
+    gitid_id_clear(&id);
     f = fopen(fname2, "r");
-    gitid_id_min_read(id, f);
+    gitid_id_min_read(&id, f);
 
     //Write input to temporary file
     tmp = fopen("./tmp/tmp_test_gitid_id_read_2", "w");
-    gitid_id_min_write(id, tmp);
+    gitid_id_min_write(&id, tmp);
    
     fclose(f), fclose(tmp); 
-    gitid_id_free(id);
+    gitid_id_deinit(&id);
 }
 
 void test_git_user_write() {
