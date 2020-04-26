@@ -299,14 +299,15 @@ int process_clone(void) {
         safestrcat(buffer, name, 1000);
 
         //Look for matching git_id
-        gitid_id* id = gitid_id_init();
-        gitid_get_system_gitid_id(*(clone_shift->sval), id);
+        gitid_id id;
+        gitid_id_init(&id);
+        gitid_get_system_gitid_id(*(clone_shift->sval), &id);
 
         //Attempt to cd and set
-        git_set_user_local_prefix(id->user, buffer);
+        git_set_user_local_prefix(&id.user, buffer);
         printf("Set newly cloned repo to ID \"%s\"!\n", *(clone_shift->sval));
         //Finally, free
-        gitid_id_free(id);
+        gitid_id_deinit(&id);
     }
 
     //Free
@@ -334,20 +335,22 @@ int process_main(void** argtable) {
 
     if(list->count != 0) {
         //Intialize a vector, and grab all system gitids
-        vector_gitid_id* v = vector_init_gitid_id();
-        gitid_get_system_gitid_ids(v);
-        if(vector_size_gitid_id(v)) {
+        vector_gitid_id v;
+        vector_gitid_id_init(&v);
+        gitid_get_system_gitid_ids(&v);
+        if(vector_size_gitid_id(&v)) {
             //Write to stdout
             fputs("All registered identities:\n", stdout);
-            for(gitid_id** it = v->head; it != v->avail; ++it) {
+            for(gitid_id* it = v.head; it != v.avail; ++it) {
                 putc('\n', stdout);
-                gitid_id_write(*it, stdout);
+                gitid_id_write(it, stdout);
             }
         } else {
             fputs("No identities registered yet!\n", stdout);
         }
         //Free
-        vector_free_gitid_id(v);
+        vector_gitid_id_deinit_r(&v);
+        vector_gitid_id_deinit(&v);
         return 0;
     }
 
@@ -358,19 +361,20 @@ int process_main(void** argtable) {
             exit(1);
         }
         //Init git_user and obtain latest
-        git_user* user = git_user_init();
+        git_user user;
+        git_user_init(&user);
 
         //If local not specified, global is default anyways, so print global
         if(!local->count) {
-            git_get_user_global(user);
+            git_get_user_global(&user);
             fputs("Current global git identity:\n\n", stdout);
         } else {
-            git_get_user_local(user);
+            git_get_user_local(&user);
             fputs("Current local git identity:\n\n", stdout);
         }
         //Print, and free
-        git_user_write(user, stdout);
-        git_user_free(user);
+        git_user_write(&user, stdout);
+        git_user_deinit(&user);
         return 0;
     }
 
@@ -382,20 +386,21 @@ int process_main(void** argtable) {
         }
 
         //Look for matching git_id
-        gitid_id* id = gitid_id_init();
-        gitid_get_system_gitid_id(*(shift->sval), id);
+        gitid_id id;
+        gitid_id_init(&id);
+        gitid_get_system_gitid_id(*(shift->sval), &id);
 
         //Finally, set
         if(!local->count) {
-            gitid_shift_gitid_id_global(id);
-            printf("Shifted global git identity to: %s\n", string_cstr(id->id_name));
+            gitid_shift_gitid_id_global(&id);
+            printf("Shifted global git identity to: %s\n", string_cstr(&id.id_name));
         } else {
-            gitid_shift_gitid_id_local(id);
-            printf("Shifted local git identity to: %s\n", string_cstr(id->id_name));
+            gitid_shift_gitid_id_local(&id);
+            printf("Shifted local git identity to: %s\n", string_cstr(&id.id_name));
         }
 
         //And, finally, free id
-        gitid_id_free(id);
+        gitid_id_deinit(&id);
         return 0;
     }
 
@@ -407,20 +412,21 @@ int process_main(void** argtable) {
         }
 
         //Construct gitid_id
-        gitid_id* new_id = gitid_id_init();
+        gitid_id new_id;
+        gitid_id_init(&new_id);
 
-        string_asn_cstr(new_id->id_name, *(new->sval));
-        string_asn_cstr(new_id->user->name, *(user->sval));
-        string_asn_cstr(new_id->user->email, *(email->sval));
+        string_asn_cstr(&new_id.id_name, *(new->sval));
+        string_asn_cstr(&new_id.user->name, *(user->sval));
+        string_asn_cstr(&new_id.user->email, *(email->sval));
         if(sigkey->count) {
-            string_asn_cstr(new_id->user->signing_key, *(sigkey->sval));
+            string_asn_cstr(&new_id.user.signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to add
-        gitid_new_system_gitid_id(new_id);
+        gitid_new_system_gitid_id(&new_id);
 
         //Free
-        gitid_id_free(new_id);
+        gitid_id_deinit(&new_id);
         return 0;
     }
 
@@ -435,19 +441,20 @@ int process_main(void** argtable) {
         }
 
         //Construct gitid_id
-        gitid_id* upd_id = gitid_id_init();
-        string_asn_cstr(upd_id->id_name, *(update->sval));
-        string_asn_cstr(upd_id->user->name, *(user->sval));
-        string_asn_cstr(upd_id->user->email, *(email->sval));
+        gitid_id upd_id;
+        gitid_id_init(&upd_id);
+        string_asn_cstr(&upd_id.id_name, *(update->sval));
+        string_asn_cstr(&upd_id.user->name, *(user->sval));
+        string_asn_cstr(&upd_id.user->email, *(email->sval));
         if(sigkey->count) {
-            string_asn_cstr(upd_id->user->signing_key, *(sigkey->sval));
+            string_asn_cstr(&upd_id.user.signing_key, *(sigkey->sval));
         }
 
         //Finally, attempt to update
-        gitid_update_system_gitid_id(upd_id, *(update->sval));
+        gitid_update_system_gitid_id(&upd_id, *(update->sval));
 
         //Free
-        gitid_id_free(upd_id);
+        gitid_id_deinit(&upd_id);
         return 0;
     }
 

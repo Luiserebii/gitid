@@ -73,7 +73,7 @@ void gitid_delete_system_gitid_id(const char* id_name);
  * Since these are so trivial to implement, these are really better as macros,
  * if they should be used at all
  */
-#define gitid_shift_gitid_id_global(id) git_set_user_global(id->user)
-#define gitid_shift_gitid_id_local(id) git_set_user_local(id->user)
+#define gitid_shift_gitid_id_global(id) git_set_user_global(id.user)
+#define gitid_shift_gitid_id_local(id) git_set_user_local(id.user)
 
 #endif

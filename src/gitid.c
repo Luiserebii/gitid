@@ -80,7 +80,7 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
 
     //Look for the id_name to determine uniqueness
     int unique = 1;
-    for(gitid_id* it = v->head; it != v->avail; ++it) {
+    for(gitid_id* it = v.head; it != v.avail; ++it) {
         if(string_cmp(&it->id_name, &id->id_name) == 0) {
             unique = 0;
             break;
@@ -116,7 +116,7 @@ void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name) {
 
     //Look for the id_name, and set
     gitid_id* upd_id = NULL;
-    for(gitid_id* it = v->head; it != v->avail; ++it) {
+    for(gitid_id* it = v.head; it != v.avail; ++it) {
         if(string_cmp(&it->id_name, &id->id_name) == 0) {
             upd_id = it;
             break;
@@ -145,7 +145,7 @@ void gitid_delete_system_gitid_id(const char* id_name) {
 
     //Look for the id to delete
     gitid_id* del_id = NULL;
-    for(gitid_id* it = v->head; it != v->avail; ++it) {
+    for(gitid_id* it = v.head; it != v.avail; ++it) {
         if(string_cmp_cstr(&it->id_name, id_name) == 0) {
             del_id = it;
             break;
