@@ -338,7 +338,7 @@ int process_main(void** argtable) {
         vector_gitid_id v;
         vector_gitid_id_init(&v);
         gitid_get_system_gitid_ids(&v);
-        if(vector_size_gitid_id(&v)) {
+        if(vector_gitid_id_size(&v)) {
             //Write to stdout
             fputs("All registered identities:\n", stdout);
             for(gitid_id* it = v.head; it != v.avail; ++it) {
@@ -416,8 +416,8 @@ int process_main(void** argtable) {
         gitid_id_init(&new_id);
 
         string_asn_cstr(&new_id.id_name, *(new->sval));
-        string_asn_cstr(&new_id.user->name, *(user->sval));
-        string_asn_cstr(&new_id.user->email, *(email->sval));
+        string_asn_cstr(&new_id.user.name, *(user->sval));
+        string_asn_cstr(&new_id.user.email, *(email->sval));
         if(sigkey->count) {
             string_asn_cstr(&new_id.user.signing_key, *(sigkey->sval));
         }
@@ -444,8 +444,8 @@ int process_main(void** argtable) {
         gitid_id upd_id;
         gitid_id_init(&upd_id);
         string_asn_cstr(&upd_id.id_name, *(update->sval));
-        string_asn_cstr(&upd_id.user->name, *(user->sval));
-        string_asn_cstr(&upd_id.user->email, *(email->sval));
+        string_asn_cstr(&upd_id.user.name, *(user->sval));
+        string_asn_cstr(&upd_id.user.email, *(email->sval));
         if(sigkey->count) {
             string_asn_cstr(&upd_id.user.signing_key, *(sigkey->sval));
         }

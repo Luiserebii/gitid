@@ -50,7 +50,7 @@ void git_user_clear(git_user* gu) {
 
 void git_user_deinit(git_user* gu) {
     //Free members
-    string_free(&gu->name);
-    string_free(&gu->email);
-    string_free(&gu->signing_key);
+    string_deinit(&gu->name);
+    string_deinit(&gu->email);
+    string_deinit(&gu->signing_key);
 }
