@@ -315,31 +315,33 @@ void test_gitid_id_read() {
 }
 
 void test_git_user_write() {
-    git_user* user = git_user_init();
+    git_user user;
+    git_user_init(&user);
     
-    string_asn_cstr(user->name, "Luiserebii");
-    string_asn_cstr(user->email, "luis@serebii.io");
-    string_asn_cstr(user->signing_key, "3B7E2D68E27CBBCF");
+    string_asn_cstr(&user.name, "Luiserebii");
+    string_asn_cstr(&user.email, "luis@serebii.io");
+    string_asn_cstr(&user.signing_key, "3B7E2D68E27CBBCF");
 
     //Temporary file to write to
     //NOTE: fopen() relative paths are relative to the execution of the 
     //program, note this
     FILE* tmp = fopen("./tmp/tmp_test_git_user_write", "w");
     TEST_ASSERT(tmp != NULL);
-    git_user_write(user, tmp);
+    git_user_write(&user, tmp);
 
     fclose(tmp);
-    git_user_free(user);
+    git_user_deinit(&user);
 }
 
 void test_git_user_init() {
-    git_user* user = git_user_init();
+    git_user user;
+    git_user_init(&user);
 
-    TEST_ASSERT_EQUAL_INT(0, string_size(user->name));
-    TEST_ASSERT_EQUAL_INT(0, string_size(user->email));
-    TEST_ASSERT_EQUAL_INT(0, string_size(user->signing_key));
+    TEST_ASSERT_EQUAL_INT(0, string_size(&user.name));
+    TEST_ASSERT_EQUAL_INT(0, string_size(&user.email));
+    TEST_ASSERT_EQUAL_INT(0, string_size(&user.signing_key));
 
-    git_user_free(user);
+    git_user_deinit(&user);
 }
 
 void test_parseGitURLName() {
@@ -370,31 +372,33 @@ void test_parseGitURLName() {
 }
 
 void test_escapesh() {
-    string* s1 = string_init_cstr("ls -lha");
-    string* s2 = string_init_cstr("Fun Giraffe' 'ls -lha'");
-    string* s3 = string_init_cstr("'Meme Team'");
+    string s1, s2, s3;
+    string_init_cstr(&s1, "ls -lha");
+    string_init_cstr(&s2, "Fun Giraffe' 'ls -lha'");
+    string_init_cstr(&s3, "'Meme Team'");
 
     char exp1[] = "'ls -lha'";
     char exp2[] = "'Fun Giraffe'\\'' '\\''ls -lha'\\'''";
     char exp3[] = "''\\''Meme Team'\\'''";
 
-    escapesh(s1);
-    escapesh(s2);
-    escapesh(s3);
+    escapesh(&s1);
+    escapesh(&s2);
+    escapesh(&s3);
 
-    TEST_ASSERT_EQUAL_STRING(exp1, string_cstr(s1));
-    TEST_ASSERT_EQUAL_STRING(exp2, string_cstr(s2));
-    TEST_ASSERT_EQUAL_STRING(exp3, string_cstr(s3));
+    TEST_ASSERT_EQUAL_STRING(exp1, string_cstr(&s1));
+    TEST_ASSERT_EQUAL_STRING(exp2, string_cstr(&s2));
+    TEST_ASSERT_EQUAL_STRING(exp3, string_cstr(&s3));
 }
 
 void test_runcmd() {
     char cmd[] = "echo hello";
     char exp[] = "hello\n";
 
-    string* res = string_init_capacity(10);
+    string res;
+    string_init_capacity(&res, 10);
 
-    runcmd(cmd, res);
-    TEST_ASSERT_EQUAL_STRING(exp, string_cstr(res));
+    runcmd(cmd, &res);
+    TEST_ASSERT_EQUAL_STRING(exp, string_cstr(&res));
 }
 
 void test_safestrcpy() {
