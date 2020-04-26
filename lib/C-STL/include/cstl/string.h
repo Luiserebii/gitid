@@ -30,10 +30,16 @@ declare_vector_class(string, char);
 // clang-format on
 
 /**
- * Intiailizes an empty string with the contents of the char* passed. 
+ * Initializes an empty string with the contents of the char* passed. 
  * It is assumed that that char* is valid.
  */
-string* string_init_cstr(const char* s);
+void string_init_cstr(string* str, const char* s);
+
+/**
+ * Creates (allocates and initializes) an empty string with the contents of the char* passed. 
+ * It is assumed that that char* is valid.
+ */
+string* string_create_cstr(const char* s);
 
 /**
  * Sets the contents of the string to the char* passed. If there is not enough space,
@@ -44,7 +50,7 @@ void string_asn_cstr(string* str, const char* s);
 /**
  * Concatenates the string src to the end of the string dest.
  */
-#define string_cat(dest, src) string_insert_range(dest, dest->avail, src->head, src->avail)
+void string_cat(string* dest, const string* src);
 
 /**
  * Concatenates the char* string s to the end of the string str.

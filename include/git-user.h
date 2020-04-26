@@ -12,15 +12,15 @@
 #define GIT_USER_BUFFER_MIN 20
 
 typedef struct {
-    string* name;
-    string* email;
-    string* signing_key;
+    string name;
+    string email;
+    string signing_key;
 } git_user;
 
 /**
- * Allocates space for a new git_user struct.
+ * Initializes a git_user struct.
  */
-git_user* git_user_init(void);
+void git_user_init(git_user* gu);
 
 /**
  * This is meant to provide a more OOP constructor, where the invariant
@@ -30,7 +30,7 @@ git_user* git_user_init(void);
  * In the event that NULL is passed in either parameter, an error is thrown
  * and the application ends.
  */
-git_user* git_user_safe_init(const char* n, const char* e);
+void git_user_safe_init(git_user* gu, const char* n, const char* e);
 
 /**
  * Set the values of dest to the values of src. Note that the function
@@ -45,7 +45,7 @@ void git_user_set(git_user* dest, const git_user* src);
 /**
  * Writes git_user to FILE* stream.
  */
-void git_user_write(const git_user* user, FILE* stream);
+void git_user_write(const git_user* gu, FILE* stream);
 
 /**
  * Clears all members, clearing recursively (in this case, by calling string_free) 
@@ -54,11 +54,11 @@ void git_user_write(const git_user* user, FILE* stream);
  * The important this is that all members are left in a valid state, so string
  * members are still allocated (and handle their own memory clearing).
  */
-void git_user_clear(git_user* user);
+void git_user_clear(git_user* gu);
 
 /**
- * Frees git_user struct.
+ * Deinitializes git_user struct and frees resources as needed.
  */
-void git_user_free(git_user* user);
+void git_user_deinit(git_user* gu);
 
 #endif

@@ -14,19 +14,19 @@
 #define GITID_ID_ENDING_DELIMITER "____________"
 
 typedef struct {
-    string* id_name;
-    git_user* user;
+    string id_name;
+    git_user user;
 } gitid_id;
 
 /**
- * Allocates space for a new git_user struct.
+ * Initializes a gitid_id struct.
  */
-gitid_id* gitid_id_init(void);
+gitid_id_init(gitid_id* id);
 
 /**
  * Invariant protected: name, username, and email set
  */
-gitid_id* gitid_id_safe_init(const char* id_n, const char* n, const char* e);
+gitid_id_safe_init(gitid_id* id, const char* id_n, const char* n, const char* e);
 
 /**
  * Set the values of dest to the values of src. Note that the function
@@ -69,8 +69,8 @@ void gitid_id_min_read(gitid_id* id, FILE* stream);
 void gitid_id_clear(gitid_id* id);
 
 /**
- * Frees gitid_id struct.
+ * Deinitializes gitid_id struct.
  */
-void gitid_id_free(gitid_id* id);
+void gitid_id_deinit(gitid_id* id);
 
 #endif
