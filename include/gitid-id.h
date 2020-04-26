@@ -21,12 +21,12 @@ typedef struct {
 /**
  * Initializes a gitid_id struct.
  */
-gitid_id_init(gitid_id* id);
+void gitid_id_init(gitid_id* id);
 
 /**
  * Invariant protected: name, username, and email set
  */
-gitid_id_safe_init(gitid_id* id, const char* id_n, const char* n, const char* e);
+void gitid_id_safe_init(gitid_id* id, const char* id_n, const char* n, const char* e);
 
 /**
  * Set the values of dest to the values of src. Note that the function
