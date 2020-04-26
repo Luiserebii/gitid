@@ -58,7 +58,7 @@ void test_gitid_get_system_gitid_ids() {
 
     //Attempt to get system ids from one with two
     vector_gitid_id v;
-    vector_init_gitid_id(&v);
+    vector_gitid_id_init(&v);
     gitid_get_system_gitid_ids_file(&v, "data/double_gitid_id_1");
     
     //Assert each data piece, and size
@@ -68,10 +68,10 @@ void test_gitid_get_system_gitid_ids() {
     TEST_ASSERT_EQUAL_STRING("luis@serebii.io", string_cstr(&v.head->user.email));
     TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", string_cstr(&v.head->user.signing_key));
     
-    TEST_ASSERT_EQUAL_STRING("cheem", string_cstr(&(v->head + 1)->id_name));
+    TEST_ASSERT_EQUAL_STRING("cheem", string_cstr(&(v.head + 1)->id_name));
     TEST_ASSERT_EQUAL_STRING("I am cheem", string_cstr(&(v.head + 1)->user.name));
     TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", string_cstr(&(v.head + 1)->user.email));
-    TEST_ASSERT_EQUAL_INT(0, string_size(&(v->head + 1)->user.signing_key));
+    TEST_ASSERT_EQUAL_INT(0, string_size(&(v.head + 1)->user.signing_key));
     
     //Free vector
     vector_gitid_id_deinit(&v);
@@ -85,13 +85,14 @@ void test_gitid_get_system_gitid_ids() {
     TEST_ASSERT_EQUAL_PTR(NULL, v.head);
 
     //Free vector
-    vector_gitid_id_free(&v);
+    vector_gitid_id_deinit_r(&v);
+    vector_gitid_id_deinit(&v);
 }
 
 void test_gitid_set_system_gitid_ids() {
     //Initialize gitid_id vector
     vector_gitid_id ids;
-    vector_init_gitid_id(&id);
+    vector_gitid_id_init(&ids);
 
     //Sample data
     char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
@@ -176,7 +177,7 @@ void test_git_get_user_global() {
     TEST_ASSERT_EQUAL_INT(0, res);
     
     //Finally, free git_user
-    git_user_free(user);
+    git_user_deinit(&user);
 }
 
 void test_git_set_user_global() { 
@@ -233,7 +234,7 @@ void test_git_set_user_global() {
 void test_vector_gitid_id() {
     //Initialize gitid_id vector
     vector_gitid_id ids;
-    vector_init_gitid_id(&v);
+    vector_gitid_id_init(&ids);
 
     //Sample data
     char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
@@ -258,16 +259,16 @@ void test_vector_gitid_id() {
     vector_gitid_id_push_back_r(&ids, &id);
     
     //Assert current state
-    TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(&vector_gitid_id_at(&ids, 1)->user.signing_key));
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&vector_gitid_id_at(&ids, 2)->id_name));
+    TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(&(vector_gitid_id_begin(&ids) + 1)->user.signing_key));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&(vector_gitid_id_begin(&ids) + 2)->id_name));
     TEST_ASSERT_EQUAL_INT(3, vector_gitid_id_size(&ids));
 
     //Attempt erase of second element
     vector_gitid_id_erase_deinit(&ids, vector_gitid_id_begin(&ids) + 1);
 
     //Make assertions of first and third (now second) elements
-    TEST_ASSERT_EQUAL_STRING(id_data1[1], string_cstr(&vector_at_gitid_id(ids, 0)->user.name));
-    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&vector_at_gitid_id(ids, 1)->id_name));
+    TEST_ASSERT_EQUAL_STRING(id_data1[1], string_cstr(&(vector_gitid_id_begin(&ids) + 0)->user.name));
+    TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&(vector_gitid_id_begin(&ids) + 1)->id_name));
 
     //Test vector_get_id_gitid_id by searching for one
     gitid_id* idp = vector_gitid_id_get_id(&ids, id_data3[0]);
