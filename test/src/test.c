@@ -57,40 +57,41 @@ int main() {
 void test_gitid_get_system_gitid_ids() {
 
     //Attempt to get system ids from one with two
-    vector_gitid_id* v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids_file(v, "data/double_gitid_id_1");
+    vector_gitid_id v;
+    vector_init_gitid_id(&v);
+    gitid_get_system_gitid_ids_file(&v, "data/double_gitid_id_1");
     
     //Assert each data piece, and size
-    TEST_ASSERT_EQUAL_INT(2, vector_size_gitid_id(v));
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr((*(v->head))->id_name));
-    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr((*(v->head))->user->name));
-    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", string_cstr((*(v->head))->user->email));
-    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", string_cstr((*(v->head))->user->signing_key));
+    TEST_ASSERT_EQUAL_INT(2, vector_gitid_id_size(&v));
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr(&v.head->id_name));
+    TEST_ASSERT_EQUAL_STRING("Luiserebii", string_cstr(&v.head->user.name));
+    TEST_ASSERT_EQUAL_STRING("luis@serebii.io", string_cstr(&v.head->user.email));
+    TEST_ASSERT_EQUAL_STRING("3B7E2D68E27CBBCF", string_cstr(&v.head->user.signing_key));
     
-    TEST_ASSERT_EQUAL_STRING("cheem", string_cstr((*(v->head + 1))->id_name));
-    TEST_ASSERT_EQUAL_STRING("I am cheem", string_cstr((*(v->head + 1))->user->name));
-    TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", string_cstr((*(v->head + 1))->user->email));
-    TEST_ASSERT_EQUAL_INT(0, string_size((*(v->head + 1))->user->signing_key));
+    TEST_ASSERT_EQUAL_STRING("cheem", string_cstr(&(v->head + 1)->id_name));
+    TEST_ASSERT_EQUAL_STRING("I am cheem", string_cstr(&(v.head + 1)->user.name));
+    TEST_ASSERT_EQUAL_STRING("cheem@tothemoon.io", string_cstr(&(v.head + 1)->user.email));
+    TEST_ASSERT_EQUAL_INT(0, string_size(&(v->head + 1)->user.signing_key));
     
     //Free vector
-    vector_free_gitid_id(v);
+    vector_gitid_id_deinit(&v);
 
     //Test attempting to grab ids from empty file
-    v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids_file(v, "data/empty_gitid_id_1");
+    vector_gitid_id_init(&v);
+    gitid_get_system_gitid_ids_file(&v, "data/empty_gitid_id_1");
 
     //Assert state
-    TEST_ASSERT_EQUAL_INT(0, vector_size_gitid_id(v));
-    TEST_ASSERT_EQUAL_PTR(NULL, v->head);
+    TEST_ASSERT_EQUAL_INT(0, vector_gitid_id_size(&v));
+    TEST_ASSERT_EQUAL_PTR(NULL, v.head);
 
     //Free vector
-    vector_free_gitid_id(v);
+    vector_gitid_id_free(&v);
 }
 
 void test_gitid_set_system_gitid_ids() {
-    
     //Initialize gitid_id vector
-    vector_gitid_id* ids = vector_init_gitid_id();
+    vector_gitid_id ids;
+    vector_init_gitid_id(&id);
 
     //Sample data
     char* id_data1[] = {"cheem", "i am cheem", "cheem@tothemoon.io"};
@@ -98,21 +99,34 @@ void test_gitid_set_system_gitid_ids() {
     char* id_data3[] = {"secret cheem", "???", "???@???.cheem"};
     
     //Push all of sample data as gitid_ids onto the vector
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data1[0], id_data1[1], id_data1[2]));
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data2[0], id_data2[1], id_data2[2]));
-    string_asn_cstr(vector_at_gitid_id(ids, 1)->user->signing_key, id_data2[3]);
-    vector_push_back_gitid_id(ids, gitid_id_safe_init(id_data3[0], id_data3[1], id_data3[2]));
+    gitid_id id;
+
+    gitid_id_safe_init(&id, id_data1[0], id_data1[1], id_data1[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
+
+    string_asn_cstr(&id.id_name, id_data2[0]);
+    string_asn_cstr(&id.user.name, id_data2[1]);
+    string_asn_cstr(&id.user.email, id_data2[2]);
+    string_asn_cstr(&id.user.signing_key, id_data2[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
+
+    string_asn_cstr(&id.id_name, id_data3[0]);
+    string_asn_cstr(&id.user.name, id_data3[1]);
+    string_asn_cstr(&id.user.email, id_data3[2]);
+    vector_gitid_id_push_back_r(&ids, &id);
 
     //Finally, write to file
-    gitid_set_system_gitid_ids_file(ids, "./tmp/tmp_test_gitid_set_system_gitid_ids");
+    gitid_set_system_gitid_ids_file(&ids, "./tmp/tmp_test_gitid_set_system_gitid_ids");
 
     //Free vector
-    vector_free_gitid_id(ids);
+    vector_gitid_id_deinit_r(&ids);
+    vector_gitid_id_deinit(&ids);
 }
 
 void test_git_get_user_global() { 
     char buffer[1000];
-    string* buf = string_init();
+    string buf;
+    string_init(&buf);
     //Create a temporary directory, and set it to TMPDIR
     //as a way to safely rm -rf it
     char tmpdir[] = "/tmp/tmp.XXXXXX";
@@ -129,25 +143,27 @@ void test_git_get_user_global() {
     char cmd[1000];
     sprintf(cmd, "git config --global user.name '%s' && git config --global user.email '%s'"
             "&& git config --global user.signingkey '%s'", n, e, sigkey);
-    runcmd(cmd, buf);
+    runcmd(cmd, &buf);
 
-    git_user* user = git_user_init();
-    git_get_user_global(user);
+    git_user user;
+    git_user_init(&user);
+    git_get_user_global(&user);
 
     //Finally, try confirming the get
-    runcmd("git config --global user.name", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), string_cstr(buf));
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), n);
-    string_clear(buf);
+    runcmd("git config --global user.name", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.name), string_cstr(&buf));
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.name), n);
+    string_clear(&buf);
 
-    runcmd("git config --global user.email", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), string_cstr(buf));
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), e);
-    string_clear(buf);
+    runcmd("git config --global user.email", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.email), string_cstr(&buf));
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.email), e);
+    string_clear(&buf);
 
-    runcmd("git config --global user.signingkey", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), string_cstr(buf));
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), sigkey);
+    runcmd("git config --global user.signingkey", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.signing_key), string_cstr(&buf));
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.signing_key), sigkey);
+    string_deinit(&buf);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
@@ -165,7 +181,8 @@ void test_git_get_user_global() {
 
 void test_git_set_user_global() { 
     char buffer[1000];
-    string* buf = string_init();
+    string buf;
+    string_init(&buf);
     //Create a temporary directory, and set it to TMPDIR
     //as a way to safely rm -rf it
     char tmpdir[] = "/tmp/tmp.XXXXXX";
@@ -175,27 +192,29 @@ void test_git_set_user_global() {
     setenv("HOME", tmpdir, 1);
   
     //Create git_user as test, and try setting
-    git_user* user = git_user_init();
+    git_user user;
+    git_user_init(&user);
     char n[] = "End of Evangello";
     char e[] = "endofeva@meme.io";
     char sigkey[] = "3V@01";
-    string_asn_cstr(user->name, n);
-    string_asn_cstr(user->email, e);
-    string_asn_cstr(user->signing_key, sigkey);
+    string_asn_cstr(&user.name, n);
+    string_asn_cstr(&user.email, e);
+    string_asn_cstr(&user.signing_key, sigkey);
 
-    git_set_user_global(user);
+    git_set_user_global(&user);
 
     //Finally, try confirming the set
-    runcmd("git config --global user.name", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->name), string_cstr(buf));
-    string_clear(buf);
+    runcmd("git config --global user.name", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.name), string_cstr(&buf));
+    string_clear(&buf);
 
-    runcmd("git config --global user.email", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->email), string_cstr(buf));
-    string_clear(buf);
+    runcmd("git config --global user.email", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.email), string_cstr(&buf));
+    string_clear(&buf);
 
-    runcmd("git config --global user.signingkey", buf), string_pop_back(buf);
-    TEST_ASSERT_EQUAL_STRING(string_cstr(user->signing_key), string_cstr(buf));
+    runcmd("git config --global user.signingkey", &buf), string_pop_back(&buf);
+    TEST_ASSERT_EQUAL_STRING(string_cstr(&user.signing_key), string_cstr(&buf));
+    string_deinit(&buf);
 
     //It feels to risky to ever run something like "rm -rf $HOME", even when temporary,
     //so let's attempt it on the TMPDIR
@@ -208,7 +227,7 @@ void test_git_set_user_global() {
     TEST_ASSERT_EQUAL_INT(0, res);
     
     //Finally, free git_user
-    git_user_free(user);
+    git_user_deinit(&user);
 }
 
 void test_vector_gitid_id() {
