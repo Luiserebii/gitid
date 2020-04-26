@@ -34,18 +34,18 @@ void gitid_id_set(gitid_id* dest, const gitid_id* src) {
 }
 
 void gitid_id_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", string_cstr(&id->id_name), string_cstr(&id->user->name),
-            string_cstr(&id->user->email));
-    if(string_size(&id->user->signing_key)) {
-        fprintf(stream, "Signing Key: %s\n", string_cstr(&id->user->signing_key));
+    fprintf(stream, "ID: %s\nName: %s\nEmail: %s\n", string_cstr(&id->id_name), string_cstr(&id->user.name),
+            string_cstr(&id->user.email));
+    if(string_size(&id->user.signing_key)) {
+        fprintf(stream, "Signing Key: %s\n", string_cstr(&id->user.signing_key));
     }
 }
 
 void gitid_id_min_write(const gitid_id* id, FILE* stream) {
-    fprintf(stream, "%s\n%s\n%s\n", string_cstr(&id->id_name), string_cstr(&id->user->name),
-            string_cstr(&id->user->email));
-    if(string_size(&id->user->signing_key)) {
-        fprintf(stream, "%s\n", string_cstr(&id->user->signing_key));
+    fprintf(stream, "%s\n%s\n%s\n", string_cstr(&id->id_name), string_cstr(&id->user.name),
+            string_cstr(&id->user.email));
+    if(string_size(&id->user.signing_key)) {
+        fprintf(stream, "%s\n", string_cstr(&id->user.signing_key));
     }
     //Close with ending ___
     fprintf(stream, GITID_ID_ENDING_DELIMITER "\n");
@@ -65,8 +65,8 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 
     //Set into gitid_id
     string_asn(&id->id_name, &buf1);
-    string_asn(&id->user->name, &buf2);
-    string_asn(&id->user->email, &buf3);
+    string_asn(&id->user.name, &buf2);
+    string_asn(&id->user.email, &buf3);
 
     //Test to see if next is ending, or not
     string_clear(&buf1);
@@ -78,7 +78,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     }
 
     //Otherwise, set signing key into struct
-    string_asn(&id->user->signing_key, &buf1);
+    string_asn(&id->user.signing_key, &buf1);
 
     //Read ending delimiter so as to complete read of one entity
     int res;
