@@ -13,6 +13,12 @@ declare_vector_type(gitid_id);
 gitid_id* vector_gitid_id_get_id(vector_gitid_id* v, const char* id_name);
 
 /**
+ * Erases an element at the pointer passed from the vector, but deinits the element
+ * before removing. Returns a pointer to the new end of the vector.
+ */
+gitid_id* vector_gitid_id_erase_deinit(vector_gitid_id* v, gitid_id* pos);
+
+/**
  * Frees the resources allocated to all vector elements through a kind of recursive
  * deinit.
  *

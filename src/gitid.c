@@ -74,13 +74,14 @@ void gitid_get_system_gitid_id(const char* id_name, gitid_id* id) {
 
 void gitid_new_system_gitid_id(const gitid_id* id) {
     //Initialize new vector and attempt a load
-    vector_gitid_id* v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids(v);
+    vector_gitid_id v;
+    vector_gitid_id_init(&v);
+    gitid_get_system_gitid_ids(&v);
 
     //Look for the id_name to determine uniqueness
     int unique = 1;
-    for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(string_cmp((*it)->id_name, id->id_name) == 0) {
+    for(gitid_id* it = v->head; it != v->avail; ++it) {
+        if(string_cmp(&it->id_name, &id->id_name) == 0) {
             unique = 0;
             break;
         }
@@ -88,33 +89,36 @@ void gitid_new_system_gitid_id(const gitid_id* id) {
 
     //Throw error and break if not unique
     if(!unique) {
-        fprintf(stderr, "Error: git id already exists under the name \"%s\"\n", string_cstr(id->id_name));
+        fprintf(stderr, "Error: git id already exists under the name \"%s\"\n", string_cstr(&id->id_name));
         exit(1);
     }
 
     //Add the new identity to be added
     //(for const-correctness, we create a kind of copy here to push)
-    gitid_id* copy_id = gitid_id_init();
-    gitid_id_set(copy_id, id);
-    vector_push_back_gitid_id(v, copy_id);
+    gitid_id copy_id;
+    gitid_id_init(&copy_id);
+    gitid_id_set(&copy_id, id);
+    vector_gitid_id_push_back_r(&v, &copy_id);
 
     //Set
-    gitid_set_system_gitid_ids(v);
+    gitid_set_system_gitid_ids(&v);
 
-    //Finally, free all elements
-    vector_free_gitid_id(v);
+    //Finally, free all elements and vector
+    vector_gitid_id_deinit_r(&v);
+    vector_gitid_id_deinit(&v);
 }
 
 void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name) {
     //Initialize new vector and attempt a load
-    vector_gitid_id* v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids(v);
+    vector_gitid_id v;
+    vector_gitid_id_init(&v);
+    gitid_get_system_gitid_ids(&v);
 
     //Look for the id_name, and set
     gitid_id* upd_id = NULL;
-    for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(string_cmp((*it)->id_name, id->id_name) == 0) {
-            upd_id = *it;
+    for(gitid_id* it = v->head; it != v->avail; ++it) {
+        if(string_cmp(&it->id_name, &id->id_name) == 0) {
+            upd_id = it;
             break;
         }
     }
@@ -127,19 +131,22 @@ void gitid_update_system_gitid_id(const gitid_id* id, const char* id_name) {
 
     //Update, write, and free vector
     gitid_id_set(upd_id, id);
-    gitid_set_system_gitid_ids(v);
-    vector_free_gitid_id(v);
+    gitid_set_system_gitid_ids(&v);
+
+    vector_gitid_id_deinit_r(&v);
+    vector_gitid_id_deinit(&v);
 }
 
 void gitid_delete_system_gitid_id(const char* id_name) {
     //Initialize new vector and attempt a load
-    vector_gitid_id* v = vector_init_gitid_id();
-    gitid_get_system_gitid_ids(v);
+    vector_gitid_id v;
+    vector_gitid_id_init(&v);
+    gitid_get_system_gitid_ids(&v);
 
     //Look for the id to delete
-    gitid_id** del_id = NULL;
-    for(gitid_id** it = v->head; it != v->avail; ++it) {
-        if(string_cmp_cstr((*it)->id_name, id_name) == 0) {
+    gitid_id* del_id = NULL;
+    for(gitid_id* it = v->head; it != v->avail; ++it) {
+        if(string_cmp_cstr(&it->id_name, id_name) == 0) {
             del_id = it;
             break;
         }
@@ -152,7 +159,9 @@ void gitid_delete_system_gitid_id(const char* id_name) {
     }
 
     //Erase and free element, write, and free vector
-    vector_erase_free_gitid_id(v, del_id);
-    gitid_set_system_gitid_ids(v);
-    vector_free_gitid_id(v);
+    vector_gitid_id_erase_deinit(&v, del_id);
+    gitid_set_system_gitid_ids(&v);
+
+    vector_gitid_id_deinit_r(&v);
+    vector_gitid_id_deinit(&v);
 }

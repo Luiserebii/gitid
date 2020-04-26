@@ -18,6 +18,11 @@ gitid_id* vector_gitid_id_get_id(vector_gitid_id* v, const char* id_name) {
     return NULL;
 }
 
+gitid_id* vector_gitid_id_erase_deinit(vector_gitid_id* v, gitid_id* pos) {
+    gitid_id_deinit(pos);
+    vector_gitid_id_erase(v, pos);
+}
+
 void vector_gitid_id_deinit_r(vector_gitid_id* v) {
     //Deinitializes all gitid_ids
     for(gitid_id* it = v->head; it != v->avail; ++it) {
