@@ -105,16 +105,17 @@ void test_gitid_set_system_gitid_ids() {
     gitid_id_safe_init(&id, id_data1[0], id_data1[1], id_data1[2]);
     vector_gitid_id_push_back_r(&ids, &id);
 
-    string_asn_cstr(&id.id_name, id_data2[0]);
-    string_asn_cstr(&id.user.name, id_data2[1]);
-    string_asn_cstr(&id.user.email, id_data2[2]);
-    string_asn_cstr(&id.user.signing_key, id_data2[2]);
+    //NOTE: The heap pointers are copied directly as an element to the vector, so our reference
+    //to those are invalid; we need to reinitialize (**NOT DEINIT**) to clear our id.
+    //The alternative, I suppose, would be to create a copy and push that, but it seems easier
+    //(and cheaper!) to just reinitialize
+    gitid_id_safe_init(&id, id_data2[0], id_data2[1], id_data2[2]);
+    string_asn_cstr(&id.user.signing_key, id_data2[3]);
     vector_gitid_id_push_back_r(&ids, &id);
 
-    string_asn_cstr(&id.id_name, id_data3[0]);
-    string_asn_cstr(&id.user.name, id_data3[1]);
-    string_asn_cstr(&id.user.email, id_data3[2]);
+    gitid_id_safe_init(&id, id_data3[0], id_data3[1], id_data3[2]);
     vector_gitid_id_push_back_r(&ids, &id);
+    //We don't free id for the same reason noted above
 
     //Finally, write to file
     gitid_set_system_gitid_ids_file(&ids, "./tmp/tmp_test_gitid_set_system_gitid_ids");
@@ -247,17 +248,18 @@ void test_vector_gitid_id() {
     gitid_id_safe_init(&id, id_data1[0], id_data1[1], id_data1[2]);
     vector_gitid_id_push_back_r(&ids, &id);
 
-    string_asn_cstr(&id.id_name, id_data2[0]);
-    string_asn_cstr(&id.user.name, id_data2[1]);
-    string_asn_cstr(&id.user.email, id_data2[2]);
-    string_asn_cstr(&id.user.signing_key, id_data2[2]);
+    //NOTE: The heap pointers are copied directly as an element to the vector, so our reference
+    //to those are invalid; we need to reinitialize (**NOT DEINIT**) to clear our id.
+    //The alternative, I suppose, would be to create a copy and push that, but it seems easier
+    //(and cheaper!) to just reinitialize
+    gitid_id_safe_init(&id, id_data2[0], id_data2[1], id_data2[2]);
+    string_asn_cstr(&id.user.signing_key, id_data2[3]);
     vector_gitid_id_push_back_r(&ids, &id);
 
-    string_asn_cstr(&id.id_name, id_data3[0]);
-    string_asn_cstr(&id.user.name, id_data3[1]);
-    string_asn_cstr(&id.user.email, id_data3[2]);
+    gitid_id_safe_init(&id, id_data3[0], id_data3[1], id_data3[2]);
     vector_gitid_id_push_back_r(&ids, &id);
-    
+    //We don't free id for the same reason noted above
+
     //Assert current state
     TEST_ASSERT_EQUAL_STRING(id_data2[3], string_cstr(&(vector_gitid_id_begin(&ids) + 1)->user.signing_key));
     TEST_ASSERT_EQUAL_STRING(id_data3[0], string_cstr(&(vector_gitid_id_begin(&ids) + 2)->id_name));
