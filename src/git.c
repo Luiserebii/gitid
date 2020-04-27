@@ -30,6 +30,8 @@ void git_get_user_global(git_user* user) {
     if(string_size(&buf)) {
         string_assign(&user->signing_key, string_begin(&buf), string_end(&buf) - 1);
     }
+
+    string_deinit(&buf);
 }
 
 void git_get_user_local(git_user* user) {
