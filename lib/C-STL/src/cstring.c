@@ -2,8 +2,11 @@
 #include <string.h>
 
 void safestrcpy(char* dest, const char* src, size_t lim) {
+    //Minor dev-note; *dest++ = *src++ can resolve to '\0'
+    //being set, rendering the final statement potentially pointless
     while(--lim && (*dest++ = *src++))
         ;
+    *dest = '\0';
 }
 
 char* fstrcat(char* dest, const char* src) {

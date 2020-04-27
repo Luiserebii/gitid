@@ -1,8 +1,8 @@
 #ifndef VECTOR_GITID_ID_H
 #define VECTOR_GITID_ID_H
 
-#include "gitid-id.h"
 #include <cstl/vector.h>
+#include "gitid-id.h"
 
 declare_vector_type(gitid_id);
 

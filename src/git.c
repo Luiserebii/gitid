@@ -55,7 +55,7 @@ void git_get_user_local(git_user* user) {
 
 int git_set_user_global(const git_user* user) {
     string escbuf, cmd;
-   
+
     string_init_capacity(&escbuf, GIT_USER_BUFFER_MIN);
     string_init_cstr(&cmd, "git config --global user.name ");
 
@@ -94,7 +94,7 @@ int git_set_user_global(const git_user* user) {
 
 int git_set_user_local(const git_user* user) {
     string escbuf, cmd;
-   
+
     string_init_capacity(&escbuf, GIT_USER_BUFFER_MIN);
     string_init_cstr(&cmd, "git config --local user.name ");
 
