@@ -290,14 +290,14 @@ int process_clone(void) {
     //Note that if --directory is specified, this can really change things
     if(clone_shift->count) {
         //Parse repo out into "humanish" part
-        //TODO: Acquire advice on whether malloc may be better
-        char name[1000];
-        safestrcpy(name, opts.repo, 1000);
-        parseGitURLName(name);
+        char* name = safemalloc(strlen(opts.repo) + 1);
+        strcpy(name, opts.repo);
+        parse_git_url_name(name);
 
-        char buffer[1000];
-        safestrcpy(buffer, "cd ", 1000);
-        safestrcat(buffer, name, 1000);
+        //Allocate for 3 extra bytes + 1 for null term; "cd "
+        char* buffer = safemalloc(strlen(name) + 4);
+        strcpy(buffer, "cd ");
+        strcat(buffer, name);
 
         //Look for matching git_id
         gitid_id id;
@@ -309,6 +309,7 @@ int process_clone(void) {
         printf("Set newly cloned repo to ID \"%s\"!\n", *(clone_shift->sval));
         //Finally, free
         gitid_id_deinit(&id);
+        free(name), free(buffer);
     }
 
     //Free

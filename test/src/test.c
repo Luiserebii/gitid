@@ -24,7 +24,7 @@ void test_gitid_id_min_write();
 void test_gitid_id_read();
 void test_git_user_init();
 void test_git_user_write();
-void test_parseGitURLName();
+void test_parse_git_url_name();
 void test_escapesh();
 void test_runcmd();
 void test_safestrcpy();
@@ -47,7 +47,7 @@ int main() {
     RUN_TEST(test_git_user_init);    
     RUN_TEST(test_git_user_write);
 
-    RUN_TEST(test_parseGitURLName);
+    RUN_TEST(test_parse_git_url_name);
     RUN_TEST(test_escapesh);
     RUN_TEST(test_runcmd);
     RUN_TEST(test_safestrcpy);
@@ -383,7 +383,7 @@ void test_git_user_init() {
     git_user_deinit(&user);
 }
 
-void test_parseGitURLName() {
+void test_parse_git_url_name() {
     char s1[] = "https://github.com/Luiserebii/gitid";
     char s2[] = "https://github.com/Luiserebii/gitid/";
     char s3[] = "/path/to/meme.git";
@@ -397,15 +397,15 @@ void test_parseGitURLName() {
     char exp5[] = "foo";
 
     //Parse and assert each case
-    parseGitURLName(s1);
+    parse_git_url_name(s1);
     TEST_ASSERT_EQUAL_STRING(exp1, s1);
-    parseGitURLName(s2);
+    parse_git_url_name(s2);
     TEST_ASSERT_EQUAL_STRING(exp2, s2);
-    parseGitURLName(s3);
+    parse_git_url_name(s3);
     TEST_ASSERT_EQUAL_STRING(exp3, s3);
-    parseGitURLName(s4);
+    parse_git_url_name(s4);
     TEST_ASSERT_EQUAL_STRING(exp4, s4);
-    parseGitURLName(s5);
+    parse_git_url_name(s5);
     TEST_ASSERT_EQUAL_STRING(exp5, s5);
     
 }

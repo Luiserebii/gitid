@@ -126,7 +126,7 @@ void generate_path_home(char* buffer, const char* path, size_t buffer_lim) {
     safestrcat(buffer, path, buffer_lim);
 }
 
-void parseGitURLName(char* url) {
+void parse_git_url_name(char* url) {
     char* rslash = strrchr(url, '/');
     //If this is the last one, remove it and find "true" one
     if(!rslash[1]) {

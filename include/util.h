@@ -72,6 +72,6 @@ void generate_path_home(char* buffer, const char* path, size_t buffer_lim);
 /**
  * Parses out the name of the repository from a git repository URL.
  */
-void parseGitURLName(char* url);
+void parse_git_url_name(char* url);
 
 #endif
