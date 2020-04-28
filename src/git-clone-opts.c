@@ -5,27 +5,19 @@
 #include <stdio.h>
 #include <string.h>
 
-git_clone_opts* git_clone_opts_init(void) {
-    //Allocate git_clone_opts
-    git_clone_opts* opts = safemalloc(sizeof(git_clone_opts));
-
+void git_clone_opts_init(git_clone_opts* opts) {
     //Initialize fields
     opts->flags = 0;
     opts->repo = opts->template = opts->reference = opts->origin = opts->branch = opts->upload_pack = opts->depth =
         opts->seperate_git_dir = opts->config = NULL;
-
-    return opts;
 }
 
-git_clone_opts* git_clone_opts_safe_init(const char* rp) {
+void git_clone_opts_safe_init(git_clone_opts* opts, const char* rp) {
     //Throw in the event that param is null
     if(!rp) {
         fprintf(stderr, "logic error: git_user_safe_init received a NULL argument\n");
         exit(1);
     }
-
-    //Allocate git_clone_opts
-    git_clone_opts* opts = safemalloc(sizeof(git_clone_opts));
 
     //Set repo in parameter
     git_clone_opts_set_repo(opts, rp);
@@ -34,8 +26,6 @@ git_clone_opts* git_clone_opts_safe_init(const char* rp) {
     opts->flags = 0;
     opts->template = opts->reference = opts->origin = opts->branch = opts->upload_pack = opts->depth =
         opts->seperate_git_dir = opts->config = NULL;
-
-    return opts;
 }
 
 /**
@@ -51,12 +41,9 @@ define_struct_set_string(git_clone_opts, depth, opts, dpth);
 define_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd);
 define_struct_set_string(git_clone_opts, config, opts, conf);
 
-void git_clone_opts_free(git_clone_opts* opts) {
+void git_clone_opts_deinit(git_clone_opts* opts) {
     //Free members
     free(opts->repo);
     free(opts->template), free(opts->reference), free(opts->origin), free(opts->branch), free(opts->upload_pack),
         free(opts->depth), free(opts->seperate_git_dir), free(opts->config);
-
-    //Free struct
-    free(opts);
 }

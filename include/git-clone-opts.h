@@ -68,14 +68,15 @@ typedef struct {
 } git_clone_opts;
 
 /**
- * Allocates space for a new git_clone_opts struct.
+ * Initializes a git_clone_opts struct.
  */
-git_clone_opts* git_clone_opts_init(void);
+void git_clone_opts_init(git_clone_opts* opts);
 
 /**
- *
+ * Initializes a git_clone_opts struct, with an argument to protect an invariant.
+ * (git clone requires a repo)
  */
-git_clone_opts* git_clone_opts_safe_init(const char* rp);
+void git_clone_opts_safe_init(git_clone_opts* opts, const char* rp);
 
 /**
  * MACRO use: Declares the following functions:
@@ -100,8 +101,8 @@ declare_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd);
 declare_struct_set_string(git_clone_opts, config, opts, conf);
 
 /**
- * Frees git_clone_opts struct.
+ * Deinitializes git_clone_opts struct.
  */
-void git_clone_opts_free(git_clone_opts* opts);
+void git_clone_opts_deinit(git_clone_opts* opts);
 
 #endif

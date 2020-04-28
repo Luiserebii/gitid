@@ -188,100 +188,101 @@ CLI_MODE identifyMode(struct arg_rex* clone) {
 int process_clone(void) {
 
     //Initialize a new git_clone_opts and set repo
-    git_clone_opts* opts = git_clone_opts_init();
-    git_clone_opts_set_repo(opts, *(clone_repo->sval));
+    git_clone_opts opts;
+    git_clone_opts_init(&opts);
+    git_clone_opts_set_repo(&opts, *(clone_repo->sval));
 
     /**
      * Process flags
      */
     if(clone_verbose->count) {
-        opts->flags |= GIT_CLONE_OPTS_VERBOSE;
+        opts.flags |= GIT_CLONE_OPTS_VERBOSE;
     }
 
     if(clone_quiet->count) {
-        opts->flags |= GIT_CLONE_OPTS_QUIET;
+        opts.flags |= GIT_CLONE_OPTS_QUIET;
     }
 
     if(clone_progress->count) {
-        opts->flags |= GIT_CLONE_OPTS_PROGRESS;
+        opts.flags |= GIT_CLONE_OPTS_PROGRESS;
     }
 
     if(clone_no_checkout->count) {
-        opts->flags |= GIT_CLONE_OPTS_NO_CHECKOUT;
+        opts.flags |= GIT_CLONE_OPTS_NO_CHECKOUT;
     }
 
     if(clone_bare->count) {
-        opts->flags |= GIT_CLONE_OPTS_BARE;
+        opts.flags |= GIT_CLONE_OPTS_BARE;
     }
 
     if(clone_mirror->count) {
-        opts->flags |= GIT_CLONE_OPTS_MIRROR;
+        opts.flags |= GIT_CLONE_OPTS_MIRROR;
     }
 
     if(clone_local->count) {
-        opts->flags |= GIT_CLONE_OPTS_LOCAL;
+        opts.flags |= GIT_CLONE_OPTS_LOCAL;
     }
 
     if(clone_no_hardlinks->count) {
-        opts->flags |= GIT_CLONE_OPTS_NO_HARDLINKS;
+        opts.flags |= GIT_CLONE_OPTS_NO_HARDLINKS;
     }
 
     if(clone_shared->count) {
-        opts->flags |= GIT_CLONE_OPTS_SHARED;
+        opts.flags |= GIT_CLONE_OPTS_SHARED;
     }
 
     if(clone_recursive->count) {
-        opts->flags |= GIT_CLONE_OPTS_RECURSIVE;
+        opts.flags |= GIT_CLONE_OPTS_RECURSIVE;
     }
 
     if(clone_recurse_submodules->count) {
-        opts->flags |= GIT_CLONE_OPTS_RECURSE_SUBMODULES;
+        opts.flags |= GIT_CLONE_OPTS_RECURSE_SUBMODULES;
     }
 
     if(clone_template->count) {
-        git_clone_opts_set_template(opts, *(clone_template->sval));
+        git_clone_opts_set_template(&opts, *(clone_template->sval));
     }
 
     if(clone_reference->count) {
-        git_clone_opts_set_reference(opts, *(clone_reference->sval));
+        git_clone_opts_set_reference(&opts, *(clone_reference->sval));
     }
 
     if(clone_dissociate->count) {
-        opts->flags |= GIT_CLONE_OPTS_DISSOCIATE;
+        opts.flags |= GIT_CLONE_OPTS_DISSOCIATE;
     }
 
     if(clone_origin->count) {
-        git_clone_opts_set_origin(opts, *(clone_origin->sval));
+        git_clone_opts_set_origin(&opts, *(clone_origin->sval));
     }
 
     if(clone_branch->count) {
-        git_clone_opts_set_branch(opts, *(clone_branch->sval));
+        git_clone_opts_set_branch(&opts, *(clone_branch->sval));
     }
 
     if(clone_upload_pack->count) {
-        git_clone_opts_set_upload_pack(opts, *(clone_upload_pack->sval));
+        git_clone_opts_set_upload_pack(&opts, *(clone_upload_pack->sval));
     }
 
     if(clone_depth->count) {
-        git_clone_opts_set_depth(opts, *(clone_depth->sval));
+        git_clone_opts_set_depth(&opts, *(clone_depth->sval));
     }
 
     if(clone_single_branch->count) {
-        opts->flags |= GIT_CLONE_OPTS_SINGLE_BRANCH;
+        opts.flags |= GIT_CLONE_OPTS_SINGLE_BRANCH;
     }
 
     if(clone_seperate_git_dir->count) {
-        git_clone_opts_set_seperate_git_dir(opts, *(clone_seperate_git_dir->sval));
+        git_clone_opts_set_seperate_git_dir(&opts, *(clone_seperate_git_dir->sval));
     }
 
     if(clone_config->count) {
-        git_clone_opts_set_config(opts, *(clone_config->sval));
+        git_clone_opts_set_config(&opts, *(clone_config->sval));
     }
 
     /**
      * Run git_clone with opts
      */
-    if(!git_clone(opts)) {
+    if(!git_clone(&opts)) {
         exit(1);
     }
 
@@ -291,7 +292,7 @@ int process_clone(void) {
         //Parse repo out into "humanish" part
         //TODO: Acquire advice on whether malloc may be better
         char name[1000];
-        safestrcpy(name, opts->repo, 1000);
+        safestrcpy(name, opts.repo, 1000);
         parseGitURLName(name);
 
         char buffer[1000];
@@ -311,7 +312,7 @@ int process_clone(void) {
     }
 
     //Free
-    git_clone_opts_free(opts);
+    git_clone_opts_deinit(&opts);
     return 0;
 }
 
