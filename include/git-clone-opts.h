@@ -37,6 +37,8 @@
  * separate git dir from working tree
  * -c, --config <key=value>
  * set config inside the new repository
+ *
+ * Please note that these options are according to the git 2.7.x API.
  */
 // clang-format off
 #define GIT_CLONE_OPTS_VERBOSE              (1 << 0)

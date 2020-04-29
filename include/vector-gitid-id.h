@@ -1,6 +1,8 @@
 #ifndef VECTOR_GITID_ID_H
 #define VECTOR_GITID_ID_H
 
+#define CSTL_MALLOC safemalloc
+#define CSTL_REALLOC saferealloc
 #include <cstl/vector.h>
 #include "gitid-id.h"
 

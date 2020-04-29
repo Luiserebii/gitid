@@ -4,10 +4,7 @@
 #include "../include/git-user.h"
 #include "../include/struct.h"
 
-#define CSTL_MALLOC safemalloc
-#define CSTL_REALLOC saferealloc
 #include <cstl/string.h>
-
 #include <stdio.h>
 
 #define GITID_ID_BUFFER_MIN 20

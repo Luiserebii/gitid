@@ -2,8 +2,6 @@
 #include "../include/struct.h"
 #include "../include/util.h"
 
-#define CSTL_MALLOC safemalloc
-#define CSTL_REALLOC saferealloc
 #include <cstl/string.h>
 
 #include <stdio.h>

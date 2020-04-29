@@ -287,7 +287,6 @@ int process_clone(void) {
     }
 
     //If shift, cd into cloned dir and set identity
-    //Note that if --directory is specified, this can really change things
     if(clone_shift->count) {
         //Parse repo out into "humanish" part
         char* name = safemalloc(strlen(opts.repo) + 1);
