@@ -35,8 +35,8 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
-//    RUN_TEST(test_gitid_get_system_gitid_ids);
-//    RUN_TEST(test_gitid_set_system_gitid_ids);
+    RUN_TEST(test_gitid_get_system_gitid_ids);
+    RUN_TEST(test_gitid_set_system_gitid_ids);
     RUN_TEST(test_git_get_user_global); 
     RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_vector_gitid_id);
@@ -74,6 +74,7 @@ void test_gitid_get_system_gitid_ids() {
     TEST_ASSERT_EQUAL_INT(0, string_size(&(v.head + 1)->user.signing_key));
     
     //Free vector
+    vector_gitid_id_deinit_r(&v);
     vector_gitid_id_deinit(&v);
 
     //Test attempting to grab ids from empty file
