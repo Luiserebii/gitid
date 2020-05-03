@@ -35,9 +35,9 @@ void tearDown() {}
 int main() {
 
     UNITY_BEGIN();
-    RUN_TEST(test_gitid_get_system_gitid_ids);
-    RUN_TEST(test_gitid_set_system_gitid_ids);
-    RUN_TEST(test_git_get_user_global);
+//    RUN_TEST(test_gitid_get_system_gitid_ids);
+//    RUN_TEST(test_gitid_set_system_gitid_ids);
+    RUN_TEST(test_git_get_user_global); 
     RUN_TEST(test_git_set_user_global);
     RUN_TEST(test_vector_gitid_id);
     RUN_TEST(test_gitid_id_write);
@@ -349,7 +349,7 @@ void test_gitid_id_read() {
     tmp = fopen("./tmp/tmp_test_gitid_id_read_2", "w");
     gitid_id_min_write(&id, tmp);
    
-    fclose(f), fclose(tmp); 
+    fclose(f), fclose(tmp);
     gitid_id_deinit(&id);
 }
 
