@@ -1,10 +1,11 @@
+#define CSTL_MALLOC safemalloc
+#define CSTL_REALLOC saferealloc
+
 #include "../include/gitid-id.h"
 #include "../include/git-user.h"
 #include "../include/struct.h"
 #include "../include/util.h"
 
-#define CSTL_MALLOC safemalloc
-#define CSTL_REALLOC saferealloc
 #include <cstl/algorithm.h>
 #include <cstl/string.h>
 
