@@ -48,7 +48,7 @@ int main() {
     RUN_TEST(test_git_user_write);
 
     RUN_TEST(test_parse_git_url_name);
-    RUN_TEST(test_escapesh);
+    RUN_TEST(test_escapesh); 
     RUN_TEST(test_runcmd);
     RUN_TEST(test_safestrcpy);
     return UNITY_END();
@@ -427,6 +427,10 @@ void test_escapesh() {
     TEST_ASSERT_EQUAL_STRING(exp1, string_cstr(&s1));
     TEST_ASSERT_EQUAL_STRING(exp2, string_cstr(&s2));
     TEST_ASSERT_EQUAL_STRING(exp3, string_cstr(&s3));
+    
+    string_deinit(&s1);
+    string_deinit(&s2);
+    string_deinit(&s3);
 }
 
 void test_runcmd() {
@@ -438,6 +442,7 @@ void test_runcmd() {
 
     runcmd(cmd, &res);
     TEST_ASSERT_EQUAL_STRING(exp, string_cstr(&res));
+    string_deinit(&res);
 }
 
 void test_safestrcpy() {
