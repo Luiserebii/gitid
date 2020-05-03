@@ -30,6 +30,17 @@ declare_vector_class(string, char);
 // clang-format on
 
 /**
+ * A value representing the amount of extra capacity to allocate.
+ * In this case, it is meant to represent at least one for the
+ * null terminator.
+ *
+ * Note that all allocation/reallocations therefore allocate
+ * the capacity of the vector in terms of chars, + 1 (or,
+ * STRING_CAPACITY_EXTRA).
+ */
+#define STRING_CAPACITY_EXTRA 1
+
+/**
  * Initializes an empty string with the contents of the char* passed. 
  * It is assumed that that char* is valid.
  */
@@ -64,9 +75,6 @@ void string_cat_cstr(string* str, const char* s);
  * If s1 < s2, then the result is a negative integer (i.e. n < 0).
  * If s1 > s2, then the result is a positive integer (i.e. n > 0).
  * If s1 == s2, then the result is 0.
- *
- * NOTE/TODO: Known bug, this function will segfault if the string is empty.
- * Will need to re-think an invariant, or this function.
  */
 int string_cmp_cstr(const string* s1, const char* s2);
 
@@ -92,6 +100,6 @@ int string_cmp(const string* s1, const string* s2);
  * to the string occur - best to call once and use quickly before performing
  * any modifications.
  */
-const char* string_cstr(string* str);
+const char* string_cstr(const string* str);
 
 #endif

@@ -17,9 +17,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#define CSTL_VECTOR_ALLOC_SZ(sz) ((sz) + 1)
+#define CSTL_VECTOR_INIT(v) string_init_capacity(v, 4)
 #include "../include/cstl/string.h"
-#include "../include/cstl/vector.h"
 #include "../include/cstl/algorithm.h"
+#include "../include/cstl/vector.h"
 
 #include <string.h>
 
@@ -28,9 +30,9 @@
  */
 // clang-format off
 define_vector_class(string, char)
-// clang-format on
+    // clang-format on
 
-void string_init_cstr(string* str, const char* s) {
+    void string_init_cstr(string* str, const char* s) {
     size_t len = strlen(s);
     string_init_size(str, len);
     algorithm_min_copy(char*, s, s + len, str->head);
@@ -71,7 +73,7 @@ int string_cmp_cstr(const string* s1, const char* s2) {
     }
     if(it1 == end1 && *s2 == '\0') {
         return 0;
-    } 
+    }
     if(it1 == end1) {
         return -1;
     }
@@ -90,18 +92,14 @@ int string_cmp(const string* s1, const string* s2) {
     }
     if(it1 == end1 && it2 == end2) {
         return 0;
-    } 
+    }
     if(it1 == end1) {
         return -1;
     }
     return 1;
 }
 
-const char* string_cstr(string* str) {
-    //Grow capacity if necessary
-    if(str->avail == str->tail) {
-        string_grow(str, string_capacity(str) + 1);
-    }
+const char* string_cstr(const string* str) {
     //Set a null-terminator at avail
     *(str->avail) = '\0';
     return str->head;
