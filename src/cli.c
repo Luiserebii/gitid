@@ -190,7 +190,7 @@ int process_clone(void) {
     //Initialize a new git_clone_opts and set repo
     git_clone_opts opts;
     git_clone_opts_init(&opts);
-    git_clone_opts_set_repo(&opts, *(clone_repo->sval));
+    cstring_asn(opts.repo, *(clone_repo->sval));
 
     /**
      * Process flags
@@ -240,11 +240,11 @@ int process_clone(void) {
     }
 
     if(clone_template->count) {
-        git_clone_opts_set_template(&opts, *(clone_template->sval));
+        cstring_asn(opts.template, *(clone_template->sval));
     }
 
     if(clone_reference->count) {
-        git_clone_opts_set_reference(&opts, *(clone_reference->sval));
+        cstring_asn(opts.reference, *(clone_reference->sval));
     }
 
     if(clone_dissociate->count) {
@@ -252,19 +252,19 @@ int process_clone(void) {
     }
 
     if(clone_origin->count) {
-        git_clone_opts_set_origin(&opts, *(clone_origin->sval));
+        cstring_asn(opts.origin, *(clone_origin->sval));
     }
 
     if(clone_branch->count) {
-        git_clone_opts_set_branch(&opts, *(clone_branch->sval));
+        cstring_asn(opts.branch, *(clone_branch->sval));
     }
 
     if(clone_upload_pack->count) {
-        git_clone_opts_set_upload_pack(&opts, *(clone_upload_pack->sval));
+        cstring_asn(opts.upload_pack, *(clone_upload_pack->sval));
     }
 
     if(clone_depth->count) {
-        git_clone_opts_set_depth(&opts, *(clone_depth->sval));
+        cstring_asn(opts.depth, *(clone_depth->sval));
     }
 
     if(clone_single_branch->count) {
@@ -272,11 +272,11 @@ int process_clone(void) {
     }
 
     if(clone_seperate_git_dir->count) {
-        git_clone_opts_set_seperate_git_dir(&opts, *(clone_seperate_git_dir->sval));
+        cstring_asn(opts.seperate_git_dir, *(clone_seperate_git_dir->sval));
     }
 
     if(clone_config->count) {
-        git_clone_opts_set_config(&opts, *(clone_config->sval));
+        cstring_asn(opts.config, *(clone_config->sval));
     }
 
     /**

@@ -1,5 +1,4 @@
 #include "../include/git-user.h"
-#include "../include/struct.h"
 #include "../include/util.h"
 
 #include <cstl/string.h>

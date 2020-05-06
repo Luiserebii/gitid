@@ -1,6 +1,5 @@
 #include "../include/gitid-id.h"
 #include "../include/git-user.h"
-#include "../include/struct.h"
 #include "../include/util.h"
 
 #include <cstl/algorithm.h>

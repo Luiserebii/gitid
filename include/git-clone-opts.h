@@ -3,8 +3,6 @@
 
 #define GIT_CLONE_OPTS_BUFFER_MAX 1000
 
-#include "../include/struct.h"
-
 /**
  * Type struct git_clone_opts based on the following options:
  *
@@ -79,28 +77,6 @@ void git_clone_opts_init(git_clone_opts* opts);
  * (git clone requires a repo)
  */
 void git_clone_opts_safe_init(git_clone_opts* opts, const char* rp);
-
-/**
- * MACRO use: Declares the following functions:
- *
- * void git_clone_opts_set_template(git_clone_opts* opts, const char* tmpl);
- * void git_clone_opts_set_reference(git_clone_opts* opts, const char* ref);
- * void git_clone_opts_set_origin(git_clone_opts* opts, const char* orig);
- * void git_clone_opts_set_branch(git_clone_opts* opts, const char* brnch);
- * void git_clone_opts_set_upload_pack(git_clone_opts* opts, const char* up_pck);
- * void git_clone_opts_set_depth(git_clone_opts* opts, const char* dpth);
- * void git_clone_opts_set_seperate_git_dir(git_clone_opts* opts, const char* sep_gd);
- * void git_clone_opts_set_config(git_clone_opts* opts, const char* conf);
- */
-declare_struct_set_string(git_clone_opts, repo, opts, rp);
-declare_struct_set_string(git_clone_opts, template, opts, tmpl);
-declare_struct_set_string(git_clone_opts, reference, opts, ref);
-declare_struct_set_string(git_clone_opts, origin, opts, orig);
-declare_struct_set_string(git_clone_opts, branch, opts, brnch);
-declare_struct_set_string(git_clone_opts, upload_pack, opts, up_pck);
-declare_struct_set_string(git_clone_opts, depth, opts, dpth);
-declare_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd);
-declare_struct_set_string(git_clone_opts, config, opts, conf);
 
 /**
  * Deinitializes git_clone_opts struct.

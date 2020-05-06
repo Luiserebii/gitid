@@ -1,6 +1,7 @@
 #include "../include/git-clone-opts.h"
-#include "../include/struct.h"
 #include "../include/util.h"
+
+#include <cstl/cstring.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -20,7 +21,7 @@ void git_clone_opts_safe_init(git_clone_opts* opts, const char* rp) {
     }
 
     //Set repo in parameter
-    git_clone_opts_set_repo(opts, rp);
+    cstring_asn(opts->repo, rp);
 
     //Initialize rest of fields
     opts->flags = 0;
@@ -28,22 +29,10 @@ void git_clone_opts_safe_init(git_clone_opts* opts, const char* rp) {
         opts->seperate_git_dir = opts->config = NULL;
 }
 
-/**
- * MACRO use: Define struct functions for each char* member
- */
-define_struct_set_string(git_clone_opts, repo, opts, rp);
-define_struct_set_string(git_clone_opts, template, opts, tmpl);
-define_struct_set_string(git_clone_opts, reference, opts, ref);
-define_struct_set_string(git_clone_opts, origin, opts, orig);
-define_struct_set_string(git_clone_opts, branch, opts, brnch);
-define_struct_set_string(git_clone_opts, upload_pack, opts, up_pck);
-define_struct_set_string(git_clone_opts, depth, opts, dpth);
-define_struct_set_string(git_clone_opts, seperate_git_dir, opts, sep_gd);
-define_struct_set_string(git_clone_opts, config, opts, conf);
-
 void git_clone_opts_deinit(git_clone_opts* opts) {
     //Free members
     free(opts->repo);
-    free(opts->template), free(opts->reference), free(opts->origin), free(opts->branch), free(opts->upload_pack),
-        free(opts->depth), free(opts->seperate_git_dir), free(opts->config);
+    cstring_destroy(opts->template), cstring_destroy(opts->reference), cstring_destroy(opts->origin),
+        cstring_destroy(opts->branch), cstring_destroy(opts->upload_pack), cstring_destroy(opts->depth),
+        cstring_destroy(opts->seperate_git_dir), cstring_destroy(opts->config);
 }

@@ -2,7 +2,6 @@
 #define GITID_ID_H
 
 #include "../include/git-user.h"
-#include "../include/struct.h"
 
 #include <cstl/string.h>
 #include <stdio.h>

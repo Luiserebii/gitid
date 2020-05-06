@@ -1,8 +1,6 @@
 #ifndef GIT_USER_H
 #define GIT_USER_H
 
-#include "../include/struct.h"
-
 #include <cstl/string.h>
 #include <stdio.h>
 
