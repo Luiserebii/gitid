@@ -1,6 +1,3 @@
-#define CSTL_MALLOC safemalloc
-#define CSTL_REALLOC saferealloc
-
 #include "../include/gitid-id.h"
 #include "../include/git-user.h"
 #include "../include/struct.h"

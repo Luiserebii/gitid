@@ -23,22 +23,11 @@
 #include <assert.h>
 #include <stdlib.h>
 #include "algorithm.h"
+#include "memory.h"
 
 /**
- * Options for supplanting a user-defined malloc/realloc equivalent for vectors.
+ * Options for supplanting functions (in this form, it is really only useful for internal overriding.)
  */
-#ifndef CSTL_MALLOC
-#define CSTL_MALLOC malloc
-#endif
-
-#ifndef CSTL_REALLOC
-#define CSTL_REALLOC realloc
-#endif
-
-#ifndef CSTL_FREE
-#define CSTL_FREE free
-#endif
-
 #ifndef CSTL_VECTOR_ALLOC_SZ
 #define CSTL_VECTOR_ALLOC_SZ(sz) sz
 #endif
@@ -350,12 +339,12 @@
     void prefix##init##suffix(struct_name* v) { CSTL_VECTOR_INIT(v); }                                   \
                                                                                                          \
     void prefix##init_size##suffix(struct_name* v, size_t s) {                                           \
-        v->head = CSTL_MALLOC(CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * s));                            \
+        v->head = cstl_malloc(CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * s));                            \
         v->tail = v->avail = v->head + s;                                                                \
     }                                                                                                    \
                                                                                                          \
     void prefix##init_capacity##suffix(struct_name* v, size_t s) {                                       \
-        v->head = v->avail = CSTL_MALLOC(CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * s));                 \
+        v->head = v->avail = cstl_malloc(CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * s));                 \
         v->tail = v->head + s;                                                                           \
     }                                                                                                    \
                                                                                                          \
@@ -371,19 +360,19 @@
                                                                                                          \
     struct_name* prefix##create##suffix(void) {                                                          \
         /* Allocate memory for vector struct */                                                          \
-        struct_name* v = (struct_name*) CSTL_MALLOC(sizeof(struct_name));                                \
+        struct_name* v = (struct_name*) cstl_malloc(sizeof(struct_name));                                \
         prefix##init##suffix(v);                                                                         \
         return v;                                                                                        \
     }                                                                                                    \
                                                                                                          \
     struct_name* prefix##create_size##suffix(size_t s) {                                                 \
-        struct_name* v = (struct_name*) CSTL_MALLOC(sizeof(struct_name));                                \
+        struct_name* v = (struct_name*) cstl_malloc(sizeof(struct_name));                                \
         prefix##init_size##suffix(v, s);                                                                 \
         return v;                                                                                        \
     }                                                                                                    \
                                                                                                          \
     struct_name* prefix##create_capacity##suffix(size_t s) {                                             \
-        struct_name* v = (struct_name*) CSTL_MALLOC(sizeof(struct_name));                                \
+        struct_name* v = (struct_name*) cstl_malloc(sizeof(struct_name));                                \
         prefix##init_capacity##suffix(v, s);                                                             \
         return v;                                                                                        \
     }                                                                                                    \
@@ -418,7 +407,7 @@
     void prefix##assign##suffix(struct_name* v, const vector_type* first, const vector_type* last) {     \
         size_t sz = last - first;                                                                        \
         if(prefix##capacity##suffix(v) < sz) {                                                           \
-            v->head = CSTL_REALLOC(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * sz));             \
+            v->head = cstl_realloc(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * sz));             \
             v->tail = v->head + sz;                                                                      \
         }                                                                                                \
         algorithm_min_copy(vector_type*, first, last, v->head);                                          \
@@ -515,7 +504,7 @@
         size_t old_sz = prefix##size##suffix(v);                                                         \
         size_t n_size = v->head ? old_sz * 2 : 1;                                                        \
                                                                                                          \
-        v->head = CSTL_REALLOC(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n_size));             \
+        v->head = cstl_realloc(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n_size));             \
         v->avail = v->head + old_sz;                                                                     \
         v->tail = v->head + n_size;                                                                      \
     }                                                                                                    \
@@ -529,7 +518,7 @@
     void prefix##resize##suffix(struct_name* v, size_t n) {                                              \
         size_t old_sz = prefix##size##suffix(v);                                                         \
         if(n > old_sz) {                                                                                 \
-            v->head = CSTL_REALLOC(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n));              \
+            v->head = cstl_realloc(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n));              \
             v->avail = v->head + old_sz;                                                                 \
             v->tail = v->head + n;                                                                       \
         } else {                                                                                         \
@@ -541,7 +530,7 @@
         size_t old_sz = prefix##size##suffix(v);                                                         \
         assert(n >= old_sz);                                                                             \
         /* Realloc and set pointers as appropriate */                                                    \
-        v->head = CSTL_REALLOC(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n));                  \
+        v->head = cstl_realloc(v->head, CSTL_VECTOR_ALLOC_SZ(sizeof(vector_type) * n));                  \
         v->avail = v->head + old_sz;                                                                     \
         v->tail = v->head + n;                                                                           \
     }                                                                                                    \
@@ -553,11 +542,11 @@
                                                                                                          \
     void prefix##clear##suffix(struct_name* v) { v->avail = v->head; }                                   \
                                                                                                          \
-    void prefix##deinit##suffix(struct_name* v) { CSTL_FREE(v->head); }                                  \
+    void prefix##deinit##suffix(struct_name* v) { cstl_free(v->head); }                                  \
                                                                                                          \
     void prefix##destroy##suffix(struct_name* v) {                                                       \
         prefix##deinit##suffix(v);                                                                       \
-        CSTL_FREE(v);                                                                                    \
+        cstl_free(v);                                                                                    \
     }
 
 #endif

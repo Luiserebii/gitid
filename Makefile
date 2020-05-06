@@ -1,5 +1,6 @@
 INCLUDE_FLAGS=-I./lib/C-STL/include
-CFLAGS = -g3 -Wall -Wextra -Wstrict-prototypes $(INCLUDE_FLAGS)
+MACROS= -DCSTL_CUSTOM_MEMORY
+CFLAGS= -g3 -Wall -Wextra -Wstrict-prototypes -Wvla $(MACROS) $(INCLUDE_FLAGS)
 
 .PHONY: gitid
 gitid:

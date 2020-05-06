@@ -1,6 +1,3 @@
-#define CSTL_MALLOC safemalloc
-#define CSTL_REALLOC saferealloc
-
 #include "../include/vector-gitid-id.h"
 #include "../include/gitid-id.h"
 #include "../include/util.h"

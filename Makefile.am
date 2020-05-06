@@ -9,8 +9,9 @@ argtable3_inc=./lib/argtable3/argtable3.h ./lib/argtable3/argtable3_private.h ./
 cstl_inc=./lib/C-STL/include/cstl/algorithm.h ./lib/C-STL/include/cstl/vector.h
 
 include_flags=-I$(srcdir)/lib/C-STL/include
+macros=-DNDEBUG -DCSTL_CUSTOM_MEMORY
 
 gitid_SOURCES=$(gitid_src) $(argtable3_src) $(cstl_src)
-gitid_CFLAGS=-Wall -Wextra -Wstrict-prototypes -DNDEBUG $(include_flags)
+gitid_CFLAGS=-Wall -Wextra -Wstrict-prototypes $(macros) $(include_flags)
 
 pkginclude_HEADERS=$(gitid_inc) $(argtable3_inc) $(cstl_inc)
