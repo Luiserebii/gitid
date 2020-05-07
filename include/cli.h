@@ -4,7 +4,7 @@
 #include "../lib/argtable3/argtable3.h"
 
 #define PRG_NAME "gitid"
-#define PRG_VERSION "0.3.0-alpha"
+#define PRG_VERSION "0.3.1"
 #define PRG_DESCRIPTION \
     "A command line tool allowing for easy shifting between git identities (username, email, and signing key)."
 

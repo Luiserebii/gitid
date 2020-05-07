@@ -5,7 +5,9 @@
 [![CircleCI](https://circleci.com/gh/Luiserebii/gitid.svg?style=svg)](https://circleci.com/gh/Luiserebii/gitid)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/cdba0bbafbf2465eac0e3f1e8302342a)](https://www.codacy.com/manual/Luiserebii/gitid?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Luiserebii/gitid&amp;utm_campaign=Badge_Grade)
 
-A command line tool allowing for easy shifting between git identities (username, email, and signing key (e.g GPG)). A short, readable guide on this tool can be found at: [https://luiserebii.io/2020/05/introduction-to-gitid/](https://luiserebii.io/2020/05/introduction-to-gitid/)
+gitid is a simple, minimal command line tool allowing for easy management of git identities (username, email, and signing key (e.g GPG)). It aims to make working with different git configurations easy and shifting between identities painless. Above all, the tool aims to reduce any possibility of user error.
+
+A short, readable guide on this tool may be found at: [https://luiserebii.io/2020/05/introduction-to-gitid/](https://luiserebii.io/2020/05/introduction-to-gitid/)
 
 ## Usage
 ```
