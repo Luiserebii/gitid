@@ -12,7 +12,7 @@ A short, readable guide on this tool may be found at: [https://luiserebii.io/202
 ## Usage
 ```
 Usage: gitid [-valch] [-s <id-name>] [-n <id-name>] [-u <id-name>] [-d <id-name>] [--global] [--local] [--user=<username>] [--email=<email>] [--sigkey=<sigkey>]
-A command line tool allowing for easy shifting between git identities (username, email, and signing key).
+A simple, minimal command line tool allowing for easy management of git identities (username, email, and signing key).
 
   -v, --version             output the version number
   -a, --about               about this tool

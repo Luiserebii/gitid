@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
         fprintf(stdout, "Usage: %s clone", PRG_NAME);
         //Print one-line syntax for main argtable
         arg_print_syntax(stdout, clone_argtable, "\n");
-        fprintf(stdout, PRG_DESCRIPTION "\n\n");
+        fprintf(stdout, "\n");
         arg_print_glossary(stdout, clone_argtable, "  %-35s %s\n");
         return 0;
     }
