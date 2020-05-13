@@ -71,8 +71,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
 
     //Check if ending delimiter
     if(string_cmp_cstr(&buf1, GITID_ID_ENDING_DELIMITER) == 0) {
-        string_deinit(&buf1), string_deinit(&buf2), string_deinit(&buf3);
-        return;
+        goto cleanup;
     }
 
     //Otherwise, set signing key into struct
@@ -83,6 +82,7 @@ void gitid_id_min_read(gitid_id* id, FILE* stream) {
     while((res = getc(stream)) != '\n' && res != EOF)
         ;
 
+cleanup:
     string_deinit(&buf1), string_deinit(&buf2), string_deinit(&buf3);
 
     //NOTE: For the time being, I suppose EOF is "ok", we don't need to enforce an ending delim/newline to read,

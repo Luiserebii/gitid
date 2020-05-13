@@ -330,7 +330,7 @@ int process_main(void** argtable) {
         printf(PRG_NAME "\n");
         printf(PRG_DESCRIPTION "\n");
         printf("Version: %s\n", PRG_VERSION);
-        printf("Author: Luiserebii\nCheck me out on GitHub at: https://github.com/Luiserebii!\n");
+        printf("Author: Luiserebii\n");
         return 0;
     }
 
