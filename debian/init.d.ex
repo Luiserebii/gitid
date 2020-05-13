@@ -15,7 +15,7 @@ fi
 #                    <...>
 ### END INIT INFO
 
-# Author: Luiserebii <luiserebii@unknown>
+# Author: Luiserebii <luis@serebii.io>
 
 DESC="gitid"
 DAEMON=/usr/bin/gitid
