@@ -4,7 +4,7 @@
 .\" First parameter, NAME, should be all caps
 .\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
 .\" other parameters are allowed: see man(7), man(1)
-.TH Gitid SECTION "May 12 2020"
+.TH GITID 1 "May 12 2020"
 .\" Please adjust this date whenever revising the manpage.
 .\"
 .\" Some roff macros, for reference:
@@ -18,24 +18,21 @@
 .\" .sp <n>    insert n+1 empty lines
 .\" for manpage-specific macros, see man(7)
 .SH NAME
-gitid \- program to do something
+gitid \- A simple, minimal git identity management tool
 .SH SYNOPSIS
 .B gitid
-.RI [ options ] " files" ...
-.br
-.B bar
-.RI [ options ] " files" ...
+[\fI\,-valch\/\fR] [\fI\,-s <id-name>\/\fR] [\fI\,-n <id-name>\/\fR] [\fI\,-u <id-name>\/\fR] [\fI\,-d <id-name>\/\fR] [\fI\,--global\/\fR] [\fI\,--local\/\fR] [\fI\,--user=<username>\/\fR] [\fI\,--email=<email>\/\fR] [\fI\,--sigkey=<sigkey>\/\fR]
 .SH DESCRIPTION
-This manual page documents briefly the
-.B gitid
-and
-.B bar
-commands.
 .PP
-.\" TeX users may be more comfortable with the \fB<whatever>\fP and
-.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
-.\" respectively.
-\fBgitid\fP is a program that...
+\fBgitid\fP is a command line tool allowing for easy shifting between git identities
+(username, email, and signing key (e.g GPG)). It aims to make working with
+different git configurations easy and shifting between identities painless.
+Above all, the tool aims to reduce any possibility for user error.
+.PP
+It is intended for people who need to manage multiple username/email/signing
+key configurations, and want to minimize the difficulties and risk of managing
+multiple repositories with multiple configurations.
+
 .SH OPTIONS
 These programs follow the usual GNU command line syntax, with long
 options starting with two dashes (`-').
