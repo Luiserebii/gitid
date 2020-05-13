@@ -1,15 +1,22 @@
 Source: gitid
-Section: unknown
+Section: devel
 Priority: optional
-Maintainer: Luiserebii <luiserebii@unknown>
+Maintainer: Luiserebii <luis@serebii.io>
 Build-Depends: debhelper (>=9)
 Standards-Version: 3.9.6
-Homepage: <insert the upstream URL, if relevant>
-#Vcs-Git: git://anonscm.debian.org/collab-maint/gitid.git
-#Vcs-Browser: https://anonscm.debian.org/cgit/collab-maint/gitid.git
+Vcs-Git: https://github.com/Luiserebii/gitid.git -b debian-pkg
+Vcs-Browser: https://github.com/Luiserebii/gitid/tree/debian-pkg
+Homepage: https://github.com/Luiserebii/gitid
 
 Package: gitid
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Description: A simple, minimal git identity management tool
+ gitid is a command line tool allowing for easy shifting between git identities
+ (username, email, and signing key (e.g GPG)). It aims to make working with 
+ different git configurations easy and shifting between identities painless.
+ Above all, the tool aims to reduce any possibility for user error.
+ .
+ It is intended for people who need to manage multiple username/email/signing
+ key configurations, and want to minimize the difficulties and risk of managing
+ multiple repositories with multiple configurations.
