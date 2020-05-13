@@ -15,7 +15,7 @@
 
 
 %:
-	dh $@ 
+	dh --builddir=build $@ 
 
 
 # dh_make generated override targets
