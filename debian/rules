@@ -15,10 +15,13 @@
 
 
 %:
-	dh $@ --builddir=build
+	dh $@ --builddir=build --with autoreconf
 
 #override_dh_auto_build:
 #	dh_auto_build -- build
+
+override_dh_autoreconf:
+	./scripts/autogen.sh dh_autoreconf
 
 # dh_make generated override targets
 # This is example for Cmake (See https://bugs.debian.org/641051 )
