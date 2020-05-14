@@ -36,7 +36,6 @@ multiple repositories with multiple configurations.
 These programs follow the usual GNU command line syntax, with long
 options starting with two dashes (`-').
 A summary of options is included below.
-For a complete description, see the Info files.
 .TP
 \fB\-v\fR, \fB\-\-version\fR
 output the version number
@@ -64,15 +63,15 @@ delete registered identity
 .TP
 \fB\-h\fR, \fB\-\-help\fR
 display this help and exit
-.PP
-Additional flags:
+.SS Additional flags:
+.BR
 .SS "-c, --current, --s, --shift:"
 .TP
 \fB\-\-global\fR
-refer to global git config
+refers to global git config
 .TP
 \fB\-\-local\fR
-refer to local git config (repository\-level)
+refers to local git config (repository\-level)
 .SS "-n, --new, -u, --update:"
 .TP
 \fB\-\-user=\fR<username>
@@ -89,10 +88,42 @@ Show summary of options.
 .TP
 .B \-v, \-\-version
 Show version of program.
-.SH SEE ALSO
-.BR bar (1),
-.BR baz (1).
+.SH EXAMPLES
+.TP
+\fBAdding a new git identity:\fR
+gitid -n strawberry \-\-user Strawberry \-\-email strawberry@fruit.io \-\-sigkey 5B3A4739
+.TP
+\fBListing all registered identities:\fR
+gitid -l
+.TP
+\fBSetting a new git identity globally:\fR
+gitid -s strawberry
+.TP
+\fBDisplaying the current global git identity:\fR
+gitid -c
+\fBSetting a new git identity locally:\fR
+gitid -s strawberry \-\-local
+.TP
+\fBDisplaying the current local git identity:\fR
+gitid -c \-\-local
+.TP
+\fBCloning a repository and setting the local identity within:\fR
+gitid clone -s strawberry https://github.com/Luiserebii/gitid
+.SH AUTHOR
+Written by Luiserebii.
+.SH COPYRIGHT
+Copyright (C) 2020 Luiserebii
+.PP
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+.PP
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+.SH NOTES
+1. GitHub repository:
 .br
-The programs are documented fully by
-.IR "The Rise and Fall of a Fooish Bar" ,
-available via the Info system.
+   https://github.com/Luiserebii/gitid
