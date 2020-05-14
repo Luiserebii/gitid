@@ -88,6 +88,81 @@ Show summary of options.
 .TP
 .B \-v, \-\-version
 Show version of program.
+.SH GITID-CLONE
+.BR
+.SS SYNOPSIS
+.B gitid clone
+\/\fR[\fI\,-vqnlh\/\fR] <repo> \/\fR[\fI\,-s <id-name>\/\fR] [\fI\,--progress\/\fR] [\fI\,--bare\/\fR] [\fI\,--mirror\/\fR] [\fI\,--no-hardlinks\/\fR] [\fI\,--shared\/\fR] [\fI\,--recursive\/\fR] [\fI\,--recurse-submodules\/\fR] [\fI\,--template=<template-directory>\/\fR] [\fI\,--reference=<repo>\/\fR] [\fI\,--dissociate\/\fR] [\fI\,-o <name>\/\fR] [\fI\,-b <branch>\/\fR] [\fI\,-u <path>\/\fR] [\fI\,--depth=<depth>\/\fR] [\fI\,--single-branch\/\fR] [\fI\,--seperate-git-dir=<gitdir>\/\fR] [\fI\,-c <key=value>\/\fR]
+.SS OPTIONS
+.TP
+\fB\-s\fR, \fB\-\-shift=\fR<id\-name>
+set git identity of repo to registered identity post\-clone
+.TP
+\fB\-v\fR, \fB\-\-verbose\fR
+be more verbose
+.TP
+\fB\-q\fR, \fB\-\-quiet\fR
+be more quiet
+.TP
+\fB\-\-progress\fR
+force progress reporting
+.TP
+\fB\-n\fR, \fB\-\-no\-checkout\fR
+don't create a checkout
+.TP
+\fB\-\-bare\fR
+create a bare repository
+.TP
+\fB\-\-mirror\fR
+create a mirror repository (implies bare)
+.TP
+\fB\-l\fR, \fB\-\-local\fR
+to clone from a local repository
+.TP
+\fB\-\-no\-hardlinks\fR
+don't use local hardlinks, always copy
+.TP
+\fB\-\-shared\fR
+setup as shared repository
+.TP
+\fB\-\-recursive\fR
+initialize submodules in the clone
+.TP
+\fB\-\-recurse\-submodules\fR
+initialize submodules in the clone
+.TP
+\fB\-\-template=\fR<template\-directory>
+directory from which templates will be used
+.TP
+\fB\-\-reference=\fR<repo>
+reference repository
+.TP
+\fB\-\-dissociate\fR
+use \fB\-\-reference\fR only while cloning
+.TP
+\fB\-o\fR, \fB\-\-origin=\fR<name>
+use <name> instead of 'origin' to track upstream
+.TP
+\fB\-b\fR, \fB\-\-branch=\fR<branch>
+checkout <branch> instead of the remote's HEAD
+.TP
+\fB\-u\fR, \fB\-\-upload\-pack=\fR<path>
+path to git\-upload\-pack on the remote
+.TP
+\fB\-\-depth=\fR<depth>
+create a shallow clone of that depth
+.TP
+\fB\-\-single\-branch\fR
+clone only one branch, HEAD or \fB\-\-branch\fR
+.TP
+\fB\-\-seperate\-git\-dir=\fR<gitdir>
+separate git dir from working tree
+.TP
+\fB\-c\fR, \fB\-\-config=\fR<key=value>
+set config inside the new repository
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+display this help and exit
 .SH EXAMPLES
 .TP
 \fBAdding a new git identity:\fR
