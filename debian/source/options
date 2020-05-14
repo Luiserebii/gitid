@@ -1,1 +1,1 @@
-extend-diff-ignore = "(^|/)(gitid|a\.out|build.*|.*.swp|.*.swo|test\/tmp.*)$"
+extend-diff-ignore = "(^|/)(gitid|a\.out|build.*|.*.swp|.*.swo|test\/tmp.*|extra.*)$"
