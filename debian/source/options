@@ -1,1 +1,1 @@
-extend-diff-ignore = "(^|/)(gitid|a\.out|build.*|.*.swp|.*.swo|test\/tmp.*|extra.*)$"
+extend-diff-ignore = "(^|/)(gitid|a\.out|build.*|.*.swp|.*.swo|test\/tmp.*|extra.*|COPYING|INSTALL|Makefile.in|aclocal.m4|compile|config.h.in|configure|depcomp|install-sh|missing)$"
