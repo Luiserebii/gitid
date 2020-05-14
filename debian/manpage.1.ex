@@ -68,10 +68,10 @@ display this help and exit
 .SS "-c, --current, --s, --shift:"
 .TP
 \fB\-\-global\fR
-refers to global git config
+refer to global git config
 .TP
 \fB\-\-local\fR
-refers to local git config (repository\-level)
+refer to local git config (repository\-level)
 .SS "-n, --new, -u, --update:"
 .TP
 \fB\-\-user=\fR<username>
