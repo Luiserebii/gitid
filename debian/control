@@ -2,8 +2,8 @@ Source: gitid
 Section: devel
 Priority: optional
 Maintainer: Luiserebii <luis@serebii.io>
-Build-Depends: debhelper (>=10), dh-autoreconf
-Standards-Version: 3.9.7
+Build-Depends: debhelper (>=10)
+Standards-Version: 4.1.4
 Vcs-Git: https://github.com/Luiserebii/gitid.git -b debian-pkg
 Vcs-Browser: https://github.com/Luiserebii/gitid/tree/debian-pkg
 Homepage: https://github.com/Luiserebii/gitid
