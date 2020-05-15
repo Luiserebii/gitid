@@ -12,7 +12,7 @@ Package: gitid
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: simple, minimal git identity management tool
- gitid is a command line tool allowing for easy shifting between git identities
+ gitid is a command line tool allowing for easy management of git identities
  (username, email, and signing key (e.g GPG)). It aims to make working with 
  different git configurations easy and shifting between identities painless.
  Above all, the tool aims to reduce any possibility for user error.
@@ -20,3 +20,8 @@ Description: simple, minimal git identity management tool
  It is intended for people who need to manage multiple username/email/signing
  key configurations, and want to minimize the difficulties and risk of managing
  multiple repositories with multiple configurations.
+ .
+ Although gitid allows you to swap between git identities globally in a single
+ command (modifying the global .gitconfig), it encourages specifying git
+ identities per repository by offering the --local flag, applying it to
+ the .gitconfig of the current repository.

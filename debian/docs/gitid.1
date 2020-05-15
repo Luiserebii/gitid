@@ -24,7 +24,7 @@ gitid \- A simple, minimal git identity management tool
 [\fI\,-valch\/\fR] [\fI\,-s <id-name>\/\fR] [\fI\,-n <id-name>\/\fR] [\fI\,-u <id-name>\/\fR] [\fI\,-d <id-name>\/\fR] [\fI\,--global\/\fR] [\fI\,--local\/\fR] [\fI\,--user=<username>\/\fR] [\fI\,--email=<email>\/\fR] [\fI\,--sigkey=<sigkey>\/\fR]
 .SH DESCRIPTION
 .PP
-\fBgitid\fP is a command line tool allowing for easy shifting between git identities
+\fBgitid\fP is a command line tool allowing for easy management of git identities
 (username, email, and signing key (e.g GPG)). It aims to make working with
 different git configurations easy and shifting between identities painless.
 Above all, the tool aims to reduce any possibility for user error.
@@ -32,8 +32,13 @@ Above all, the tool aims to reduce any possibility for user error.
 It is intended for people who need to manage multiple username/email/signing
 key configurations, and want to minimize the difficulties and risk of managing
 multiple repositories with multiple configurations.
+.PP
+Although gitid allows you to swap between git identities globally in a single
+command (modifying the global .gitconfig), it encourages specifying git identities
+per repository by offering the \fB\-\-local\fR flag, applying it to the .gitconfig
+of the current repository.
 .SH OPTIONS
-These programs follow the usual GNU command line syntax, with long
+This program follows the usual GNU command line syntax, with long
 options starting with two dashes (`-').
 A summary of options is included below.
 .TP
