@@ -1,4 +1,4 @@
-gitid (0.3.1-1) UNRELEASED; urgency=medium
+gitid (0.3.1-1) unstable; urgency=medium
 
   * Initial release. Closes: #959992.
 
